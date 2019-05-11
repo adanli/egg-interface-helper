@@ -1,21 +1,28 @@
 <html>
 <head>
-    <script src="jquery/jquery.js" type="text/javascript"></script>
+    <script src="js/jquery/jquery.js" type="text/javascript"></script>
+    <script src="js/bootstrap/bootstrap.js" type="text/javascript"></script>
+    <script src="js/bootstrap/bootstrap.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="css/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap/css/bootstrap.min.css">
 </head>
 <body>
     <div>Hello World</div>
+    <button class="btn btn-default" id="btn">click</button>
     <div id="name"></div>
     <div id="age"></div>
 </body>
 <script type="text/javascript">
     $(document).ready(function () {
-        $.ajax({
-            url: "http://localhost:8080/ih/demo/demo/1",
-            method: 'GET',
-            success: function (data) {
-                $('#name').text(data.name)
-                $('#age').text(data.age)
-            }
+        $('#btn').click(function () {
+            $.ajax({
+                url: "http://localhost:8080/ih/demo/demo/1",
+                method: 'GET',
+                success: function (data) {
+                    $('#name').text(data.name)
+                    $('#age').text(data.age)
+                }
+            })
         })
     })
 </script>
