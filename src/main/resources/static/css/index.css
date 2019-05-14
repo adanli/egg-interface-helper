@@ -1,0 +1,54 @@
+    body{
+        font-size: 16px;
+    }
+    /*navpills导航栏样式*/
+    .nav-pills > li.active > a{
+        color: #0f0f0f;
+        background-color: #fff;
+        border-bottom: 2px solid #FF5733;
+    }
+    .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover{
+        color: #0f0f0f;
+        background-color: #fff;
+    }
+    .nav > li > a:hover{
+        color: #CDCDCD;
+        background-color: #fff;
+    }
+    a{
+        color: #CDCDCD;
+    }
+    /*分割线样式*/
+    .divider {
+        height: 1px;
+        margin: 9px 0;
+        overflow: hidden;
+        background-color: #CDCDCD;
+    }
+    /*搜索框样式*/
+    .search {
+        border-radius:10px;
+    }
+    /*指针变化*/
+    .cursor{
+        cursor: pointer;
+    }
+    /*设置右顶导航栏*/
+    .cus-nav-tabs{
+        position: relative;
+    }
+    /*设置右顶导航栏添加按钮*/
+    .cus-icon{
+        width: 20px;
+        position: absolute;
+        top:30%;
+        margin-left: 10px;
+    }
+    /*统一margin*/
+    .mrg {
+        margin: 10px 10px;
+    }
+    /*统一右浮动*/
+    .flo{
+        float: right;
+    }
