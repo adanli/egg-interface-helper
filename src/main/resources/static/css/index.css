@@ -8,10 +8,10 @@
         border-radius: 0 !important;
     }
     /**/
-    .col-md-3{
+    .col-md-2{
         padding-right: 0px !important;
     }
-    .col-md-9{
+    .col-md-10{
         padding-left: 0px !important;
     }
     /*树样式*/
@@ -22,7 +22,7 @@
         margin-right: 12px !important;
     }
     .list-group-item{
-        padding: 20px 10px !important;
+        padding: 20px 0px !important;
     }
     /*navpills导航栏样式*/
     .nav-pills > li.active > a{
@@ -54,9 +54,11 @@
     .search {
         border-radius:10px;
     }
-    /*指针变化*/
+    /*图标指针变化及大小*/
     .cursor{
         cursor: pointer;
+        font-size: 12px;
+
     }
     /*设置右顶导航栏navtabs导航样式*/
     .cus-nav-tabs{
@@ -92,7 +94,7 @@
     .cus-icon{
         width: 20px;
         position: absolute;
-        top:30%;
+        top:36%;
         margin-left: 10px;
     }
     /*统一margin*/
@@ -119,7 +121,7 @@
     }
     /*textarea*/
     .cus-textarea{
-        border-left: 0px;
+        /*border-left: 0px;*/
     }
     /**/
     .cus-btn{
