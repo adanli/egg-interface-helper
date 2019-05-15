@@ -7,6 +7,23 @@
         -moz-border-radius: 0 !important;
         border-radius: 0 !important;
     }
+    /**/
+    .col-md-3{
+        padding-right: 0px !important;
+    }
+    .col-md-9{
+        padding-left: 0px !important;
+    }
+    /*树样式*/
+    .node-history {
+        border-bottom: 2px solid #D3D3D3 !important;
+    }
+    .treeview span.icon{
+        margin-right: 12px !important;
+    }
+    .list-group-item{
+        padding: 20px 10px !important;
+    }
     /*navpills导航栏样式*/
     .nav-pills > li.active > a{
         color: #0f0f0f;
@@ -31,7 +48,7 @@
         height: 1px;
         margin: 9px 0;
         overflow: hidden;
-        background-color: #CDCDCD;
+        background-color: #D3D3D3;
     }
     /*搜索框样式*/
     .search {
@@ -41,12 +58,23 @@
     .cursor{
         cursor: pointer;
     }
-    /*设置右顶导航栏*/
+    /*设置右顶导航栏navtabs导航样式*/
     .cus-nav-tabs{
         position: relative;
     }
     .nav-tabs > li.active > a{
         border-top: 2px solid #FF5733;
+    }
+    .nav-tabs > li.active > a:hover{
+        border-top: 2px solid #FF5733;
+    }
+    .nav-tabs > li.active > a:focus{
+        border-top: 2px solid #FF5733;
+    }
+    /*右下导航栏navpills*/
+    .cus-nav-right-pills{
+        border-top: 1px solid #D3D3D3;
+        border-bottom: 1px solid #D3D3D3;
     }
     /*设置左导航栏*/
     .cus-left-nav-pills{
@@ -55,6 +83,10 @@
     /*文字居中*/
     .cus-text-align{
         text-align: center;
+    }
+    /*右顶导航栏关闭按钮*/
+    .cus-close-icon{
+        margin-left: 10px;
     }
     /*设置右顶导航栏添加按钮*/
     .cus-icon{
@@ -65,9 +97,40 @@
     }
     /*统一margin*/
     .mrg {
-        margin: 10px 10px;
+        /*margin: 15px 15px;*/
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+    .div-mrg{
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    /*padding-left*/
+    .cus-padding{
+        padding-left: 10px;
     }
     /*统一右浮动*/
     .flo{
         float: right;
+    }
+    /*右侧模块左边框*/
+    .cus-right-left-border{
+        border-left: 1px solid #D3D3D3;
+    }
+    /*textarea*/
+    .cus-textarea{
+        border-left: 0px;
+    }
+    /**/
+    .cus-btn{
+        color: #fff;
+        background-color: #1890FF;
+        border-color: #1890FF;
+        text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+        box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+    }
+    .cus-btn:hover, .cus-btn:focus {
+         color: #fff;
+         background-color: #40a9ff;
+         border-color: #40a9ff;
     }

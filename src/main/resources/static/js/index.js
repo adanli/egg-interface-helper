@@ -73,5 +73,7 @@ $(function(){
  * URL名称修改
  */
 function urlTextUpdate(){
-    $('#interface_url').text($('#url_text').val());
+    var text = $('#url_text').val()
+    $('#interface_url').text(text);
+    $('#href_content').text(text);
 }

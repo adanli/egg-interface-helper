@@ -19,7 +19,7 @@
         <!--左-->
         <div class="col-md-3">
             <!--搜索框-->
-            <div class="input-group search search mrg">
+            <div class="input-group search search mrg div-mrg">
                 <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
                 <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
             </div>
@@ -29,12 +29,14 @@
                 <li role="presentation" class="cus-left-nav-pills cus-text-align"><a href="#collections" data-toggle="tab">文件夹</a></li>
             </ul>
             <!--工具栏-->
-            <div class="row mrg">
-                <div class="col-md-2 cursor"><span class="glyphicon glyphicon-trash"></span></div>
-                <div class="col-md-2 cursor flo"><span class="glyphicon glyphicon-plus"></span></div>
+            <div class="mrg">
+                <div class="row">
+                    <div class="col-md-2 cursor"><span class="glyphicon glyphicon-trash"></span></div>
+                    <div class="col-md-2 cursor flo"><span class="glyphicon glyphicon-plus"></span></div>
+                </div>
+                <!--分割线-->
+                <ul class="nav nav-list"><li class="divider"></li></ul>
             </div>
-            <!--分割线-->
-            <ul class="nav nav-list"><li class="divider"></li></ul>
             <!--导航栏对应内容-->
             <div id="left_tab_content" class="tab-content mrg">
                 <div class="tab-pane active" id="history">
@@ -46,12 +48,12 @@
             </div>
         </div>
         <!--右-->
-        <div class="col-md-9">
+        <div class="col-md-9 cus-right-left-border">
             <!--导航栏-->
             <ul id="right_top_tab" class="nav nav-tabs cus-nav-tabs mrg">
-                <li role="presentation" class="active">
-                    <a href="#content" id="href_content" data-toggle="tab">历史记录
-                        <span class="glyphicon glyphicon-remove cursor"></span>
+                <li role="presentation" class="active cus-padding">
+                    <a href="#content" id="href_content" data-toggle="tab">Untitled Request
+                        <span class="glyphicon glyphicon-remove cus-close-icon cursor"></span>
                     </a>
                 </li>
                 <span class="glyphicon glyphicon-plus cursor cus-icon"></span>
@@ -60,15 +62,15 @@
             <div id="right_top_tab_content" class="tab-content mrg">
                 <div class="tab-pane active" id="content">
                     <!--右侧接口名称-->
-                    <div class="mrg">
-                        <span id="interface_url">接口名称</span>
+                    <div class="mrg div-mrg">
+                        <span id="interface_url">Untitled Request</span>
                         <span id="interface_desc_icon" class="glyphicon glyphicon-triangle-left cursor"></span>
                         <input id="interface_desc" type="text" style="display: none; margin-top: 10px" class="form-control" placeholder="接口描述"/>
                     </div>
                     <!--分割线-->
                     <ul class="nav nav-list"><li class="divider"></li></ul>
                     <!--接口内容-->
-                    <div class="mrg">
+                    <div class="mrg div-mrg">
                         <div class="row">
                             <div class="col-md-10">
                                 <div class="input-group">
@@ -86,7 +88,7 @@
                                 </div>
                             </div>
                             <div class="col-md-1">
-                                <button class="btn btn-primary">测试</button>
+                                <button class="btn cus-btn">测试</button>
                             </div>
                             <div class="col-md-1">
                                 <button class="btn btn-default">保存</button>
@@ -96,7 +98,7 @@
                     <!--接口参数-->
                     <div class="mrg">
                         <!--导航栏-->
-                        <ul id="right_bottom_tab" class="nav nav-pills mrg">
+                        <ul id="right_bottom_tab" class="nav nav-pills cus-nav-right-pills mrg">
                             <li role="presentation" class="active"><a href="#params" data-toggle="tab">params</a></li>
                             <li role="presentation"><a href="#authorization" data-toggle="tab">authorization</a></li>
                             <li role="presentation"><a href="#headers" data-toggle="tab">headers</a></li>
@@ -106,19 +108,19 @@
                         <!--导航栏对应内容-->
                         <div id="right_bottom_tab_content" class="tab-content mrg">
                             <div class="tab-pane active" id="params">
-                                <p>params</p>
+                                <textarea class="form-control cus-textarea" rows="12">params</textarea>
                             </div>
                             <div class="tab-pane" id="authorization">
-                                <p>authorization</p>
+                                <textarea class="form-control cus-textarea" rows="12">authorization</textarea>
                             </div>
                             <div class="tab-pane" id="headers">
-                                <p>headers</p>
+                                <textarea class="form-control cus-textarea" rows="12">headers</textarea>
                             </div>
                             <div class="tab-pane" id="body">
-                                <p>body</p>
+                                <textarea class="form-control cus-textarea" rows="12">body</textarea>
                             </div>
                             <div class="tab-pane" id="response">
-                                <p>response</p>
+                                <textarea class="form-control cus-textarea" rows="12">response</textarea>
                             </div>
                         </div>
                     </div>
