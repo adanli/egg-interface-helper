@@ -91,7 +91,7 @@ public class ApiController {
         return ResponseBuilder.build(DefaultErrorCode.SUCCESS);
     }
 
-    @ApiOperation(notes = "/class/{classId}", value = "创建接口类")
+    @ApiOperation(notes = "/class/{classId}", value = "修改接口类")
     @ApiImplicitParams({
         @ApiImplicitParam(name = "classId", value = "接口类主键", dataType = "String", paramType = "path", required = true),
         @ApiImplicitParam(name = "className", value = "接口类名称", dataType = "String", paramType = "query", required = true)
@@ -101,7 +101,7 @@ public class ApiController {
         return ResponseBuilder.build(DefaultErrorCode.SUCCESS);
     }
 
-    @ApiOperation(notes = "/interface/{interfaceId}", value = "创建接口")
+    @ApiOperation(notes = "/interface/{interfaceId}", value = "修改接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "interfaceId", value = "接口主键", dataType = "String", paramType = "path", required = true),
             @ApiImplicitParam(name = "interfaceVO", value = "接口类", dataType = "IhInterfaceVO", paramType = "query", required = true),
