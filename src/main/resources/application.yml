@@ -13,3 +13,7 @@ mybatis-plus:
   type-aliases-package: com.egg.ih.db.model
   configuration:
     map-underscore-to-camel-case: true
+
+# 当前路径
+current:
+  path: D:\\code\\java\\egg\\egg-interface-helper
