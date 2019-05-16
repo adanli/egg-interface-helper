@@ -1,5 +1,10 @@
+    html, body{
+        margin:0;
+        height:100%;
+    }
     body{
-        font-size: 16px;
+        font-size: 13px;
+        height:100%;
     }
     /*去除所有圆角属性*/
     * {
@@ -7,12 +12,20 @@
         -moz-border-radius: 0 !important;
         border-radius: 0 !important;
     }
+    .container-fluid{
+        height: 100%;
+    }
+    .row{
+        height: 100%;
+    }
     /**/
     .col-md-2{
         padding-right: 0px !important;
+        height: 100%;
     }
     .col-md-10{
         padding-left: 0px !important;
+        height: 100%;
     }
     /*树样式*/
     .node-history {
@@ -57,7 +70,7 @@
     /*图标指针变化及大小*/
     .cursor{
         cursor: pointer;
-        font-size: 12px;
+        font-size: 10px;
 
     }
     /*设置右顶导航栏navtabs导航样式*/
@@ -72,6 +85,14 @@
     }
     .nav-tabs > li.active > a:focus{
         border-top: 2px solid #FF5733;
+    }
+    .cus-right-top-height{
+        height: 25px;
+        padding: 5px 5px !important;
+    }
+    /*右下模块边框*/
+    .right-bottom-border{
+        border: 1px solid #D3D3D3;
     }
     /*右下导航栏navpills*/
     .cus-nav-right-pills{
@@ -94,7 +115,7 @@
     .cus-icon{
         width: 20px;
         position: absolute;
-        top:36%;
+        top:35%;
         margin-left: 10px;
     }
     /*统一margin*/

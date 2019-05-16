@@ -42,7 +42,7 @@
                 <div class="tab-pane active" id="history">
                     <p>历史记录</p>
                 </div>
-                <div class="tab-pane" id="collections">
+                <div class="tab-pane" id="collections" style="height: 100%; overflow: auto">
                     <p>文件夹</p>
                 </div>
             </div>
@@ -52,7 +52,7 @@
             <!--导航栏-->
             <ul id="right_top_tab" class="nav nav-tabs cus-nav-tabs mrg">
                 <li role="presentation" class="active cus-padding" suffix="default">
-                    <a href="#content_default" id="href_content_default" data-toggle="tab">
+                    <a href="#content_default" id="href_content_default" data-toggle="tab" class="cus-right-top-height">
                         <nobr>Untitled Request</nobr>
                         <span id="close_icon_default" class="glyphicon glyphicon-remove cus-close-icon cursor" style="display: none" onclick="closeTabContro()"></span>
                     </a>
@@ -60,7 +60,7 @@
                 <span id="add_right_tab" class="glyphicon glyphicon-plus cursor cus-icon"></span>
             </ul>
             <!--导航栏对应内容-->
-            <div id="right_top_tab_content" class="tab-content mrg">
+            <div id="right_top_tab_content" class="tab-content mrg div-mrg right-bottom-border">
                 <div class="tab-pane active" id="content_default">
                     <!--右侧接口名称-->
                     <div class="mrg div-mrg">
@@ -73,7 +73,7 @@
                     <!--接口内容-->
                     <div class="mrg div-mrg">
                         <div class="row">
-                            <div class="col-md-9">
+                            <div class="col-md-11">
                                 <div class="input-group">
                                     <div class="input-group-btn">
                                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -85,14 +85,14 @@
                                             <li><a href="#">PUT</a></li>
                                         </ul>
                                     </div>
-                                    <input id="url_text_default" type="text" class="form-control" aria-label="..." onkeydown="urlTextUpdate()">
+                                    <input id="url_text_default" type="text" class="form-control" aria-label="..." onkeydown="urlTextUpdate()" onkeyup="urlTextUpdate()">
                                 </div>
                             </div>
+                            <!--<div class="col-md-1">-->
+                                <!--<button class="btn cus-btn">测试</button>-->
+                            <!--</div>btn btn-default-->
                             <div class="col-md-1">
-                                <button class="btn cus-btn">测试</button>
-                            </div>
-                            <div class="col-md-1">
-                                <button class="btn btn-default">保存</button>
+                                <button class="btn cus-btn">保存</button>
                             </div>
                         </div>
                     </div>
@@ -101,7 +101,7 @@
                         <!--导航栏-->
                         <ul id="right_bottom_tab_default" class="nav nav-pills cus-nav-right-pills mrg">
                             <li role="presentation" class="active"><a href="#params_default" data-toggle="tab">params</a></li>
-                            <li role="presentation"><a href="#authorization_default" data-toggle="tab">authorization</a></li>
+                            <!--<li role="presentation"><a href="#authorization_default" data-toggle="tab">authorization</a></li>-->
                             <li role="presentation"><a href="#headers_default" data-toggle="tab">headers</a></li>
                             <li role="presentation"><a href="#body_default" data-toggle="tab">body</a></li>
                             <li role="presentation"><a href="#response_default" data-toggle="tab">response</a></li>
@@ -109,19 +109,50 @@
                         <!--导航栏对应内容-->
                         <div id="right_bottom_tab_content_default" class="tab-content mrg">
                             <div class="tab-pane active div-mrg" id="params_default">
-                                <textarea class="form-control cus-textarea" rows="12">params</textarea>
+                                <table class="table table-condensed">
+                                    <caption>Query Params</caption>
+                                    <tbody><tr flag="true">
+                                        <td><input class="form-control" type="text" name="name" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>
+                                        <td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>
+                                        <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>
+                                        <td><input class="form-control" type="text" name="required" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>
+                                        <td><input class="form-control" type="text" name="max_length" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>
+                                        <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>
+                                    </tr></tbody>
+                                </table>
                             </div>
-                            <div class="tab-pane div-mrg" id="authorization_default">
-                                <textarea class="form-control cus-textarea" rows="12">authorization</textarea>
-                            </div>
+                            <!--<div class="tab-pane div-mrg" id="authorization_default">-->
+                                <!--<textarea class="form-control cus-textarea" rows="12">authorization</textarea>-->
+                            <!--</div>-->
                             <div class="tab-pane div-mrg" id="headers_default">
-                                <textarea class="form-control cus-textarea" rows="12">headers</textarea>
+                                <table class="table table-condensed">
+                                    <caption>Headers</caption>
+                                    <tbody><tr flag="true">
+                                        <td><input class="form-control" type="text" name="name" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>
+                                        <td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>
+                                        <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>
+                                        <td><input class="form-control" type="text" name="required" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>
+                                        <td><input class="form-control" type="text" name="max_length" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>
+                                        <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>
+                                    </tr></tbody>
+                                </table>
                             </div>
                             <div class="tab-pane div-mrg" id="body_default">
+                                <table class="table table-condensed">
+                                    <caption>Body</caption>
+                                    <tbody><tr flag="true">
+                                        <td><input class="form-control" type="text" name="name" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>
+                                        <td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>
+                                        <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>
+                                        <td><input class="form-control" type="text" name="required" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>
+                                        <td><input class="form-control" type="text" name="max_length" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>
+                                        <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>
+                                    </tr></tbody>
+                                </table>
                                 <textarea class="form-control cus-textarea" rows="12">body</textarea>
                             </div>
                             <div class="tab-pane div-mrg" id="response_default">
-                                <textarea class="form-control cus-textarea" rows="12">response</textarea>
+                                <textarea class="form-control cus-textarea" rows="12" onkeydown="analysisJson(this)">Response</textarea>
                             </div>
                         </div>
                     </div>
