@@ -2,8 +2,8 @@ package com.egg.ih.db.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import java.util.Date;
 import java.io.Serializable;
 
 /**
@@ -14,7 +14,6 @@ import java.io.Serializable;
  * @author lhx
  * @since 2019-05-16
  */
-@TableName(value = "ih_params")
 public class IhParams extends Model<IhParams> {
 
 private static final long serialVersionUID=1L;
@@ -23,6 +22,12 @@ private static final long serialVersionUID=1L;
     private String paramId;
 
     private String interfaceId;
+
+    private Date createTime;
+
+    private Date updateTime;
+
+    private Date deleteTime;
 
     private String name;
 
@@ -38,7 +43,7 @@ private static final long serialVersionUID=1L;
 
     private String remark;
 
-    private byte[] example;
+    private Integer example;
 
     private String type;
 
@@ -57,6 +62,30 @@ private static final long serialVersionUID=1L;
 
     public void setInterfaceId(String interfaceId) {
         this.interfaceId = interfaceId;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Date getDeleteTime() {
+        return deleteTime;
+    }
+
+    public void setDeleteTime(Date deleteTime) {
+        this.deleteTime = deleteTime;
     }
 
     public String getName() {
@@ -115,11 +144,11 @@ private static final long serialVersionUID=1L;
         this.remark = remark;
     }
 
-    public byte[] getExample() {
+    public Integer getExample() {
         return example;
     }
 
-    public void setExample(byte[] example) {
+    public void setExample(Integer example) {
         this.example = example;
     }
 
@@ -141,6 +170,9 @@ private static final long serialVersionUID=1L;
         return "IhParams{" +
         "paramId=" + paramId +
         ", interfaceId=" + interfaceId +
+        ", createTime=" + createTime +
+        ", updateTime=" + updateTime +
+        ", deleteTime=" + deleteTime +
         ", name=" + name +
         ", code=" + code +
         ", description=" + description +

@@ -8,6 +8,9 @@
         <result column="class_id" property="classId" />
         <result column="hi_oper_id" property="hiOperId" />
         <result column="valid" property="valid" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="delete_time" property="deleteTime" />
         <result column="name" property="name" />
         <result column="code" property="code" />
         <result column="description" property="description" />

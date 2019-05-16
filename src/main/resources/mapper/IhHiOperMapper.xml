@@ -5,6 +5,9 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.egg.ih.db.model.IhHiOper">
         <id column="hi_oper_id" property="hiOperId" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="delete_time" property="deleteTime" />
         <result column="url" property="url" />
         <result column="oper_ip" property="operIp" />
     </resultMap>

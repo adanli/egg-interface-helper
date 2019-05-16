@@ -1,7 +1,6 @@
 package com.egg.ih.biz.api.control;
 
 import com.egg.ih.biz.api.vo.*;
-import com.egg.ih.db.model.IhClass;
 import com.egg.ih.util.errorcode.DefaultErrorCode;
 import com.egg.ih.util.response.BaseResponse;
 import com.egg.ih.util.response.ResponseBuilder;
@@ -9,6 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -17,16 +17,17 @@ import java.util.List;
 /**
  * @author Administrator
  */
-@RestController
+@Controller
 @RequestMapping(value = "/rest/apiService/v1")
 @Api(value = "/rest/apiService/v1", tags = {"接口管理类"})
 public class ApiController {
 
     @ApiOperation(notes = "/class", value = "创建接口类")
-    @ApiImplicitParam(name = "className", value = "接口类名称", dataType = "String", paramType = "query", required = true)
+    @ApiImplicitParam(name = "ihClassVO", value = "接口类", dataType = "com.egg.ih.biz.api.vo.IhClassVO", paramType = "body", required = true)
     @PostMapping(value = "/class")
-    public BaseResponse createClass(@RequestParam String className) {
-        return ResponseBuilder.build(DefaultErrorCode.SUCCESS);
+    @ResponseBody
+    public BaseResponse<IhClassVO> createClass(@RequestBody IhClassVO ihClassVO) {
+        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, ihClassVO);
     }
 
     @ApiOperation(notes = "/interface", value = "创建接口")
