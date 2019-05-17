@@ -12,14 +12,16 @@ import java.io.Serializable;
  * </p>
  *
  * @author lhx
- * @since 2019-05-16
+ * @since 2019-05-17
  */
 public class IhHiOper extends Model<IhHiOper> {
 
 private static final long serialVersionUID=1L;
 
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.UUID)
     private String hiOperId;
+
+    private String interfaceId;
 
     private Date createTime;
 
@@ -38,6 +40,14 @@ private static final long serialVersionUID=1L;
 
     public void setHiOperId(String hiOperId) {
         this.hiOperId = hiOperId;
+    }
+
+    public String getInterfaceId() {
+        return interfaceId;
+    }
+
+    public void setInterfaceId(String interfaceId) {
+        this.interfaceId = interfaceId;
     }
 
     public Date getCreateTime() {
@@ -89,6 +99,7 @@ private static final long serialVersionUID=1L;
     public String toString() {
         return "IhHiOper{" +
         "hiOperId=" + hiOperId +
+        ", interfaceId=" + interfaceId +
         ", createTime=" + createTime +
         ", updateTime=" + updateTime +
         ", deleteTime=" + deleteTime +

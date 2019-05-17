@@ -12,16 +12,20 @@ import java.io.Serializable;
  * </p>
  *
  * @author lhx
- * @since 2019-05-16
+ * @since 2019-05-17
  */
 public class IhParams extends Model<IhParams> {
 
 private static final long serialVersionUID=1L;
 
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.UUID)
     private String paramId;
 
     private String interfaceId;
+
+    private String state;
+
+    private String flag;
 
     private Date createTime;
 
@@ -43,7 +47,7 @@ private static final long serialVersionUID=1L;
 
     private String remark;
 
-    private Integer example;
+    private byte[] example;
 
     private String type;
 
@@ -62,6 +66,22 @@ private static final long serialVersionUID=1L;
 
     public void setInterfaceId(String interfaceId) {
         this.interfaceId = interfaceId;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
     }
 
     public Date getCreateTime() {
@@ -144,11 +164,11 @@ private static final long serialVersionUID=1L;
         this.remark = remark;
     }
 
-    public Integer getExample() {
+    public byte[] getExample() {
         return example;
     }
 
-    public void setExample(Integer example) {
+    public void setExample(byte[] example) {
         this.example = example;
     }
 
@@ -170,6 +190,8 @@ private static final long serialVersionUID=1L;
         return "IhParams{" +
         "paramId=" + paramId +
         ", interfaceId=" + interfaceId +
+        ", state=" + state +
+        ", flag=" + flag +
         ", createTime=" + createTime +
         ", updateTime=" + updateTime +
         ", deleteTime=" + deleteTime +

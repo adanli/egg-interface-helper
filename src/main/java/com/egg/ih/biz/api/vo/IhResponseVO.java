@@ -2,6 +2,7 @@ package com.egg.ih.biz.api.vo;
 
 import lombok.Data;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -9,6 +10,6 @@ import java.util.Map;
  */
 @Data
 public class IhResponseVO {
-    private Map<String, Object> body;
+    private List<IhParamsVO> list;
     private String example;
 }
