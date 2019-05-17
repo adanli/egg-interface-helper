@@ -18,7 +18,7 @@ $(function(){
             nodes.push(node);
         }
         var parent = {
-            text: '文件夹' + j,
+            text: '文件夹' + j +'<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px" onclick="delClass()"></span>',
             id: j,
             icon:'glyphicon glyphicon-folder-close',
             // color:"#fff",
@@ -122,7 +122,7 @@ $(function(){
             '</div></div>' +
             // '<div class="col-md-1"><button class="btn cus-btn">测试</button></div>btn btn-default' +
             '<div class="col-md-1">' +
-            '<button class="btn cus-btn">保存</button>\</div></div></div><div class="mrg">'+
+            '<button class="btn cus-btn">保存</button>\</div></div></div><div class="mrg cus-right-bottom-input">'+
             '<ul id='+right_bottom_tab+' class="nav nav-pills cus-nav-right-pills mrg">' +
             '<li role="presentation" class="active"><a href='+href_params+' data-toggle="tab">params</a></li>' +
             // '<li role="presentation"><a href='+href_authorization+' data-toggle="tab">authorization</a></li>' +
@@ -151,18 +151,19 @@ $(function(){
             '</tr></tbody></table></div>' +
             '<div class="tab-pane div-mrg" id='+id_body+'>' +
             '<table class="table table-condensed"><caption>Body</caption><tbody><tr flag="true">' +
-            '<td><input class="form-control" type="text" name="name" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>\n' +
-            '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>\n' +
-            '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>\n' +
-            '<td><input class="form-control" type="text" name="required" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>\n' +
-            '<td><input class="form-control" type="text" name="max_length" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>\n' +
-            '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>\n' +
+            '<td><input class="form-control" type="text" name="name" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>' +
+            '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>' +
+            '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>' +
+            '<td><input class="form-control" type="text" name="required" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/></td>' +
+            '<td><input class="form-control" type="text" name="max_length" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>' +
+            '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>' +
+            '<td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td>' +
             '</tr></tbody></table>' +
             // '<textarea class="form-control cus-textarea" rows="12" placeholder="JSON格式数据" onkeydown="analysisJson(this)" onkeyup="analysisJson(this)"></textarea>' +
-            '<div id='+body_json_editor+'></div>' +
+            '<div id='+body_json_editor+' class="cus-jsoneditor"></div>' +
             '</div><div class="tab-pane div-mrg" id='+id_response+'>' +
             // '<textarea class="form-control cus-textarea" rows="12" placeholder="JSON格式数据"></textarea>' +
-            '<div id='+response_json_editor+'></div></div></div></div></div>');
+            '<div id='+response_json_editor+' class="cus-jsoneditor"></div></div></div></div></div>');
         //判断是否显示关闭图标
         showOrHide();
         //初始化json编辑器
@@ -393,6 +394,9 @@ function analysisJson(suffix, json, i, parent){
         }
     }
     return i;
+}
+function delClass(){
+    alert("删除class");
 }
 /*//获得id后缀
     let suffix = getSelectSuffix();
