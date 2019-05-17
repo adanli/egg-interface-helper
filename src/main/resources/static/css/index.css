@@ -12,6 +12,18 @@
         -moz-border-radius: 0 !important;
         border-radius: 0 !important;
     }
+    /*滚动条样式*/
+    ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+        background-color: #fff;
+    }
+    ::-webkit-scrollbar-thumb
+    {
+        border-radius: 10px;
+        background-color: #555;
+    }
+    /**/
     .container-fluid{
         height: 100%;
     }
@@ -22,10 +34,12 @@
     .col-md-2{
         padding-right: 0px !important;
         height: 100%;
+        overflow: auto;
     }
     .col-md-10{
         padding-left: 0px !important;
         height: 100%;
+        overflow: auto;
     }
     /*树样式*/
     .node-history {
@@ -89,6 +103,11 @@
     .cus-right-top-height{
         height: 25px;
         padding: 5px 5px !important;
+    }
+    /*右下input框*/
+    .cus-right-bottom-input input{
+        border: 0px;
+        box-shadow: inset 0 0px 0px rgba(0, 0, 0, .075)
     }
     /*右下模块边框*/
     .right-bottom-border{
@@ -164,4 +183,7 @@
     .jsoneditor-outer, .has-main-menu-bar {
          margin-top: 0px !important;
          padding-top: 0px !important;
+    }
+    .cus-jsoneditor{
+        height: 300px;
     }
