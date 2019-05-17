@@ -1,5 +1,6 @@
 package com.egg.ih.biz.api.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.egg.ih.biz.api.service.ApiService;
 import com.egg.ih.biz.api.vo.*;
 import com.egg.ih.constant.BaseConstant;
@@ -9,13 +10,11 @@ import com.egg.ih.db.mapper.IhParamsMapper;
 import com.egg.ih.db.model.IhClass;
 import com.egg.ih.db.model.IhInterface;
 import com.egg.ih.db.model.IhParams;
-import com.fasterxml.jackson.databind.ser.Serializers;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -126,6 +125,25 @@ public class ApiServiceImpl implements ApiService {
         return returnId;
     }
 
+    @Override
+    public List<IhClassVO> findClasses() {
+
+        List<IhClass> li = ihClassMapper.selectList(new QueryWrapper<>());
+        if(li!=null && li.size()>0) {
+            List<IhClassVO> list = new ArrayList<>(li.size());
+            li.stream().forEach(clazz -> {
+                IhClassVO vo = new IhClassVO();
+                BeanUtils.copyProperties(clazz, vo);
+                list.add(vo);
+            });
+            // 将类型根据字典顺序排列
+            Collections.sort(list, Comparator.comparing(IhClassVO::getCode));
+            return list;
+        }
+
+        return null;
+    }
+
     private void saveExample(byte[] example, String position, String interfaceId) {
         IhParams exampleParams = new IhParams();
         inExample.accept(exampleParams);
@@ -136,5 +154,7 @@ public class ApiServiceImpl implements ApiService {
         exampleParams.setExample(example);
         ihParamsMapper.insert(exampleParams);
     }
+
+
 
 }

@@ -90,9 +90,8 @@ public class ApiController {
     @ApiOperation(notes = "/classes", value = "查询接口类列表")
     @GetMapping(value = "/classes")
     public BaseResponse<List<IhClassVO>> findClasses() {
-        List<IhClassVO> list = new ArrayList<>();
 
-        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, list);
+        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.findClasses());
     }
 
     @ApiOperation(notes = "/interface/{interfaceName}", value = "根据接口名查询接口类列表, 以接口类包裹形式展示")

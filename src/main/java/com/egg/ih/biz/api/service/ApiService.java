@@ -26,4 +26,11 @@ public interface ApiService {
      * @return
      */
     int saveInterface(IhInterfaceVO interfaceVO, List<IhParamsVO> params, List<IhHeaderVO> headers, IhBodyVO bodyVO, IhResponseVO responseVO) ;
+
+    /**
+     * 查询所有类, 将类名以字典形式顺利展示
+     * @return
+     */
+    List<IhClassVO> findClasses();
+
 }
