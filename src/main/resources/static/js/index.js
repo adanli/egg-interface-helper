@@ -81,16 +81,18 @@ $(function(){
         let url_text = 'url_text_'+ran;
         let right_bottom_tab = 'right_bottom_tab_'+ran;
         let right_bottom_tab_content = 'right_bottom_tab_content_'+ran;
-        let href_params = '#params'+ran;
-        let href_authorization = '#authorization'+ran;
-        let href_headers = '#headers'+ran;
-        let href_body = '#body'+ran;
-        let href_response = '#response'+ran;
-        let id_params = 'params'+ran;
-        let id_authorization = 'authorization'+ran;
-        let id_headers = 'headers'+ran;
-        let id_body = 'body'+ran;
-        let id_response = 'response'+ran;
+        let href_params = '#params_'+ran;
+        let href_authorization = '#authorization_'+ran;
+        let href_headers = '#headers_'+ran;
+        let href_body = '#body_'+ran;
+        let href_response = '#response_'+ran;
+        let id_params = 'params_'+ran;
+        let id_authorization = 'authorization_'+ran;
+        let id_headers = 'headers_'+ran;
+        let id_body = 'body_'+ran;
+        let id_response = 'response_'+ran;
+        let body_json_editor = 'body_json_editor_'+ran;
+        let response_json_editor = 'response_json_editor_'+ran;
         //移除所有选中
         $('#right_top_tab li').removeClass('active');
         //追加tab
@@ -155,12 +157,19 @@ $(function(){
             '<td><input class="form-control" type="text" name="required" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>\n' +
             '<td><input class="form-control" type="text" name="max_length" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>\n' +
             '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>\n' +
-            '</tr></tbody></table><textarea class="form-control cus-textarea" rows="12">body</textarea></div>' +
-            '<div class="tab-pane div-mrg" id='+id_response+'>' +
-            '<textarea class="form-control cus-textarea" rows="12">response</textarea></div></div></div></div>');
-        //判断是否显示关闭
+            '</tr></tbody></table>' +
+            // '<textarea class="form-control cus-textarea" rows="12" placeholder="JSON格式数据" onkeydown="analysisJson(this)" onkeyup="analysisJson(this)"></textarea>' +
+            '<div id='+body_json_editor+'></div>' +
+            '</div><div class="tab-pane div-mrg" id='+id_response+'>' +
+            // '<textarea class="form-control cus-textarea" rows="12" placeholder="JSON格式数据"></textarea>' +
+            '<div id='+response_json_editor+'></div></div></div></div></div>');
+        //判断是否显示关闭图标
         showOrHide();
+        //初始化json编辑器
+        initJsonEditor(ran);
     })
+    //初始化json编辑器
+    initJsonEditor('default');
 })
 let flag = false;
 /**
@@ -245,8 +254,6 @@ function urlTextUpdate(){
  * 自动追加tr,td
  */
 function addTrTd(obj){
-    //获得id后缀
-    // let suffix = getSelectSuffix();
     let flag = $(obj).parent().parent().attr('flag');
     if(flag == 'true'){
         $(obj).parent().parent().attr('flag','false');
@@ -260,10 +267,154 @@ function addTrTd(obj){
             '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td></tr>');
     }
 }
+function addBodyTrTd(obj){
+    let flag = $(obj).parent().parent().attr('flag');
+    if(flag == 'true'){
+        $(obj).parent().parent().attr('flag','false');
+        $(obj).parent().parent().last().after('<tr flag="true">' +
+            '<td><input class="form-control" type="text" name="name" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>' +
+            '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>' +
+            '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>' +
+            '<td><input class="form-control" type="text" name="required" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/></td>' +
+            '<td><input class="form-control" type="text" name="max_length" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>' +
+            '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>' +
+            '<td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td></tr>');
+    }
+}
+
+/**
+ * 初始化json编辑器
+ */
+function initJsonEditor(suffix){
+    var body_container,resp_container, body_options, resp_options, json;
+    body_container = document.getElementById('body_json_editor_'+suffix);
+    resp_container = document.getElementById('response_json_editor_'+suffix);
+    //jsoneditor支持多种模式，modes: ['code', 'form', 'text', 'tree', 'view'], // allowed modes
+    //jsoneditor初始化，mode为tree时，显示结构树，为text时，默认显示为纯文本
+    body_options = {
+        mode: 'code',
+        modes: ['code', 'form', 'text', 'tree', 'view'],
+        name: "jsonContent",
+        onError: function (err) {
+            alert(err.toString());
+        },
+        onEvent: function(node, event) {
+            if (event.type === 'click') {
+                var message = 'click on <' + node.field +
+                    '> under path <' + node.path +
+                    '> with pretty path: <' + prettyPrintPath(node.path) + '>';
+                if (node.value) message += ' with value <' + node.value + '>';
+                console.log(message);
+            }
+            function prettyPrintPath(path) {
+                var str = '';
+                for (var i=0; i<path.length; i++) {
+                    var element = path[i];
+                    if (typeof element === 'number') {
+                        str += '[' + element + ']'
+                    } else {
+                        if (str.length > 0) str += ',';
+                        str += element;
+                    }
+                }
+                return str;
+            }
+        },
+        onChange: function(){
+            getJsonData(suffix);
+        }
+    };
+    resp_options = {
+        mode: 'code',
+        modes: ['code', 'form', 'text', 'tree', 'view'],
+        name: "jsonContent",
+        onError: function (err) {
+            alert(err.toString());
+        },
+        onEvent: function(node, event) {
+            if (event.type === 'click') {
+                var message = 'click on <' + node.field +
+                    '> under path <' + node.path +
+                    '> with pretty path: <' + prettyPrintPath(node.path) + '>';
+                if (node.value) message += ' with value <' + node.value + '>';
+                console.log(message);
+            }
+            function prettyPrintPath(path) {
+                var str = '';
+                for (var i=0; i<path.length; i++) {
+                    var element = path[i];
+                    if (typeof element === 'number') {
+                        str += '[' + element + ']'
+                    } else {
+                        if (str.length > 0) str += ',';
+                        str += element;
+                    }
+                }
+                return str;
+            }
+        }
+    };
+    json = {};
+    window['body_editor_'+suffix] = new JSONEditor(body_container, body_options, json);
+    window['resp_editor_'+suffix] = new JSONEditor(resp_container, resp_options, json);
+}
 /**
  * 解析textarea中的json
  */
-function analysisJson(obj){
-    let json = $(obj).val();
-    console.log(JSON.parse(json));
+function getJsonData(suffix){
+    let str = eval('body_editor_'+suffix).getText();
+    let json = $.parseJSON(str); //json数据
+    let i = 0; //修改索引值
+    analysisJson(suffix, json, i);
 }
+function analysisJson(suffix, json, i, parent){
+    let body = $('#body_'+suffix+' tr')
+    let len = body.length;
+    for(name in json){
+        if(i > len - 2){
+            $('#body_'+suffix+' tr:last').after('<tr flag="false">' +
+                '<td><input class="form-control" type="text" name="name" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>' +
+                '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>' +
+                '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>' +
+                '<td><input class="form-control" type="text" name="required" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/></td>' +
+                '<td><input class="form-control" type="text" name="max_length" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>' +
+                '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>' +
+                '<td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td></tr>');
+        }
+        body.eq(i).find('td:first').find('input').val(name);
+        body.eq(i).find('td:last').find('input').val(parent);
+        i++;
+        body.each(function() {$(this).attr('flag','false');}); //将所有input置为false(自动不可添加)
+        body.last().attr('flag','true'); //将最后一个input置为true(可自动添加)
+        if(json[name] instanceof Array){
+            i = analysisJson(suffix, json[name], i, name);
+        }else if(json[name] instanceof Object){
+            i = analysisJson(suffix, json[name], i, name);
+        }
+    }
+    return i;
+}
+/*//获得id后缀
+    let suffix = getSelectSuffix();
+    let str = $(obj).val();
+    let json = $.parseJSON(str);
+    let i = 0;
+    let body = $('#body_'+suffix+' tr')
+    let len = body.length;
+    for(name in json){
+        if(i > len - 2){
+            $('#body_'+suffix+' tr:last').after('<tr flag="false">' +
+                '<td><input class="form-control" type="text" name="name" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>' +
+                '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>' +
+                '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>' +
+                '<td><input class="form-control" type="text" name="required" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>' +
+                '<td><input class="form-control" type="text" name="max_length" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>' +
+                '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td></tr>');
+        }
+        body.eq(i).find('td:first').find('input').val(name);
+        i++;
+        body.each(function() {
+            $(this).attr('flag','false');
+        })
+        body.last().attr('flag','true');
+    }*/
