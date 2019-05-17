@@ -28,4 +28,6 @@ public class IhClassVO {
     private String code;
 
     private String description;
+
+    private String url;
 }

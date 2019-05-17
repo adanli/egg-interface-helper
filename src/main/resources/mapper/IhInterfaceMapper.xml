@@ -6,7 +6,6 @@
     <resultMap id="BaseResultMap" type="com.egg.ih.db.model.IhInterface">
         <id column="interface_id" property="interfaceId" />
         <result column="class_id" property="classId" />
-        <result column="hi_oper_id" property="hiOperId" />
         <result column="valid" property="valid" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />

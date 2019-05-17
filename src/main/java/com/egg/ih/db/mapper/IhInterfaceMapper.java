@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
  * </p>
  *
  * @author lhx
- * @since 2019-05-16
+ * @since 2019-05-17
  */
 @Mapper
 public interface IhInterfaceMapper extends BaseMapper<IhInterface> {

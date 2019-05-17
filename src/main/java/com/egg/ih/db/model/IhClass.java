@@ -12,13 +12,13 @@ import java.io.Serializable;
  * </p>
  *
  * @author lhx
- * @since 2019-05-16
+ * @since 2019-05-17
  */
 public class IhClass extends Model<IhClass> {
 
 private static final long serialVersionUID=1L;
 
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.UUID)
     private String classId;
 
     private String state;
@@ -39,6 +39,19 @@ private static final long serialVersionUID=1L;
 
     private String description;
 
+    private String url;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     public String getClassId() {
         return classId;
@@ -138,6 +151,7 @@ private static final long serialVersionUID=1L;
         ", name=" + name +
         ", code=" + code +
         ", description=" + description +
+        ", url=" + url +
         "}";
     }
 }

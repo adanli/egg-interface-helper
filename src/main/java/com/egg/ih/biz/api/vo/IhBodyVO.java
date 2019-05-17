@@ -2,7 +2,7 @@ package com.egg.ih.biz.api.vo;
 
 import lombok.Data;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * 接口入参放在body中的参数
@@ -10,6 +10,6 @@ import java.util.Map;
  */
 @Data
 public class IhBodyVO {
-    private Map<String, Object> body;
+    private List<IhParamsVO> list;
     private String example;
 }

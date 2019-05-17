@@ -17,7 +17,7 @@ public class Demo extends Model<Demo> {
 
 private static final long serialVersionUID=1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.UUID)
     private Integer id;
 
     private String name;
