@@ -37,4 +37,6 @@ public class IhParamsVO {
     private Integer example;
 
     private String type;
+
+    private String parent;
 }

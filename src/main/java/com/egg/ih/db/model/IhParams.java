@@ -51,6 +51,15 @@ private static final long serialVersionUID=1L;
 
     private String type;
 
+    private String parent;
+
+    public String getParent() {
+        return parent;
+    }
+
+    public void setParent(String parent) {
+        this.parent = parent;
+    }
 
     public String getParamId() {
         return paramId;
