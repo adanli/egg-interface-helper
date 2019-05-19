@@ -296,74 +296,28 @@ public class ApiServiceImpl implements ApiService {
 
     private IhInterface findOrgInterfaceById(String id) {
         QueryWrapper<IhInterface> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(IhInterface::getValid, BaseConstant.有效性.有效.getCode());
         wrapper.lambda().eq(IhInterface::getClassId, id);
+        wrapper.lambda().eq(IhInterface::getValid, BaseConstant.有效性.有效.getCode());
         return ihInterfaceMapper.selectOne(wrapper);
     }
 
+    /**
+     * 先物理删除原接口和参数，新增新接口
+     * @param interfaceVO 接口类,包含名称, 代码, 描述等
+     * @param params 位于params的参数
+     * @param headers 位于headers的参数
+     * @param bodyVO 位于body的参数
+     * @param responseVO 返回值
+     * @return
+     */
     @Override
     public int updateInterface(IhInterfaceVO interfaceVO, List<IhParamsVO> params, List<IhHeaderVO> headers, IhBodyVO bodyVO, IhResponseVO responseVO) {
+        // 删除参数
+        QueryWrapper<IhParams> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(IhParams::getInterfaceId, interfaceVO.getInterfaceId());
+        ihParamsMapper.selectList(wrapper).stream().forEach(p -> ihParamsMapper.deleteById(p.getParamId()));
 
-        IhInterface ihInterface = interfaceVO2Interface.apply(interfaceVO);
-        // 保存接口
-        int returnId = ihInterfaceMapper.updateById(ihInterface);
-        // 保存接口参数
-        if(params != null) {
-            params.stream().map(vo -> {
-                IhParams p = new IhParams();
-                BeanUtils.copyProperties(vo, p);
-                p.setCreateTime(new Date());
-                p.setUpdateTime(new Date());
-                inQuery.accept(p);
-                p.setPosition(BaseConstant.参数存储位置.PARAMS.name());
-                p.setInterfaceId(ihInterface.getInterfaceId());
-                return p;
-            }).forEach(p -> ihParamsMapper.updateById(p));
-        }
-        if(headers != null) {
-            headers.stream().map(vo -> {
-                IhParams p = new IhParams();
-                BeanUtils.copyProperties(vo, p);
-                p.setCreateTime(new Date());
-                p.setUpdateTime(new Date());
-                p.setPosition(BaseConstant.参数存储位置.HEADER.name());
-                inQuery.accept(p);
-                p.setInterfaceId(ihInterface.getInterfaceId());
-                return p;
-            }).forEach(p -> ihParamsMapper.updateById(p));
-        }
-        if(bodyVO != null) {
-            bodyVO.getList().stream().map(vo -> {
-                IhParams p = new IhParams();
-                BeanUtils.copyProperties(vo, p);
-                p.setCreateTime(new Date());
-                p.setUpdateTime(new Date());
-                p.setPosition(BaseConstant.参数存储位置.BODY.name());
-                p.setInterfaceId(ihInterface.getInterfaceId());
-                inQuery.accept(p);
-                return p;
-            }).forEach(p -> {
-                ihParamsMapper.updateById(p);
-            });
-            saveExample(bodyVO.getExample().getBytes(), BaseConstant.参数存储位置.BODY.name(), ihInterface.getInterfaceId());
-        }
-        if(responseVO != null) {
-            responseVO.getList().stream().map(vo -> {
-                IhParams p = new IhParams();
-                BeanUtils.copyProperties(vo, p);
-                inQuery.accept(p);
-                p.setCreateTime(new Date());
-                p.setUpdateTime(new Date());
-                p.setPosition(BaseConstant.参数存储位置.RESPONSE.name());
-                p.setInterfaceId(ihInterface.getInterfaceId());
-                return p;
-            }).forEach(p -> {
-                ihParamsMapper.updateById(p);
-            });
-            saveExample(responseVO.getExample().getBytes(), BaseConstant.参数存储位置.RESPONSE.name(), ihInterface.getInterfaceId());
-        }
-
-        return returnId;
+        return this.saveInterface(interfaceVO, params, headers, bodyVO, responseVO);
     }
 
 }
