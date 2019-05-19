@@ -13,7 +13,7 @@ public class BaseConstant {
          *
          */
         有效("有效", "Y"),
-        无效("无效", "Y")
+        无效("无效", "N")
         ;
         有效性(String name, String code) {
             this.name = name;

@@ -3,6 +3,7 @@ package com.egg.ih.biz.api.vo;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Administrator
@@ -34,4 +35,19 @@ public class IhInterfaceVO {
     private String url;
 
     private String type;
+
+    /**
+     * params
+     */
+    private List<IhParamsVO> params;
+
+    /**
+     * header
+     */
+    private List<IhHeaderVO> headers;
+
+    private IhBodyVO body;
+
+    private IhResponseVO response;
+
 }

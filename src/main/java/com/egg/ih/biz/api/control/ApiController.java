@@ -94,33 +94,34 @@ public class ApiController {
         return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.findClasses());
     }
 
-    @ApiOperation(notes = "/interface/{interfaceName}", value = "根据接口名查询接口类列表, 以接口类包裹形式展示")
-    @ApiImplicitParam(name = "interfaceName", value = "根据类名查询接口类", dataType = "String", paramType = "path", required = true)
-    @GetMapping(value = "/interface/{interfaceName}")
-    public BaseResponse<List<IhClassVO>> findClassesByName(@PathVariable String interfaceName) {
+    /*@ApiOperation(notes = "/interface", value = "根据接口名查询接口类列表, 以接口类包裹形式展示")
+    @ApiImplicitParam(name = "interfaceName", value = "根据类名查询接口类", dataType = "String", paramType = "query", required = true)
+    @GetMapping(value = "/interface")
+    public BaseResponse<List<IhClassVO>> findInterfaceByName(@RequestParam String interfaceName) {
         List<IhClassVO> list = new ArrayList<>();
 
         return ResponseBuilder.build(DefaultErrorCode.SUCCESS, list);
-    }
+    }*/
 
     @ApiOperation(notes = "/interfaces", value = "根据类主键查询接口列表")
     @ApiImplicitParam(name = "classId", value = "接口类主键", dataType = "String", paramType = "query", required = true)
     @GetMapping(value = "/interfaces")
     public BaseResponse<List<IhInterfaceVO>> findInterfaceByClassId(@RequestParam String classId) {
-        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, new ArrayList<>());
+        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.findInterfacesByClassId(classId));
     }
 
     @ApiOperation(notes = "/interface/{interfaceId}", value = "根据接口主键查询接口内容")
     @ApiImplicitParam(name = "interfaceId", value = "接口主键", dataType = "String", paramType = "path", required = true)
     @GetMapping(value = "/interface/{interfaceId}")
-    public BaseResponse<IhClassVO> findClassById(@PathVariable String interfaceId) {
-        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, new IhClassVO());
+    public BaseResponse<IhInterfaceVO> findInterfaceById(@PathVariable String interfaceId) {
+        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.findInterfaceById(interfaceId));
     }
 
     @ApiOperation(notes = "/class/{classId}", value = "根据类主键删除接口类")
     @ApiImplicitParam(name = "classId", value = "接口主键", dataType = "String", paramType = "path", required = true)
     @DeleteMapping(value= "/class/{classId}")
     public BaseResponse deleteClassById(@PathVariable String classId) {
+        apiService.deleteClassById(classId);
         return ResponseBuilder.build(DefaultErrorCode.SUCCESS);
     }
 
@@ -128,6 +129,7 @@ public class ApiController {
     @ApiImplicitParam(name = "interface", value = "接口主键", dataType = "String", paramType = "path", required = true)
     @DeleteMapping(value= "/interface/{interfaceId}")
     public BaseResponse deleteInterfaceById(@PathVariable String interfaceId) {
+        apiService.deleteInterfaceById(interfaceId);
         return ResponseBuilder.build(DefaultErrorCode.SUCCESS);
     }
 

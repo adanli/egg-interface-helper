@@ -1,5 +1,6 @@
 package com.egg.ih.biz.api.service.impl;
 
+import com.alibaba.druid.sql.visitor.functions.Char;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.egg.ih.biz.api.service.ApiService;
 import com.egg.ih.biz.api.vo.*;
@@ -14,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -127,8 +129,9 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     public List<IhClassVO> findClasses() {
-
-        List<IhClass> li = ihClassMapper.selectList(new QueryWrapper<>());
+        QueryWrapper<IhClass> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(IhClass::getValid, BaseConstant.有效性.有效.getCode());
+        List<IhClass> li = ihClassMapper.selectList(wrapper);
         if(li!=null && li.size()>0) {
             List<IhClassVO> list = new ArrayList<>(li.size());
             li.stream().forEach(clazz -> {
@@ -144,6 +147,71 @@ public class ApiServiceImpl implements ApiService {
         return null;
     }
 
+    @Override
+    public List<IhInterfaceVO> findInterfacesByClassId(String classId) {
+        QueryWrapper<IhInterface> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(IhInterface::getClassId, classId);
+        wrapper.lambda().eq(IhInterface::getValid, BaseConstant.有效性.有效.getCode());
+        List<IhInterface> li = ihInterfaceMapper.selectList(wrapper);
+        List<IhInterfaceVO> list = new ArrayList<>(li.size());
+        li.stream().forEach(inter -> {
+            IhInterfaceVO vo = new IhInterfaceVO();
+            BeanUtils.copyProperties(inter, vo);
+            list.add(vo);
+        });
+        return list;
+    }
+
+    @Override
+    public IhInterfaceVO findInterfaceById(String interfaceId) {
+        QueryWrapper<IhInterface> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(IhInterface::getValid, BaseConstant.有效性.有效.getCode());
+        wrapper.lambda().eq(IhInterface::getInterfaceId, interfaceId);
+
+        // 查询接口类
+        IhInterface ihInterface = ihInterfaceMapper.selectOne(wrapper);
+        if(ihInterface == null) {
+            return null;
+        }
+        IhInterfaceVO vo = new IhInterfaceVO();
+        BeanUtils.copyProperties(ihInterface, vo);
+
+        this.setParamsByInterfaceId(vo);
+
+        return vo;
+    }
+
+    /**
+     * 根据接口主键逻辑删除接口
+     * @param interfaceId
+     */
+    @Override
+    public void deleteInterfaceById(String interfaceId) {
+        QueryWrapper<IhInterface> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(IhInterface::getInterfaceId, interfaceId);
+        wrapper.lambda().eq(IhInterface::getValid, BaseConstant.有效性.有效.getCode());
+        IhInterface ihInterface = ihInterfaceMapper.selectOne(wrapper);
+
+        if(ihInterface != null) {
+            ihInterface.setValid(BaseConstant.有效性.无效.getCode());
+            ihInterfaceMapper.updateById(ihInterface);
+        }
+
+    }
+
+    @Override
+    public void deleteClassById(String classId) {
+        QueryWrapper<IhClass> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(IhClass::getClassId, classId);
+        wrapper.lambda().eq(IhClass::getValid, BaseConstant.有效性.有效.getCode());
+        IhClass ihClass = ihClassMapper.selectOne(wrapper);
+
+        if(ihClass != null) {
+            ihClass.setValid(BaseConstant.有效性.无效.getCode());
+            ihClassMapper.updateById(ihClass);
+        }
+    }
+
     private void saveExample(byte[] example, String position, String interfaceId) {
         IhParams exampleParams = new IhParams();
         inExample.accept(exampleParams);
@@ -155,6 +223,66 @@ public class ApiServiceImpl implements ApiService {
         ihParamsMapper.insert(exampleParams);
     }
 
+    /**
+     * 根据接口主键查询参数列表，并拼凑
+     * @param interfaceVO
+     * @return
+     */
+    public void setParamsByInterfaceId(IhInterfaceVO interfaceVO) {
+        QueryWrapper<IhParams> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(IhParams::getInterfaceId, interfaceVO.getInterfaceId());
+        List<IhParams> list = ihParamsMapper.selectList(wrapper);
+        if(list!=null && list.size()>0) {
+            List<IhParamsVO> params = new ArrayList<>();
+            List<IhHeaderVO> headers = new ArrayList<>();
+            IhBodyVO body = new IhBodyVO();
+            IhResponseVO response = new IhResponseVO();
 
+            list.stream().forEach(param -> {
+                if(BaseConstant.参数存储位置.PARAMS.name().equals(param.getPosition())) {
+                    IhParamsVO vo = new IhParamsVO();
+                    BeanUtils.copyProperties(param, vo);
+                    params.add(vo);
+                }else if(BaseConstant.参数存储位置.HEADER.name().equals(param.getPosition())) {
+                    IhHeaderVO vo = new IhHeaderVO();
+                    BeanUtils.copyProperties(param, vo);
+                    headers.add(vo);
+                }else if(BaseConstant.参数存储位置.BODY.name().equals(param.getPosition())) {
+                    if(BaseConstant.例子位置.query.getCode().equals(param.getFlag())) {
+                        if(body.getList()==null) {
+                            List<IhParamsVO> li = new ArrayList<>();
+                            body.setList(li);
+                        }
+                        IhParamsVO vo = new IhParamsVO();
+                        BeanUtils.copyProperties(param, vo);
+                        body.getList().add(vo);
+                    }else if(BaseConstant.例子位置.example.getCode().equals(param.getFlag())){
+                        body.setExample(new String(param.getExample(), Charset.defaultCharset()));
+                    }
+
+                }else if(BaseConstant.参数存储位置.RESPONSE.name().equals(param.getPosition())) {
+                    if(BaseConstant.例子位置.query.getCode().equals(param.getFlag())) {
+                        if(response.getList()==null) {
+                            List<IhParamsVO> li = new ArrayList<>();
+                            response.setList(li);
+                        }
+                        IhParamsVO vo = new IhParamsVO();
+                        BeanUtils.copyProperties(param, vo);
+                        response.getList().add(vo);
+                    }else if(BaseConstant.例子位置.example.getCode().equals(param.getFlag())){
+                        response.setExample(new String(param.getExample(), Charset.defaultCharset()));
+                    }
+
+                }
+            });
+
+            interfaceVO.setParams(params);
+            interfaceVO.setHeaders(headers);
+            interfaceVO.setBody(body);
+            interfaceVO.setResponse(response);
+
+        }
+
+    }
 
 }

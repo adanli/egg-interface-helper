@@ -33,4 +33,30 @@ public interface ApiService {
      */
     List<IhClassVO> findClasses();
 
+    /**
+     * 根据类主键查询接口列表
+     * @param classId 类主键
+     * @return
+     */
+    List<IhInterfaceVO> findInterfacesByClassId(String classId);
+
+    /**
+     * 根据接口主键查询接口详细内容
+     * @param interfaceId
+     * @return
+     */
+    IhInterfaceVO findInterfaceById(String interfaceId);
+
+    /**
+     * 根据接口主键逻辑删除接口
+     * @param interfaceId
+     */
+    void deleteInterfaceById(String interfaceId);
+
+    /**
+     * 根据类主键逻辑删除类
+     * @param classId
+     */
+    void deleteClassById(String classId);
+
 }
