@@ -122,7 +122,7 @@ $(function(){
             '</div></div>' +
             // '<div class="col-md-1"><button class="btn cus-btn">测试</button></div>btn btn-default' +
             '<div class="col-md-1">' +
-            '<button class="btn cus-btn">保存</button>\</div></div></div><div class="mrg cus-right-bottom-input">'+
+            '<button class="btn cus-btn" onclick="saveInterface()">保存</button>\</div></div></div><div class="mrg cus-right-bottom-input">'+
             '<ul id='+right_bottom_tab+' class="nav nav-pills cus-nav-right-pills mrg">' +
             '<li role="presentation" class="active"><a href='+href_params+' data-toggle="tab">params</a></li>' +
             // '<li role="presentation"><a href='+href_authorization+' data-toggle="tab">authorization</a></li>' +
@@ -132,30 +132,30 @@ $(function(){
             '<div id='+right_bottom_tab_content+' class="tab-content mrg">' +
             '<div class="tab-pane active div-mrg" id='+id_params+'>' +
             '<table class="table table-condensed"><caption>Query Params</caption><tbody><tr flag="true">\n' +
-            '<td><input class="form-control" type="text" name="name" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>\n' +
+            '<td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>\n' +
             '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>\n' +
             '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>\n' +
-            '<td><input class="form-control" type="text" name="required" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>\n' +
-            '<td><input class="form-control" type="text" name="max_length" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>\n' +
+            '<td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>\n' +
+            '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>\n' +
             '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>\n' +
             '</tr></tbody></table></div>' +
             // '<div class="tab-pane div-mrg" id='+id_authorization+'><textarea class="form-control cus-textarea" rows="12">authorization</textarea></div>' +
             '<div class="tab-pane div-mrg" id='+id_headers+'>' +
             '<table class="table table-condensed"><caption>Headers</caption><tbody><tr flag="true">\n' +
-            '<td><input class="form-control" type="text" name="name" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>\n' +
+            '<td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>\n' +
             '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>\n' +
             '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>\n' +
-            '<td><input class="form-control" type="text" name="required" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>\n' +
-            '<td><input class="form-control" type="text" name="max_length" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>\n' +
+            '<td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>\n' +
+            '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>\n' +
             '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>\n' +
             '</tr></tbody></table></div>' +
             '<div class="tab-pane div-mrg" id='+id_body+'>' +
             '<table class="table table-condensed"><caption>Body</caption><tbody><tr flag="true">' +
-            '<td><input class="form-control" type="text" name="name" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>' +
+            '<td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>' +
             '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>' +
             '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>' +
-            '<td><input class="form-control" type="text" name="required" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/></td>' +
-            '<td><input class="form-control" type="text" name="max_length" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>' +
+            '<td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/></td>' +
+            '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>' +
             '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>' +
             '<td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td>' +
             '</tr></tbody></table>' +
@@ -260,11 +260,11 @@ function addTrTd(obj){
         $(obj).parent().parent().attr('flag','false');
         // $('#content_'+suffix+' #table_tbody tr:last')
         $(obj).parent().parent().last().after('<tr flag="true">' +
-            '<td><input class="form-control" type="text" name="name" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>' +
+            '<td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>' +
             '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>' +
             '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>' +
-            '<td><input class="form-control" type="text" name="required" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>' +
-            '<td><input class="form-control" type="text" name="max_length" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>' +
+            '<td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>' +
+            '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>' +
             '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td></tr>');
     }
 }
@@ -273,11 +273,11 @@ function addBodyTrTd(obj){
     if(flag == 'true'){
         $(obj).parent().parent().attr('flag','false');
         $(obj).parent().parent().last().after('<tr flag="true">' +
-            '<td><input class="form-control" type="text" name="name" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>' +
+            '<td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>' +
             '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>' +
             '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>' +
-            '<td><input class="form-control" type="text" name="required" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/></td>' +
-            '<td><input class="form-control" type="text" name="max_length" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>' +
+            '<td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/></td>' +
+            '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>' +
             '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>' +
             '<td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td></tr>');
     }
@@ -398,27 +398,73 @@ function analysisJson(suffix, json, i, parent){
 function delClass(){
     alert("删除class");
 }
-/*//获得id后缀
-    let suffix = getSelectSuffix();
-    let str = $(obj).val();
-    let json = $.parseJSON(str);
-    let i = 0;
-    let body = $('#body_'+suffix+' tr')
-    let len = body.length;
-    for(name in json){
-        if(i > len - 2){
-            $('#body_'+suffix+' tr:last').after('<tr flag="false">' +
-                '<td><input class="form-control" type="text" name="name" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>' +
-                '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>' +
-                '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>' +
-                '<td><input class="form-control" type="text" name="required" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>' +
-                '<td><input class="form-control" type="text" name="max_length" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>' +
-                '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td></tr>');
+
+/**
+ * 请求
+ */
+function requestApi(url,type,data){
+    $.ajax({
+        url:url,
+        type:type,
+        data:data,
+        dataType:'json',
+        contentType: 'application/json',
+        success:function(resp){
+            console.log(resp);
+        },
+        error:function(resp){
+            console.log(resp);
         }
-        body.eq(i).find('td:first').find('input').val(name);
-        i++;
-        body.each(function() {
-            $(this).attr('flag','false');
+    })
+}
+
+/**
+ * 获取数据
+ * @param head
+ * @param suffix
+ * @returns {Array}
+ */
+function getVal(head, suffix){
+    let listVO = [];
+    $('#'+head+'_'+suffix+' tr').each(function(){
+        let val = {};
+        $(this).find('td').find('input').each(function(){
+            let inpVal = $(this).val();
+            if(inpVal == '' || inpVal == 'undefind'){
+                return true
+            }
+            val[$(this).attr('name')] = $(this).val();
         })
-        body.last().attr('flag','true');
-    }*/
+        if(JSON.stringify(val) == '{}'){
+            return true;
+        }
+        listVO.push(val);
+    })
+    return listVO;
+}
+/**
+ *q保存接口数据
+ */
+function saveInterface(){
+    //获得id后缀
+    let suffix = getSelectSuffix();
+    let data = {};
+    data.interfaceVO = {
+        "classId":"de8278ff6360094d39703b3aa6ab2bff",
+        "name":"test",
+        "code":$('#interface_url_'+suffix).text(),
+        "url":$('#url_text_'+suffix).val(),
+        "type":"GET"
+    }
+    data.paramsVO = getVal('params', suffix);
+    data.headersVO = getVal('headers', suffix);
+    data.bodyVO = {
+        "list": getVal('body', suffix),
+        "example": eval('body_editor_'+suffix).getText()
+    }
+    // data.responseVO = {}
+    console.log(data);
+    data = JSON.stringify(data);
+    console.log(data);
+    requestApi('/ih/rest/apiService/v1/interface','POST', data);
+}
