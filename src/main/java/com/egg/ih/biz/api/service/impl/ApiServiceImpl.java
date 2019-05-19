@@ -164,12 +164,8 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     public IhInterfaceVO findInterfaceById(String interfaceId) {
-        QueryWrapper<IhInterface> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(IhInterface::getValid, BaseConstant.有效性.有效.getCode());
-        wrapper.lambda().eq(IhInterface::getInterfaceId, interfaceId);
-
         // 查询接口类
-        IhInterface ihInterface = ihInterfaceMapper.selectOne(wrapper);
+        IhInterface ihInterface = this.findOrgInterfaceById(interfaceId);
         if(ihInterface == null) {
             return null;
         }
@@ -187,10 +183,7 @@ public class ApiServiceImpl implements ApiService {
      */
     @Override
     public void deleteInterfaceById(String interfaceId) {
-        QueryWrapper<IhInterface> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(IhInterface::getInterfaceId, interfaceId);
-        wrapper.lambda().eq(IhInterface::getValid, BaseConstant.有效性.有效.getCode());
-        IhInterface ihInterface = ihInterfaceMapper.selectOne(wrapper);
+        IhInterface ihInterface = this.findOrgInterfaceById(interfaceId);
 
         if(ihInterface != null) {
             ihInterface.setValid(BaseConstant.有效性.无效.getCode());
@@ -201,15 +194,24 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     public void deleteClassById(String classId) {
-        QueryWrapper<IhClass> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(IhClass::getClassId, classId);
-        wrapper.lambda().eq(IhClass::getValid, BaseConstant.有效性.有效.getCode());
-        IhClass ihClass = ihClassMapper.selectOne(wrapper);
+        IhClass ihClass = this.findOrgClassById(classId);
 
         if(ihClass != null) {
             ihClass.setValid(BaseConstant.有效性.无效.getCode());
             ihClassMapper.updateById(ihClass);
         }
+    }
+
+    @Override
+    public int updateClass(String classId, String className) {
+
+        IhClass ihClass = this.findOrgClassById(classId);
+        if(ihClass != null) {
+            ihClass.setName(className);
+            return ihClassMapper.updateById(ihClass);
+        }
+
+        return 0;
     }
 
     private void saveExample(byte[] example, String position, String interfaceId) {
@@ -283,6 +285,85 @@ public class ApiServiceImpl implements ApiService {
 
         }
 
+    }
+
+    private IhClass findOrgClassById(String id) {
+        QueryWrapper<IhClass> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(IhClass::getValid, BaseConstant.有效性.有效.getCode());
+        wrapper.lambda().eq(IhClass::getClassId, id);
+        return ihClassMapper.selectOne(wrapper);
+    }
+
+    private IhInterface findOrgInterfaceById(String id) {
+        QueryWrapper<IhInterface> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(IhInterface::getValid, BaseConstant.有效性.有效.getCode());
+        wrapper.lambda().eq(IhInterface::getClassId, id);
+        return ihInterfaceMapper.selectOne(wrapper);
+    }
+
+    @Override
+    public int updateInterface(IhInterfaceVO interfaceVO, List<IhParamsVO> params, List<IhHeaderVO> headers, IhBodyVO bodyVO, IhResponseVO responseVO) {
+
+        IhInterface ihInterface = interfaceVO2Interface.apply(interfaceVO);
+        // 保存接口
+        int returnId = ihInterfaceMapper.updateById(ihInterface);
+        // 保存接口参数
+        if(params != null) {
+            params.stream().map(vo -> {
+                IhParams p = new IhParams();
+                BeanUtils.copyProperties(vo, p);
+                p.setCreateTime(new Date());
+                p.setUpdateTime(new Date());
+                inQuery.accept(p);
+                p.setPosition(BaseConstant.参数存储位置.PARAMS.name());
+                p.setInterfaceId(ihInterface.getInterfaceId());
+                return p;
+            }).forEach(p -> ihParamsMapper.updateById(p));
+        }
+        if(headers != null) {
+            headers.stream().map(vo -> {
+                IhParams p = new IhParams();
+                BeanUtils.copyProperties(vo, p);
+                p.setCreateTime(new Date());
+                p.setUpdateTime(new Date());
+                p.setPosition(BaseConstant.参数存储位置.HEADER.name());
+                inQuery.accept(p);
+                p.setInterfaceId(ihInterface.getInterfaceId());
+                return p;
+            }).forEach(p -> ihParamsMapper.updateById(p));
+        }
+        if(bodyVO != null) {
+            bodyVO.getList().stream().map(vo -> {
+                IhParams p = new IhParams();
+                BeanUtils.copyProperties(vo, p);
+                p.setCreateTime(new Date());
+                p.setUpdateTime(new Date());
+                p.setPosition(BaseConstant.参数存储位置.BODY.name());
+                p.setInterfaceId(ihInterface.getInterfaceId());
+                inQuery.accept(p);
+                return p;
+            }).forEach(p -> {
+                ihParamsMapper.updateById(p);
+            });
+            saveExample(bodyVO.getExample().getBytes(), BaseConstant.参数存储位置.BODY.name(), ihInterface.getInterfaceId());
+        }
+        if(responseVO != null) {
+            responseVO.getList().stream().map(vo -> {
+                IhParams p = new IhParams();
+                BeanUtils.copyProperties(vo, p);
+                inQuery.accept(p);
+                p.setCreateTime(new Date());
+                p.setUpdateTime(new Date());
+                p.setPosition(BaseConstant.参数存储位置.RESPONSE.name());
+                p.setInterfaceId(ihInterface.getInterfaceId());
+                return p;
+            }).forEach(p -> {
+                ihParamsMapper.updateById(p);
+            });
+            saveExample(responseVO.getExample().getBytes(), BaseConstant.参数存储位置.RESPONSE.name(), ihInterface.getInterfaceId());
+        }
+
+        return returnId;
     }
 
 }

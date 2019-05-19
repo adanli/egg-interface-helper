@@ -59,4 +59,23 @@ public interface ApiService {
      */
     void deleteClassById(String classId);
 
+    /**
+     * 更新类名称
+     * @param classId
+     * @param className
+     * @return
+     */
+    int updateClass(String classId, String className);
+
+    /**
+     * 更新接口
+     * @param interfaceVO 接口类,包含名称, 代码, 描述等
+     * @param params 位于params的参数
+     * @param headers 位于headers的参数
+     * @param bodyVO 位于body的参数
+     * @param responseVO 返回值
+     * @return
+     */
+    int updateInterface(IhInterfaceVO interfaceVO, List<IhParamsVO> params, List<IhHeaderVO> headers, IhBodyVO bodyVO, IhResponseVO responseVO) ;
+
 }

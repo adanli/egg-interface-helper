@@ -12,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,35 +57,13 @@ public class ApiController {
     @PostMapping(value = "/interface")
     public BaseResponse<Integer> createInterface(@RequestBody Map<String, Object> map) {
 
-        IhInterfaceVO interfaceVO = null;
-        List<IhParamsVO> ihParamsVOS = null;
-        List<IhHeaderVO> ihHeaderVOS = null;
-        IhBodyVO ihBodyVO = null;
-        IhResponseVO responseVO = null;
+        ParamClass paramClass = this.assembleMap(map);
 
-        if(map.get(INTERFACE_VO) != null) {
-            interfaceVO = gson.fromJson(gson.toJson(map.get(INTERFACE_VO)), IhInterfaceVO.class);
-        }
-        if(map.get(PARAMS_VO) != null) {
-            Type type = new TypeToken<List<IhParamsVO>>(){}.getType();
-            ihParamsVOS = gson.fromJson(gson.toJson(map.get(PARAMS_VO)), type);
-
-        }
-        if(map.get(HEADERS_VO) != null) {
-            Type type = new TypeToken<List<IhHeaderVO>>(){}.getType();
-            ihHeaderVOS = gson.fromJson(gson.toJson(map.get(HEADERS_VO)), type);
-
-        }
-        if(map.get(BODY_VO) != null) {
-            ihBodyVO = gson.fromJson(gson.toJson(map.get(BODY_VO)), IhBodyVO.class);
-        }
-
-        if(map.get(RESPONSE_VO) != null) {
-            responseVO = gson.fromJson(gson.toJson(map.get(RESPONSE_VO)), IhResponseVO.class);
-        }
-
-
-        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.saveInterface(interfaceVO, ihParamsVOS, ihHeaderVOS, ihBodyVO, responseVO));
+        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.saveInterface(paramClass.getInterfaceVO(),
+                paramClass.getParams(),
+                paramClass.getHeader(),
+                paramClass.getBody(),
+                paramClass.getResponse()));
     }
 
     @ApiOperation(notes = "/classes", value = "查询接口类列表")
@@ -139,8 +118,8 @@ public class ApiController {
         @ApiImplicitParam(name = "className", value = "接口类名称", dataType = "String", paramType = "query", required = true)
     })
     @PutMapping(value = "/class/{classId}")
-    public BaseResponse updateClass(@PathVariable String classId, @RequestParam String className) {
-        return ResponseBuilder.build(DefaultErrorCode.SUCCESS);
+    public BaseResponse<Integer> updateClass(@PathVariable String classId, @RequestParam String className) {
+        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.updateClass(classId, className));
     }
 
     @ApiOperation(notes = "/interface/{interfaceId}", value = "修改接口")
@@ -153,13 +132,14 @@ public class ApiController {
             @ApiImplicitParam(name = "responseVO", value = "返回值类", dataType = "IhResponseVO", paramType = "query")
     })
     @PutMapping(value = "/interface/{interfaceId}")
-    public BaseResponse updateInterfaceById(@PathVariable String interfaceId,
-                                        @RequestBody IhInterfaceVO interfaceVO,
-                                        @RequestBody(required = false) IhParamsVO paramsVO,
-                                        @RequestBody(required = false) IhHeaderVO headerVO,
-                                        @RequestBody(required = false) IhBodyVO bodyVO,
-                                        @RequestBody(required = false) IhResponseVO responseVO) {
-        return ResponseBuilder.build(DefaultErrorCode.SUCCESS);
+    public BaseResponse updateInterfaceById(@RequestBody Map<String, Object> map) {
+        ParamClass paramClass = this.assembleMap(map);
+
+        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.saveInterface(paramClass.getInterfaceVO(),
+                paramClass.getParams(),
+                paramClass.getHeader(),
+                paramClass.getBody(),
+                paramClass.getResponse()));
     }
 
     @ApiOperation(notes = "/interfaces/history", value = "查询记录访问的操作的历史记录")
@@ -168,5 +148,50 @@ public class ApiController {
         return ResponseBuilder.build(DefaultErrorCode.SUCCESS, new ArrayList<>());
     }
 
+    public ParamClass assembleMap(Map<String, Object> map) {
+        IhInterfaceVO interfaceVO = null;
+        List<IhParamsVO> ihParamsVOS = null;
+        List<IhHeaderVO> ihHeaderVOS = null;
+        IhBodyVO ihBodyVO = null;
+        IhResponseVO responseVO = null;
+
+        if(map.get(INTERFACE_VO) != null) {
+            interfaceVO = gson.fromJson(gson.toJson(map.get(INTERFACE_VO)), IhInterfaceVO.class);
+        }
+        if(map.get(PARAMS_VO) != null) {
+            Type type = new TypeToken<List<IhParamsVO>>(){}.getType();
+            ihParamsVOS = gson.fromJson(gson.toJson(map.get(PARAMS_VO)), type);
+
+        }
+        if(map.get(HEADERS_VO) != null) {
+            Type type = new TypeToken<List<IhHeaderVO>>(){}.getType();
+            ihHeaderVOS = gson.fromJson(gson.toJson(map.get(HEADERS_VO)), type);
+
+        }
+        if(map.get(BODY_VO) != null) {
+            ihBodyVO = gson.fromJson(gson.toJson(map.get(BODY_VO)), IhBodyVO.class);
+        }
+
+        if(map.get(RESPONSE_VO) != null) {
+            responseVO = gson.fromJson(gson.toJson(map.get(RESPONSE_VO)), IhResponseVO.class);
+        }
+        ParamClass paramClass = new ParamClass();
+        paramClass.setInterfaceVO(interfaceVO);
+        paramClass.setParams(ihParamsVOS);
+        paramClass.setHeader(ihHeaderVOS);
+        paramClass.setBody(ihBodyVO);
+        paramClass.setResponse(responseVO);
+
+        return paramClass;
+    }
+
+    @Data
+    class ParamClass {
+        private IhInterfaceVO interfaceVO;
+        private List<IhParamsVO> params;
+        private List<IhHeaderVO> header;
+        private IhBodyVO body;
+        private IhResponseVO response;
+    }
 
 }
