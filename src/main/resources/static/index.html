@@ -94,7 +94,7 @@
                                 <!--<button class="btn cus-btn">测试</button>-->
                             <!--</div>btn btn-default-->
                             <div class="col-md-1">
-                                <button class="btn cus-btn" onclick="saveInterface()">保存</button>
+                                <button class="btn cus-btn" data-toggle="modal" data-target="#selectClassModal" onclick="saveInterfaceGetClass()">保存</button>
                             </div>
                         </div>
                     </div>
@@ -198,6 +198,33 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭
                     </button>
                     <button type="button" class="btn btn-primary" onclick="saveClass()">
+                        提交
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="selectClassModal" tabindex="-1" role="dialog" aria-labelledby="selectClassModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="selectClassModalLabel">
+                        选择类(文件夹)
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div id="select_class" class="list-group">
+
+                    </div>
+                </div>
+                <input type="text" id="select_class_id" style="display: none">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="saveInterface()">
                         提交
                     </button>
                 </div>

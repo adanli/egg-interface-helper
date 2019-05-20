@@ -92,8 +92,6 @@
 		this.init(options);
 
 		return {
-			//添加节点
-			addNode: $.proxy(this.addNode, this),
 
 			// Options (public access)
 			options: this.options,
@@ -1246,27 +1244,6 @@
 		});
 
 		return result || this;
-	};
-	/**
-	 给节点添加子节点
-	 @param {Object|Number} identifiers - A valid node, node id or array of node identifiers
-	 @param {optional Object} options.node;
-	 */
-	Tree.prototype.addNode = function (identifiers, options) {
-		this.forEachIdentifier(identifiers, options, $.proxy(function (node, options) {
-			this.setAddNode(node, options);
-		}, this));
-		this.setInitialStates({ nodes: this.tree }, 0);
-		this.render();
-	}
-	/**
-	 * 添加子节点
-	 */
-	Tree.prototype.setAddNode = function (node, options) {
-		if (node.nodes == null) node.nodes = [];
-		if (options.node) {
-			node.nodes.push(options.node);
-		};
 	};
 
 })(jQuery, window, document);

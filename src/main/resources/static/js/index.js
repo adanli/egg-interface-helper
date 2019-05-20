@@ -68,7 +68,7 @@ $(function(){
             '</div></div>' +
             // '<div class="col-md-1"><button class="btn cus-btn">测试</button></div>btn btn-default' +
             '<div class="col-md-1">' +
-            '<button class="btn cus-btn" onclick="saveInterface()">保存</button>\</div></div></div><div class="mrg cus-right-bottom-input">'+
+            '<button class="btn cus-btn" data-toggle="modal" data-target="#selectClassModal" onclick="saveInterfaceGetClass()">保存</button>\</div></div></div><div class="mrg cus-right-bottom-input">'+
             '<ul id='+right_bottom_tab+' class="nav nav-pills cus-nav-right-pills mrg">' +
             '<li role="presentation" class="active"><a href='+href_params+' data-toggle="tab">params</a></li>' +
             // '<li role="presentation"><a href='+href_authorization+' data-toggle="tab">authorization</a></li>' +
@@ -120,70 +120,6 @@ $(function(){
 })
 let flag = false;
 
-/**
- * 构建树数据
- */
-function construnctionTree(data, selectTree){
-    let treeData = [];
-    for(let i = 0; i < data.length; i++){
-        let obj = data[i];
-        let parent = {
-            text: obj.name + obj.code + obj.url +'<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px" onclick="delClass()"></span>',
-            id: obj.classId,
-            icon:'glyphicon glyphicon-folder-close',
-            selectable:false,
-            nodes:[]
-        }
-        treeData.push(parent);
-    }
-    /*const data = [];
-    for(let j = 0; j < 5; j++){
-        var nodes = [];
-        for(let i = 0; i < 2; i++){
-            var node = {
-                text: 'test' +i+'<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px" onclick="delClass()"></span>',
-                id: i,
-                //  color:"#fff",
-//              backColor: "rgba(0,0,0,0.95)",
-//              backColor: '#223043',
-                href: 'controller'+i,
-            }
-            nodes.push(node);
-        }
-        var parent = {
-            text: '文件夹' + j +'<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px" onclick="delClass()"></span>',
-            id: j,
-            icon:'glyphicon glyphicon-folder-close',
-            // color:"#fff",
-            // backColor:'#29384c',
-//          backColor: "rgba(0,0,0,0.95)",
-            selectable:false,
-            nodes:nodes
-        }
-        data.push(parent);
-    }*/
-    $('#'+selectTree).treeview({
-        data: treeData,         // 数据源
-        emptyIcon: '',    //没有子节点的节点图标
-        multiSelect: false,    //多选
-        levels: 0,
-        expandIcon:"glyphicon glyphicon-triangle-right",
-        collapseIcon: "glyphicon glyphicon-triangle-bottom",
-        showBorder: true,
-        borderColor: "#fff",
-        selectedBackColor: '#f5f5f5',
-        // onhoverColor: "#1f1f1f",
-        onNodeExpanded: function(event, data){
-            console.log(data);
-        },
-        onNodeChecked: function (event,data) {
-            console.log(data);
-        },
-        onNodeSelected: function (event, data) {
-            console.log(data);
-        },
-    });
-}
 /**
  * 获取选择当前tab页后缀
  */
@@ -406,8 +342,70 @@ function analysisJson(suffix, json, i, parent){
     }
     return i;
 }
+
+/**
+ * 选择文件夹构建
+ */
+function construnctionSelectClass(data){
+    //清空已存在内容
+    $('#select_class').empty()
+    for(let i = 0; i < data.length; i++){
+        let val = data[i];
+        $('#select_class').append('<a href="#" class="list-group-item list-group-item-action" id='+val.classId+' onclick="setSelectClass(this)">' +
+            '<span class="glyphicon glyphicon-folder-close" style="padding-right: 10px"></span>'+val.name+'</a>');
+    }
+}
+
+/**
+ * 设置选中类
+ */
+function setSelectClass(obj){
+    $('#select_class_id').val($(obj).attr('id'));
+}
 function delClass(){
     alert("删除class");
+}
+/**
+ * 构建树数据
+ */
+function construnctionTree(data, selectTree){
+    let treeData = [];
+    for(let i = 0; i < data.length; i++){
+        let obj = data[i];
+        let parent = {
+            index: i,
+            text: obj.name + obj.code + obj.url +'<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px" onclick="delClass()"></span>',
+            id: obj.classId,
+            icon:'glyphicon glyphicon-folder-close',
+            selectable:false,
+            nodes:[]
+        }
+        treeData.push(parent);
+    }
+    $('#'+selectTree).treeview({
+        data: treeData,         // 数据源
+        emptyIcon: '',    //没有子节点的节点图标
+        multiSelect: false,    //多选
+        levels: 0,
+        expandIcon:"glyphicon glyphicon-triangle-right",
+        collapseIcon: "glyphicon glyphicon-triangle-bottom",
+        showBorder: true,
+        borderColor: "#fff",
+        selectedBackColor: '#f5f5f5',
+        // onhoverColor: "#1f1f1f",
+        onNodeExpanded: function(event, data){
+            //折叠所有
+            // $('#'+selectTree).treeview('collapseAll', { silent:true });
+            console.log(data);
+            requestGetTreeChildNode('/ih/rest/apiService/v1/interfaces','GET',data.id, data.index, 'collections');
+        },
+        onNodeChecked: function (event,data) {
+            console.log(data);
+        },
+        onNodeSelected: function (event, data) {
+            console.log(data);
+        },
+    });
 }
 
 /**
@@ -422,6 +420,7 @@ function requestApi(url,type,data){
         contentType: 'application/json',
         success:function(resp){
             console.log(resp);
+            $('#selectClassModal').modal('hide');
         },
         error:function(resp){
             console.log(resp);
@@ -437,12 +436,53 @@ function requestGetTree(url, type, selectTree){
         type:type,
         contentType: 'application/json',
         success:function(resp){
-            construnctionTree(resp.data, selectTree);
+            if(selectTree == ''){ // 构建可选择文件夹
+                construnctionSelectClass(resp.data);
+            }else{ //构建类树
+                construnctionTree(resp.data, selectTree);
+            }
         },
         error:function(resp){
             console.log(resp);
         }
     })
+}
+
+/**
+ * 请求树子集数据
+ */
+function requestGetTreeChildNode(url, type, classId, index, selectTree){
+    $.ajax({
+        url:url,
+        type:type,
+        data: {
+            classId:classId
+        },
+        contentType: 'application/json',
+        success:function(resp){
+            construnctionTreeChildNode(resp.data, index, selectTree);
+        },
+        error:function(resp){
+            console.log(resp);
+        }
+    })
+}
+
+/**
+ * 构建树子集数据
+ */
+function construnctionTreeChildNode(data, index, selectTree){
+    for(let i = 0; i < data.length; i++){
+        let obj = data[i];
+        let node = {
+            text: obj.type + obj.url +'<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px" onclick="delClass()"></span>',
+            id: obj.interfaceId,
+            //  color:"#fff",
+//              backColor: "rgba(0,0,0,0.95)",
+//              backColor: '#223043',
+        };
+        $("#"+selectTree).treeview("addNode", [index, { node: node }])
+    }
 }
 /**
  * 获取数据
@@ -474,6 +514,13 @@ function getVal(head, suffix){
 function getClass(){
     requestGetTree('/ih/rest/apiService/v1/classes','GET','collections');
 }
+
+/**
+ * 保存请求类数据
+ */
+function saveInterfaceGetClass(){
+    requestGetTree('/ih/rest/apiService/v1/classes','GET','');
+}
 /**
  * 保存类名
  */
@@ -494,7 +541,7 @@ function saveInterface(){
     let suffix = getSelectSuffix();
     let data = {};
     data.interfaceVO = {
-        "classId":"de8278ff6360094d39703b3aa6ab2bff",
+        "classId":$('#select_class_id').val(),
         "name":"test",
         "code":$('#interface_url_'+suffix).text(),
         "url":$('#url_text_'+suffix).val(),

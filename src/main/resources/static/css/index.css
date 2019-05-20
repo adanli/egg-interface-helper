@@ -48,7 +48,7 @@
     .treeview span.icon{
         margin-right: 12px !important;
     }
-    .list-group-item{
+    .treeview .list-group-item{
         padding: 20px 0px !important;
     }
     /*navpills导航栏样式*/
