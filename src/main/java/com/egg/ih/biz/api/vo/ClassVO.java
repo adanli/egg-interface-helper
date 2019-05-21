@@ -8,7 +8,7 @@ import java.util.Date;
  * @author Administrator
  */
 @Data
-public class IhClassVO {
+public class ClassVO {
     private String classId;
 
     private String state;
@@ -28,6 +28,4 @@ public class IhClassVO {
     private String code;
 
     private String description;
-
-    private String url;
 }

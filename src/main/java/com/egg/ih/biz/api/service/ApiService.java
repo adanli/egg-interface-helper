@@ -1,9 +1,12 @@
 package com.egg.ih.biz.api.service;
 
 import com.egg.ih.biz.api.vo.*;
+import com.egg.ih.biz.api.vo.params.BodyVO;
+import com.egg.ih.biz.api.vo.params.HeaderVO;
+import com.egg.ih.biz.api.vo.params.QueryVO;
+import com.egg.ih.biz.api.vo.params.ResponseVO;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Administrator
@@ -14,38 +17,38 @@ public interface ApiService {
      * @param ihClassVO
      * @return
      */
-    int saveClass(IhClassVO ihClassVO);
+    int saveClass(ClassVO ihClassVO);
 
     /**
      * 保存接口
      * @param interfaceVO 接口类,包含名称, 代码, 描述等
-     * @param params 位于params的参数
-     * @param headers 位于headers的参数
+     * @param queryVO 位于query的参数
+     * @param headerVO 位于headers的参数
      * @param bodyVO 位于body的参数
      * @param responseVO 返回值
      * @return
      */
-    int saveInterface(IhInterfaceVO interfaceVO, List<IhParamsVO> params, List<IhHeaderVO> headers, IhBodyVO bodyVO, IhResponseVO responseVO) ;
+    int saveInterface(InterfaceVO interfaceVO, QueryVO queryVO, HeaderVO headerVO, BodyVO bodyVO, ResponseVO responseVO) ;
 
     /**
      * 查询所有类, 将类名以字典形式顺利展示
      * @return
      */
-    List<IhClassVO> findClasses();
+    List<ClassVO> findClasses();
 
     /**
      * 根据类主键查询接口列表
      * @param classId 类主键
      * @return
      */
-    List<IhInterfaceVO> findInterfacesByClassId(String classId);
+    List<InterfaceVO> findInterfacesByClassId(String classId);
 
     /**
      * 根据接口主键查询接口详细内容
      * @param interfaceId
      * @return
      */
-    IhInterfaceVO findInterfaceById(String interfaceId);
+    InterfaceVO findInterfaceById(String interfaceId);
 
     /**
      * 根据接口主键逻辑删除接口
@@ -70,12 +73,12 @@ public interface ApiService {
     /**
      * 更新接口
      * @param interfaceVO 接口类,包含名称, 代码, 描述等
-     * @param params 位于params的参数
-     * @param headers 位于headers的参数
+     * @param queryVO 位于params的参数
+     * @param headerVO 位于headers的参数
      * @param bodyVO 位于body的参数
      * @param responseVO 返回值
      * @return
      */
-    int updateInterface(IhInterfaceVO interfaceVO, List<IhParamsVO> params, List<IhHeaderVO> headers, IhBodyVO bodyVO, IhResponseVO responseVO) ;
+    int updateInterface(InterfaceVO interfaceVO, QueryVO queryVO, HeaderVO headerVO, BodyVO bodyVO, ResponseVO responseVO) ;
 
 }

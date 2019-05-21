@@ -1,15 +1,14 @@
-package com.egg.ih.biz.api.vo;
+package com.egg.ih.biz.api.vo.params;
 
 import lombok.Data;
 
 import java.util.Date;
 
 /**
- * 接口入参放在header中的参数，为<K, V>对
  * @author Administrator
  */
 @Data
-public class IhHeaderVO {
+public class ParamVO {
     private String paramId;
 
     private String interfaceId;
@@ -37,4 +36,6 @@ public class IhHeaderVO {
     private Integer example;
 
     private String type;
+
+    private String parent;
 }

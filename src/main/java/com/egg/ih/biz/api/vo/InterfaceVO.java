@@ -1,15 +1,18 @@
 package com.egg.ih.biz.api.vo;
 
+import com.egg.ih.biz.api.vo.params.BodyVO;
+import com.egg.ih.biz.api.vo.params.HeaderVO;
+import com.egg.ih.biz.api.vo.params.QueryVO;
+import com.egg.ih.biz.api.vo.params.ResponseVO;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author Administrator
  */
 @Data
-public class IhInterfaceVO {
+public class InterfaceVO {
     private String interfaceId;
 
     private String classId;
@@ -36,18 +39,9 @@ public class IhInterfaceVO {
 
     private String type;
 
-    /**
-     * params
-     */
-    private List<IhParamsVO> params;
-
-    /**
-     * header
-     */
-    private List<IhHeaderVO> headers;
-
-    private IhBodyVO body;
-
-    private IhResponseVO response;
+    private QueryVO queryVO;
+    private HeaderVO headerVO;
+    private BodyVO bodyVO;
+    private ResponseVO responseVO;
 
 }

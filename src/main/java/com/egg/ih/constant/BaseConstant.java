@@ -66,7 +66,7 @@ public class BaseConstant {
 
     @Getter
     public enum 参数存储位置 {
-        PARAMS, HEADER, BODY, RESPONSE
+        QUERY, HEADER, BODY, RESPONSE
     }
 
     /**
