@@ -1,120 +1,6 @@
 $(function(){
     getClass(); //类数据
-    /**
-     * 生成随机ID
-     */
-    let random = function() {
-        let str = "abcdefghijklmnopqrstuvwxyz0123456789"; // 可以作为常量放到random外面
-        let result = "";
-        for(let i = 0; i < 5; i++) {
-            result += str[parseInt(Math.random() * str.length)];
-        }
-        return result;
-    }
-    /**
-     * 添加tab控制
-     */
-    $('#add_right_tab').click(function(){
-        //生成随机字符
-        let ran = random();
-        let href_content = '#content_'+ran;
-        let id_content = 'href_content_'+ran;
-        let close_icon = 'close_icon_'+ran;
-        let content = 'content_'+ran;
-        let interface_url = 'interface_url_'+ran;
-        let interface_desc_icon = 'interface_desc_icon_'+ran;
-        let interface_desc = 'interface_desc_'+ran;
-        let url_text = 'url_text_'+ran;
-        let right_bottom_tab = 'right_bottom_tab_'+ran;
-        let right_bottom_tab_content = 'right_bottom_tab_content_'+ran;
-        let href_params = '#params_'+ran;
-        let href_authorization = '#authorization_'+ran;
-        let href_headers = '#headers_'+ran;
-        let href_body = '#body_'+ran;
-        let href_response = '#response_'+ran;
-        let id_params = 'params_'+ran;
-        let id_authorization = 'authorization_'+ran;
-        let id_headers = 'headers_'+ran;
-        let id_body = 'body_'+ran;
-        let id_response = 'response_'+ran;
-        let body_json_editor = 'body_json_editor_'+ran;
-        let response_json_editor = 'response_json_editor_'+ran;
-        //移除所有选中
-        $('#right_top_tab li').removeClass('active');
-        //追加tab
-        $('#right_top_tab li:last').after('<li role="presentation" class="active cus-padding" suffix='+ran+'>' +
-            '<a href='+href_content+' id='+id_content+' data-toggle="tab" class="cus-right-top-height">' +
-            '<nobr>Untitled Request</nobr>' +
-            '<span id='+close_icon+' class="glyphicon glyphicon-remove cus-close-icon cursor" style="display: none" onclick="closeTabContro()"></span>' +
-            '</a></li>');
-        //追加tab添加选中
-        // $('#right_top_tab li:last').addClass('active');
-        //移除内容选中
-        $('#right_top_tab_content > div').each(function() {
-            $(this).removeClass('active');
-        })
-        //追加内容
-        $('#right_top_tab_content > div:last').after('<div class="tab-pane active" id='+content+'>'+
-            '<div class="mrg div-mrg"><span id='+interface_url+'>Untitled Request</span>' +
-            '<span id='+interface_desc_icon+' class="glyphicon glyphicon-triangle-left cursor" onclick="interfaceDescription()"></span>' +
-            '<input id='+interface_desc+' type="text" style="display: none; margin-top: 10px" class="form-control" placeholder="接口描述"/>' +
-            '</div><ul class="nav nav-list"><li class="divider"></li></ul><div class="mrg div-mrg">' +
-            '<div class="row"><div class="col-md-11"><div class="input-group"><div class="input-group-btn">' +
-            '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
-            'GET<span class="caret"></span></button><ul class="dropdown-menu">' +
-            '<li><a href="#">POST</a></li>' +
-            '<li><a href="#">PUT</a></li></ul></div>' +
-            '<input id='+url_text+' type="text" class="form-control" aria-label="..." onkeydown="urlTextUpdate()" onkeyup="urlTextUpdate()">' +
-            '</div></div>' +
-            // '<div class="col-md-1"><button class="btn cus-btn">测试</button></div>btn btn-default' +
-            '<div class="col-md-1">' +
-            '<button class="btn cus-btn" data-toggle="modal" data-target="#selectClassModal" onclick="saveInterfaceGetClass()">保存</button>\</div></div></div><div class="mrg cus-right-bottom-input">'+
-            '<ul id='+right_bottom_tab+' class="nav nav-pills cus-nav-right-pills mrg">' +
-            '<li role="presentation" class="active"><a href='+href_params+' data-toggle="tab">params</a></li>' +
-            // '<li role="presentation"><a href='+href_authorization+' data-toggle="tab">authorization</a></li>' +
-            '<li role="presentation"><a href='+href_headers+' data-toggle="tab">headers</a></li>' +
-            '<li role="presentation"><a href='+href_body+' data-toggle="tab">body</a></li>' +
-            '<li role="presentation"><a href='+href_response+' data-toggle="tab">response</a></li></ul>'+
-            '<div id='+right_bottom_tab_content+' class="tab-content mrg">' +
-            '<div class="tab-pane active div-mrg" id='+id_params+'>' +
-            '<table class="table table-condensed"><caption>Query Params</caption><tbody><tr flag="true">\n' +
-            '<td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>\n' +
-            '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>\n' +
-            '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>\n' +
-            '<td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>\n' +
-            '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>\n' +
-            '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>\n' +
-            '</tr></tbody></table></div>' +
-            // '<div class="tab-pane div-mrg" id='+id_authorization+'><textarea class="form-control cus-textarea" rows="12">authorization</textarea></div>' +
-            '<div class="tab-pane div-mrg" id='+id_headers+'>' +
-            '<table class="table table-condensed"><caption>Headers</caption><tbody><tr flag="true">\n' +
-            '<td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>\n' +
-            '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>\n' +
-            '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>\n' +
-            '<td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>\n' +
-            '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>\n' +
-            '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>\n' +
-            '</tr></tbody></table></div>' +
-            '<div class="tab-pane div-mrg" id='+id_body+'>' +
-            '<table class="table table-condensed"><caption>Body</caption><tbody><tr flag="true">' +
-            '<td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>' +
-            '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>' +
-            '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>' +
-            '<td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/></td>' +
-            '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>' +
-            '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>' +
-            '<td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td>' +
-            '</tr></tbody></table>' +
-            // '<textarea class="form-control cus-textarea" rows="12" placeholder="JSON格式数据" onkeydown="analysisJson(this)" onkeyup="analysisJson(this)"></textarea>' +
-            '<div id='+body_json_editor+' class="cus-jsoneditor"></div>' +
-            '</div><div class="tab-pane div-mrg" id='+id_response+'>' +
-            // '<textarea class="form-control cus-textarea" rows="12" placeholder="JSON格式数据"></textarea>' +
-            '<div id='+response_json_editor+' class="cus-jsoneditor"></div></div></div></div></div>');
-        //判断是否显示关闭图标
-        showOrHide();
-        //初始化json编辑器
-        initJsonEditor(ran);
-    })
+
     //初始化json编辑器
     initJsonEditor('default');
 })
@@ -198,6 +84,15 @@ function urlTextUpdate(){
         $('#interface_url_'+suffix).text('Untitled Request');
     }
 }
+
+/**
+ * select选择框修改
+ * @param obj
+ */
+function changeSelect(obj){
+    let sel = $(obj).text();
+    $(obj).parent().prev().children().first().text(sel);
+}
 /**
  * 自动追加tr,td
  */
@@ -243,9 +138,7 @@ function initJsonEditor(suffix){
         mode: 'code',
         modes: ['code', 'form', 'text', 'tree', 'view'],
         name: "jsonContent",
-        onError: function (err) {
-            alert(err.toString());
-        },
+        onError: function (err) {alert(err.toString());},
         onEvent: function(node, event) {
             if (event.type === 'click') {
                 var message = 'click on <' + node.field +
@@ -263,13 +156,10 @@ function initJsonEditor(suffix){
                     } else {
                         if (str.length > 0) str += ',';
                         str += element;
-                    }
-                }
-                return str;
-            }
-        },
+                    }}return str;
+            }},
         onChange: function(){
-            getJsonData(suffix);
+            getBodyJsonData(suffix);
         }
     };
     resp_options = {
@@ -296,10 +186,9 @@ function initJsonEditor(suffix){
                     } else {
                         if (str.length > 0) str += ',';
                         str += element;
-                    }
-                }
-                return str;
-            }
+                    }}return str;}},
+        onChange: function(){
+            getResponseJsonData(suffix);
         }
     };
     json = {};
@@ -309,18 +198,24 @@ function initJsonEditor(suffix){
 /**
  * 解析textarea中的json
  */
-function getJsonData(suffix){
+function getBodyJsonData(suffix){
     let str = eval('body_editor_'+suffix).getText();
     let json = $.parseJSON(str); //json数据
     let i = 0; //修改索引值
-    analysisJson(suffix, json, i);
+    analysisJson(suffix, json, i, '', 'body_');
 }
-function analysisJson(suffix, json, i, parent){
-    let body = $('#body_'+suffix+' tr')
-    let len = body.length;
+function getResponseJsonData(suffix){
+    let str = eval('resp_editor_'+suffix).getText();
+    let json = $.parseJSON(str); //json数据
+    let i = 0; //修改索引值
+    analysisJson(suffix, json, i, '', 'response_');
+}
+function analysisJson(suffix, json, i, parent, type){
+    let obj = $('#'+type+suffix+' tr')
+    let len = obj.length;
     for(name in json){
         if(i > len - 2){
-            $('#body_'+suffix+' tr:last').after('<tr flag="false">' +
+            $('#'+type+suffix+' tr:last').after('<tr flag="false">' +
                 '<td><input class="form-control" type="text" name="name" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>' +
                 '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>' +
                 '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>' +
@@ -329,15 +224,15 @@ function analysisJson(suffix, json, i, parent){
                 '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>' +
                 '<td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td></tr>');
         }
-        body.eq(i).find('td:first').find('input').val(name);
-        body.eq(i).find('td:last').find('input').val(parent);
+        obj.eq(i).find('td:first').find('input').val(name);
+        obj.eq(i).find('td:last').find('input').val(parent);
         i++;
-        body.each(function() {$(this).attr('flag','false');}); //将所有input置为false(自动不可添加)
-        body.last().attr('flag','true'); //将最后一个input置为true(可自动添加)
+        obj.each(function() {$(this).attr('flag','false');}); //将所有input置为false(自动不可添加)
+        obj.last().attr('flag','true'); //将最后一个input置为true(可自动添加)
         if(json[name] instanceof Array){
-            i = analysisJson(suffix, json[name], i, name);
+            i = analysisJson(suffix, json[name], i, name, type);
         }else if(json[name] instanceof Object){
-            i = analysisJson(suffix, json[name], i, name);
+            i = analysisJson(suffix, json[name], i, name, type);
         }
     }
     return i;
@@ -355,7 +250,6 @@ function construnctionSelectClass(data){
             '<span class="glyphicon glyphicon-folder-close" style="padding-right: 10px"></span>'+val.name+'</a>');
     }
 }
-
 /**
  * 设置选中类
  */
@@ -374,7 +268,7 @@ function construnctionTree(data, selectTree){
         let obj = data[i];
         let parent = {
             index: i,
-            text: obj.name + obj.code + obj.url +'<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px" onclick="delClass()"></span>',
+            text: '<span title='+obj.url+'>'+obj.name+obj.code+'</span><span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px" onclick="delClass()"></span>',
             id: obj.classId,
             icon:'glyphicon glyphicon-folder-close',
             selectable:false,
@@ -396,7 +290,6 @@ function construnctionTree(data, selectTree){
         onNodeExpanded: function(event, data){
             //折叠所有
             // $('#'+selectTree).treeview('collapseAll', { silent:true });
-            console.log(data);
             requestGetTreeChildNode('/ih/rest/apiService/v1/interfaces','GET',data.id, data.index, 'collections');
         },
         onNodeChecked: function (event,data) {
@@ -404,10 +297,129 @@ function construnctionTree(data, selectTree){
         },
         onNodeSelected: function (event, data) {
             console.log(data);
+            tabControl();
+            requestInterfaceValue('/ih/rest/apiService/v1/interface/'+data.id,'GET');
         },
     });
 }
-
+/**
+ * 生成随机ID
+ */
+let random = function() {
+    let str = "abcdefghijklmnopqrstuvwxyz0123456789"; // 可以作为常量放到random外面
+    let result = "";
+    for(let i = 0; i < 5; i++) {
+        result += str[parseInt(Math.random() * str.length)];
+    }
+    return result;
+}
+/**
+ * 添加tab控制
+ */
+function tabControl(){
+    //生成随机字符
+    let ran = random();
+    let href_content = '#content_'+ran;
+    let id_content = 'href_content_'+ran;
+    let close_icon = 'close_icon_'+ran;
+    let content = 'content_'+ran;
+    let interface_url = 'interface_url_'+ran;
+    let interface_desc_icon = 'interface_desc_icon_'+ran;
+    let interface_desc = 'interface_desc_'+ran;
+    let content_select = 'content_select_'+ran;
+    let url_text = 'url_text_'+ran;
+    let right_bottom_tab = 'right_bottom_tab_'+ran;
+    let right_bottom_tab_content = 'right_bottom_tab_content_'+ran;
+    let href_params = '#params_'+ran;
+    let href_headers = '#headers_'+ran;
+    let href_body = '#body_'+ran;
+    let href_response = '#response_'+ran;
+    let id_params = 'params_'+ran;
+    let id_headers = 'headers_'+ran;
+    let id_body = 'body_'+ran;
+    let id_response = 'response_'+ran;
+    let body_json_editor = 'body_json_editor_'+ran;
+    let response_json_editor = 'response_json_editor_'+ran;
+    //移除所有选中
+    $('#right_top_tab li').removeClass('active');
+    //追加tab
+    $('#right_top_tab li:last').after('<li role="presentation" class="active cus-padding" suffix='+ran+'>' +
+        '<a href='+href_content+' id='+id_content+' data-toggle="tab" class="cus-right-top-height">' +
+        '<nobr>Untitled Request</nobr>' +
+        '<span id='+close_icon+' class="glyphicon glyphicon-remove cus-close-icon cursor" style="display: none" onclick="closeTabContro()"></span>' +
+        '</a></li>');
+    //移除内容选中
+    $('#right_top_tab_content > div').each(function() {
+        $(this).removeClass('active');
+    })
+    //追加内容
+    $('#right_top_tab_content > div:last').after('<div class="tab-pane active" id='+content+'>'+
+        '<div class="mrg div-mrg"><span id='+interface_url+'>Untitled Request</span>' +
+        '<span id='+interface_desc_icon+' class="glyphicon glyphicon-triangle-left cursor" onclick="interfaceDescription()"></span>' +
+        '<input id='+interface_desc+' type="text" style="display: none; margin-top: 10px" class="form-control" placeholder="接口描述"/>' +
+        '</div><ul class="nav nav-list"><li class="divider"></li></ul><div class="mrg div-mrg">' +
+        '<div class="row"><div class="col-md-11"><div class="input-group"><div id='+content_select+' class="input-group-btn">' +
+        '<button type="button" class="btn btn-default dropdown-toggle" style="width: 100px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+        '<span>GET</span><span style="text-align: center; float: right"><span class="caret"></span></span></button><ul class="dropdown-menu">' +
+        '<li onclick="changeSelect(this)"><a href="#">GET</a></li>' +
+        '<li onclick="changeSelect(this)"><a href="#">POST</a></li>' +
+        '<li onclick="changeSelect(this)"><a href="#">PUT</a></li>' +
+        '<li onclick="changeSelect(this)"><a href="#">DELETE</a></li></ul></div>' +
+        '<input id='+url_text+' type="text" class="form-control" aria-label="..." onkeydown="urlTextUpdate()" onkeyup="urlTextUpdate()">' +
+        '</div></div>' +
+        '<div class="col-md-1">' +
+        '<button class="btn cus-btn" data-toggle="modal" data-target="#selectClassModal" onclick="saveInterfaceGetClass()">保存</button>\</div></div></div><div class="mrg cus-right-bottom-input">'+
+        '<ul id='+right_bottom_tab+' class="nav nav-pills cus-nav-right-pills mrg">' +
+        '<li role="presentation" class="active"><a href='+href_params+' data-toggle="tab">params</a></li>' +
+        '<li role="presentation"><a href='+href_headers+' data-toggle="tab">headers</a></li>' +
+        '<li role="presentation"><a href='+href_body+' data-toggle="tab">body</a></li>' +
+        '<li role="presentation"><a href='+href_response+' data-toggle="tab">response</a></li></ul>'+
+        '<div id='+right_bottom_tab_content+' class="tab-content mrg">' +
+        '<div class="tab-pane active div-mrg" id='+id_params+'>' +
+        '<table class="table table-condensed"><caption>Query Params</caption><tbody><tr flag="true">\n' +
+        '<td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>\n' +
+        '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>\n' +
+        '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>\n' +
+        '<td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>\n' +
+        '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>\n' +
+        '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>\n' +
+        '</tr></tbody></table></div>' +
+        '<div class="tab-pane div-mrg" id='+id_headers+'>' +
+        '<table class="table table-condensed"><caption>Headers</caption><tbody><tr flag="true">\n' +
+        '<td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>\n' +
+        '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>\n' +
+        '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>\n' +
+        '<td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>\n' +
+        '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>\n' +
+        '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>\n' +
+        '</tr></tbody></table></div>' +
+        '<div class="tab-pane div-mrg" id='+id_body+'>' +
+        '<table class="table table-condensed"><caption>Body</caption><tbody><tr flag="true">' +
+        '<td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>' +
+        '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>' +
+        '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>' +
+        '<td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/></td>' +
+        '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>' +
+        '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>' +
+        '<td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td>' +
+        '</tr></tbody></table>' +
+        '<div id='+body_json_editor+' class="cus-jsoneditor"></div>' +
+        '</div><div class="tab-pane div-mrg" id='+id_response+'>' +
+        '<table class="table table-condensed"><caption>Response</caption><tbody><tr flag="true">' +
+        '<td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>' +
+        '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>' +
+        '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>' +
+        '<td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/></td>' +
+        '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>' +
+        '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>' +
+        '<td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td>' +
+        '</tr></tbody></table>' +
+        '<div id='+response_json_editor+' class="cus-jsoneditor"></div></div></div></div></div>');
+    //判断是否显示关闭图标
+    showOrHide();
+    //初始化json编辑器
+    initJsonEditor(ran);
+}
 /**
  * 请求
  */
@@ -469,9 +481,36 @@ function requestGetTreeChildNode(url, type, classId, index, selectTree){
 }
 
 /**
+ * 请求接口数据
+ */
+let requestInterfaceValue = (url, type) => {
+    $.ajax({
+        url:url,
+        type:type,
+        contentType: 'application/json',
+        success:function(resp){
+            construnctionInterfaceValue(resp.data);
+        },
+        error:function(resp){
+            console.log(resp);
+        }
+    })
+}
+let construnctionInterfaceValue = (data) => {
+    //获得id后缀
+    let suffix = getSelectSuffix();
+    // "classId":$('#select_class_id').val(),
+    // "name":"-",
+    $('#href_content_'+suffix+' nobr').text(data.name); //tab名称
+    $('#interface_url_'+suffix).text(data.code); //code
+    $('#url_text_'+suffix).val(data.url); //url
+    $('#content_select_'+suffix).children().children().first().text(data.type); //请求类型
+}
+/**
  * 构建树子集数据
  */
 function construnctionTreeChildNode(data, index, selectTree){
+    $("#"+selectTree).treeview("deleteNode", [index, { node: {}}])
     for(let i = 0; i < data.length; i++){
         let obj = data[i];
         let node = {
@@ -542,10 +581,10 @@ function saveInterface(){
     let data = {};
     data.interfaceVO = {
         "classId":$('#select_class_id').val(),
-        "name":"test",
+        "name":"-",
         "code":$('#interface_url_'+suffix).text(),
         "url":$('#url_text_'+suffix).val(),
-        "type":"GET"
+        "type": $('#content_select_'+suffix).children().children().first().text()
     }
     data.paramsVO = getVal('params', suffix);
     data.headersVO = getVal('headers', suffix);
@@ -553,8 +592,10 @@ function saveInterface(){
         "list": getVal('body', suffix),
         "example": eval('body_editor_'+suffix).getText()
     }
-    // data.responseVO = {}
+    data.responseVO = {
+        "list": getVal('response', suffix),
+        "example": eval('resp_editor_'+suffix).getText()
+    }
     console.log(data);
-    // data = JSON.stringify(data);
     requestApi('/ih/rest/apiService/v1/interface','POST', data);
 }

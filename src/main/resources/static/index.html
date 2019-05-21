@@ -59,7 +59,7 @@
                         <span id="close_icon_default" class="glyphicon glyphicon-remove cus-close-icon cursor" style="display: none" onclick="closeTabContro()"></span>
                     </a>
                 </li>
-                <span id="add_right_tab" class="glyphicon glyphicon-plus cursor cus-icon"></span>
+                <span id="add_right_tab" class="glyphicon glyphicon-plus cursor cus-icon" onclick="tabControl()"></span>
             </ul>
             <!--导航栏对应内容-->
             <div id="right_top_tab_content" class="tab-content mrg div-mrg right-bottom-border">
@@ -77,14 +77,18 @@
                         <div class="row">
                             <div class="col-md-11">
                                 <div class="input-group">
-                                    <div class="input-group-btn">
-                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            GET
-                                            <span class="caret"></span>
+                                    <div id="content_select_default" class="input-group-btn">
+                                        <button type="button" class="btn btn-default dropdown-toggle" style="width: 100px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span>GET</span>
+                                            <span style="text-align: center; float: right">
+                                                <span class="caret"></span>
+                                            </span>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a href="#">POST</a></li>
-                                            <li><a href="#">PUT</a></li>
+                                            <li onclick="changeSelect(this)"><a href="#">GET</a></li>
+                                            <li onclick="changeSelect(this)"><a href="#">POST</a></li>
+                                            <li onclick="changeSelect(this)"><a href="#">PUT</a></li>
+                                            <li onclick="changeSelect(this)"><a href="#">DELETE</a></li>
                                         </ul>
                                     </div>
                                     <input id="url_text_default" type="text" class="form-control" aria-label="..." onkeydown="urlTextUpdate()" onkeyup="urlTextUpdate()">
@@ -152,11 +156,21 @@
                                         <td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td>
                                     </tr></tbody>
                                 </table>
-                                <!--<textarea class="form-control cus-textarea" rows="12" placeholder="JSON格式数据" onkeydown="analysisJson(this)" onkeyup="analysisJson(this)"></textarea>-->
                                 <div id="body_json_editor_default" class="cus-jsoneditor"></div>
                             </div>
                             <div class="tab-pane div-mrg" id="response_default">
-                                <!--<textarea class="form-control cus-textarea" rows="12" placeholder="JSON格式数据"></textarea>-->
+                                <table class="table table-condensed">
+                                    <caption>Response</caption>
+                                    <tbody><tr flag="true">
+                                        <td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>
+                                        <td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>
+                                        <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>
+                                        <td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/></td>
+                                        <td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>
+                                        <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>
+                                        <td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td>
+                                    </tr></tbody>
+                                </table>
                                 <div id="response_json_editor_default" class="cus-jsoneditor"></div>
                             </div>
                         </div>

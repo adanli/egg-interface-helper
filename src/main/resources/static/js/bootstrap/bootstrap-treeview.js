@@ -94,6 +94,8 @@
 		return {
 			//添加节点
 			addNode: $.proxy(this.addNode, this),
+			//删除子节点
+			deleteNode: $.proxy(this.deleteNode, this),
 
 			// Options (public access)
 			options: this.options,
@@ -1267,6 +1269,24 @@
 		if (options.node) {
 			node.nodes.push(options.node);
 		};
+	};
+	/**
+	 删除子节点
+	 @param {Object|Number} identifiers - A valid node, node id or array of node identifiers
+	 @param {optional Object} options.node;
+	 */
+	Tree.prototype.deleteNode = function (identifiers, options) {
+		this.forEachIdentifier(identifiers, options , $.proxy(function (node) {
+			this.setDeleteNode(node);
+		}, this));
+		this.setInitialStates({ nodes: this.tree }, 0);
+		this.render();
+	}
+	/**
+	 * 删除子节点
+	 */
+	Tree.prototype.setDeleteNode = function (node) {
+		node.nodes = [];
 	};
 
 })(jQuery, window, document);
