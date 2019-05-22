@@ -93,6 +93,23 @@ function changeSelect(obj){
     let sel = $(obj).text();
     $(obj).parent().prev().children().first().text(sel);
 }
+// params和header添加trtd
+let parHeaderTr = '<tr flag="false">' +
+    '<td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>' +
+    '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>' +
+    '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>' +
+    '<td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>' +
+    '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>' +
+    '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td></tr>';
+// body和response添加trtd
+let bodResponseTr = '<tr flag="false">' +
+    '<td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>' +
+    '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>' +
+    '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>' +
+    '<td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/></td>' +
+    '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>' +
+    '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>' +
+    '<td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td></tr>';
 /**
  * 自动追加tr,td
  */
@@ -101,27 +118,16 @@ function addTrTd(obj){
     if(flag == 'true'){
         $(obj).parent().parent().attr('flag','false');
         // $('#content_'+suffix+' #table_tbody tr:last')
-        $(obj).parent().parent().last().after('<tr flag="true">' +
-            '<td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>' +
-            '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>' +
-            '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>' +
-            '<td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>' +
-            '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>' +
-            '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td></tr>');
+        $(obj).parent().parent().last().after(parHeaderTr);
+        $(obj).parent().parent().parent().children('tr:last-child').attr('flag','true');
     }
 }
 function addBodyTrTd(obj){
     let flag = $(obj).parent().parent().attr('flag');
     if(flag == 'true'){
         $(obj).parent().parent().attr('flag','false');
-        $(obj).parent().parent().last().after('<tr flag="true">' +
-            '<td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>' +
-            '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>' +
-            '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>' +
-            '<td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/></td>' +
-            '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>' +
-            '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>' +
-            '<td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td></tr>');
+        $(obj).parent().parent().last().after(bodResponseTr);
+        $(obj).parent().parent().parent().children('tr:last-child').attr('flag','true');
     }
 }
 
@@ -193,7 +199,7 @@ function initJsonEditor(suffix){
     };
     json = {};
     window['body_editor_'+suffix] = new JSONEditor(body_container, body_options, json);
-    window['resp_editor_'+suffix] = new JSONEditor(resp_container, resp_options, json);
+    window['response_editor_'+suffix] = new JSONEditor(resp_container, resp_options, json);
 }
 /**
  * 解析textarea中的json
@@ -205,7 +211,7 @@ function getBodyJsonData(suffix){
     analysisJson(suffix, json, i, '', 'body_');
 }
 function getResponseJsonData(suffix){
-    let str = eval('resp_editor_'+suffix).getText();
+    let str = eval('response_editor_'+suffix).getText();
     let json = $.parseJSON(str); //json数据
     let i = 0; //修改索引值
     analysisJson(suffix, json, i, '', 'response_');
@@ -215,14 +221,7 @@ function analysisJson(suffix, json, i, parent, type){
     let len = obj.length;
     for(name in json){
         if(i > len - 2){
-            $('#'+type+suffix+' tr:last').after('<tr flag="false">' +
-                '<td><input class="form-control" type="text" name="name" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>' +
-                '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>' +
-                '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>' +
-                '<td><input class="form-control" type="text" name="required" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/></td>' +
-                '<td><input class="form-control" type="text" name="max_length" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>' +
-                '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>' +
-                '<td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td></tr>');
+            $('#'+type+suffix+' tr:last').after(bodResponseTr);
         }
         obj.eq(i).find('td:first').find('input').val(name);
         obj.eq(i).find('td:last').find('input').val(parent);
@@ -256,9 +255,6 @@ function construnctionSelectClass(data){
 function setSelectClass(obj){
     $('#select_class_id').val($(obj).attr('id'));
 }
-function delClass(){
-    alert("删除class");
-}
 /**
  * 构建树数据
  */
@@ -268,7 +264,7 @@ function construnctionTree(data, selectTree){
         let obj = data[i];
         let parent = {
             index: i,
-            text: '<span title='+obj.url+'>'+obj.name+obj.code+'</span><span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px" onclick="delClass()"></span>',
+            text: '<span title='+obj.url+'>'+obj.code+'</span><span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px;" onclick="delClass(\''+obj.classId+'\',\'class\')"></span>',
             id: obj.classId,
             icon:'glyphicon glyphicon-folder-close',
             selectable:false,
@@ -286,6 +282,7 @@ function construnctionTree(data, selectTree){
         showBorder: true,
         borderColor: "#fff",
         selectedBackColor: '#f5f5f5',
+        selectedColor: '#000',
         // onhoverColor: "#1f1f1f",
         onNodeExpanded: function(event, data){
             //折叠所有
@@ -297,10 +294,30 @@ function construnctionTree(data, selectTree){
         },
         onNodeSelected: function (event, data) {
             console.log(data);
-            tabControl();
-            requestInterfaceValue('/ih/rest/apiService/v1/interface/'+data.id,'GET');
+            //判断是否添加tab
+            if(whetherAddTab(data.name)){
+                //添加tab
+                tabControl();
+                //请求tab数据
+                requestInterfaceValue('/ih/rest/apiService/v1/interface/'+data.id,'GET');
+            };
         },
     });
+}
+
+/**
+ * 判断是否添加tab
+ */
+let whetherAddTab = (name) => {
+    let flag = true;
+    $('#right_top_tab li a').each(function(){
+        let val = $(this).text();
+        if(name == val){
+            flag = false;
+            return false;
+        }
+    })
+    return flag;
 }
 /**
  * 生成随机ID
@@ -496,15 +513,49 @@ let requestInterfaceValue = (url, type) => {
         }
     })
 }
+/**
+ * 数据填充
+ * @param data
+ */
 let construnctionInterfaceValue = (data) => {
+    let {name, code, url, type, queryVO, headerVO, bodyVO, responseVO} = data;
     //获得id后缀
     let suffix = getSelectSuffix();
     // "classId":$('#select_class_id').val(),
     // "name":"-",
-    $('#href_content_'+suffix+' nobr').text(data.name); //tab名称
-    $('#interface_url_'+suffix).text(data.code); //code
-    $('#url_text_'+suffix).val(data.url); //url
-    $('#content_select_'+suffix).children().children().first().text(data.type); //请求类型
+    $('#href_content_'+suffix+' nobr').text(name); //tab名称
+    $('#interface_url_'+suffix).text(code); //code
+    $('#url_text_'+suffix).val(url); //url
+    $('#content_select_'+suffix).children().children().first().text(type); //请求类型
+    let obj = {'params':queryVO, 'headers':headerVO, 'body':bodyVO, 'response':responseVO};
+    for(let key in obj){
+        constructRightBottomData(key, obj[key], suffix);
+    }
+}
+let constructRightBottomData = (head, vo, suffix) => {
+    let trObjs = $('#'+head+'_'+suffix+' tr');
+    let params = vo.params;
+    for(let i in params){
+        $(trObjs).each(function(){$(this).attr('flag', 'false')}); // 将所有输入框置为不可自动增加
+        //追加新的输入框
+        if(head == 'params' || head == 'headers'){
+            $(trObjs).last().after(parHeaderTr);
+        }else{
+            $(trObjs).last().after(bodResponseTr);
+        }
+        let trObj = trObjs.eq(i);
+        let obj = params[i];
+        for(let key in obj){
+            $(trObj).find('input[name='+key+']').val(obj[key]);
+        }
+    }
+    $(trObjs).parent().children('tr:last-child').attr('flag', 'true') // 将最后输入框置为可自动增加
+    if(vo.hasOwnProperty('example')){
+        let example = vo.example;
+        if(example != null){
+            eval(head+'_editor_'+suffix).setText(example);
+        }
+    }
 }
 /**
  * 构建树子集数据
@@ -516,6 +567,7 @@ function construnctionTreeChildNode(data, index, selectTree){
         let node = {
             text: obj.type + obj.url +'<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px" onclick="delClass()"></span>',
             id: obj.interfaceId,
+            name: obj.name,
             //  color:"#fff",
 //              backColor: "rgba(0,0,0,0.95)",
 //              backColor: '#223043',
@@ -586,16 +638,31 @@ function saveInterface(){
         "url":$('#url_text_'+suffix).val(),
         "type": $('#content_select_'+suffix).children().children().first().text()
     }
-    data.paramsVO = getVal('params', suffix);
-    data.headersVO = getVal('headers', suffix);
+    data.queryVO = {
+        "params": getVal('params', suffix),
+    }
+    data.headerVO = {
+        "params": getVal('headers', suffix),
+    }
     data.bodyVO = {
-        "list": getVal('body', suffix),
+        "params": getVal('body', suffix),
         "example": eval('body_editor_'+suffix).getText()
     }
     data.responseVO = {
-        "list": getVal('response', suffix),
-        "example": eval('resp_editor_'+suffix).getText()
+        "params": getVal('response', suffix),
+        "example": eval('response_editor_'+suffix).getText()
     }
     console.log(data);
     requestApi('/ih/rest/apiService/v1/interface','POST', data);
+}
+
+/**
+ * 删除
+ * @param id
+ */
+function delClass(id, type){
+    // TODO 根据type判断是删除class还是interface
+    console.log(id,type);
+    //组织冒泡事件
+    window.event? window.event.cancelBubble = true : e.stopPropagation();
 }
