@@ -57,6 +57,7 @@
             <ul id="right_top_tab" class="nav nav-tabs cus-nav-tabs mrg">
                 <li role="presentation" class="active cus-padding" suffix="default">
                     <a href="#content_default" id="href_content_default" data-toggle="tab" class="cus-right-top-height">
+                        <input id="interface_id_default" style="display: none" type="text"/>
                         <nobr>Untitled Request</nobr>
                         <span id="close_icon_default" class="glyphicon glyphicon-remove cus-close-icon cursor" style="display: none" onclick="closeTabContro()"></span>
                     </a>
@@ -66,9 +67,9 @@
             <!--导航栏对应内容-->
             <div id="right_top_tab_content" class="tab-content mrg div-mrg right-bottom-border">
                 <div class="tab-pane active" id="content_default">
-                    <input id="interface_id_default" style="display: none" type="text"/>
                     <!--右侧接口名称-->
                     <div class="mrg div-mrg">
+                        <input id="interface_name_default" class="form-control cus-interface-name" type="text" placeholder="接口名称" />
                         <span id="interface_url_default">Untitled Request</span>
                         <span id="interface_desc_icon_default" class="glyphicon glyphicon-triangle-left cursor" onclick="interfaceDescription()"></span>
                         <input id="interface_desc_default" type="text" style="display: none; margin-top: 10px" class="form-control" placeholder="接口描述"/>

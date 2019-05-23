@@ -108,6 +108,13 @@
         height: 25px;
         padding: 5px 5px !important;
     }
+    /*接口名称input样式*/
+    .cus-interface-name{
+        width: 15%;
+        display: inline;
+        border: 0px;
+        box-shadow: inset 0 0px 0px rgba(0, 0, 0, .075)
+    }
     /*右下input框*/
     .cus-right-bottom-input input{
         border: 0px;

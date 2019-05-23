@@ -302,7 +302,7 @@ function construnctionTree(data, selectTree){
         onNodeSelected: function (event, data) {
             console.log(data);
             //判断是否添加tab
-            if(whetherAddTab(data.name)){
+            if(whetherAddTab(data.id)){
                 //添加tab
                 tabControl();
                 //请求tab数据
@@ -317,8 +317,8 @@ function construnctionTree(data, selectTree){
  */
 let whetherAddTab = (name) => {
     let flag = true;
-    $('#right_top_tab li a').each(function(){
-        let val = $(this).text();
+    $('#right_top_tab li a input').each(function(){
+        let val = $(this).val();
         if(name == val){
             flag = false;
             return false;
@@ -348,6 +348,7 @@ function tabControl(){
     let close_icon = 'close_icon_'+ran;
     let content = 'content_'+ran;
     let interface_id = 'interface_id_'+ran;
+    let interface_name = 'interface_name_'+ran;
     let interface_url = 'interface_url_'+ran;
     let interface_desc_icon = 'interface_desc_icon_'+ran;
     let interface_desc = 'interface_desc_'+ran;
@@ -370,6 +371,7 @@ function tabControl(){
     //追加tab
     $('#right_top_tab li:last').after('<li role="presentation" class="active cus-padding" suffix='+ran+'>' +
         '<a href='+href_content+' id='+id_content+' data-toggle="tab" class="cus-right-top-height">' +
+        '<input id='+interface_id+' style="display: none" type="text"/>' +
         '<nobr>Untitled Request</nobr>' +
         '<span id='+close_icon+' class="glyphicon glyphicon-remove cus-close-icon cursor" style="display: none" onclick="closeTabContro()"></span>' +
         '</a></li>');
@@ -379,8 +381,8 @@ function tabControl(){
     })
     //追加内容
     $('#right_top_tab_content > div:last').after('<div class="tab-pane active" id='+content+'>' +
-        '<input id='+interface_id+' style="display: none" type="text"/>'+
-        '<div class="mrg div-mrg"><span id='+interface_url+'>Untitled Request</span>' +
+        '<div class="mrg div-mrg"><input id='+interface_name+' class="form-control cus-interface-name" type="text" placeholder="接口名称" />' +
+        '<span id='+interface_url+'>Untitled Request</span>' +
         '<span id='+interface_desc_icon+' class="glyphicon glyphicon-triangle-left cursor" onclick="interfaceDescription()"></span>' +
         '<input id='+interface_desc+' type="text" style="display: none; margin-top: 10px" class="form-control" placeholder="接口描述"/>' +
         '</div><ul class="nav nav-list"><li class="divider"></li></ul><div class="mrg div-mrg">' +
@@ -561,16 +563,16 @@ function requestEditClass(url,type){
  * @param data
  */
 let construnctionInterfaceValue = (data) => {
-    let {name, interfaceId, code, url, type, queryVO, headerVO, bodyVO, responseVO} = data;
+    let {name, interfaceId, code, url, type, description, queryVO, headerVO, bodyVO, responseVO} = data;
     //获得id后缀
     let suffix = getSelectSuffix();
-    // "classId":$('#select_class_id').val(),
-    // "name":"-",
+    $('#interface_id_'+suffix).val(interfaceId); //要修改接口的ID
     $('#href_content_'+suffix+' nobr').text(name); //tab名称
-    $('#interface_id_'+suffix).val(interfaceId); //修改接口的ID
+    $('#interface_name_'+suffix).val(name); //接口名称
     $('#interface_url_'+suffix).text(code); //code
     $('#url_text_'+suffix).val(url); //url
     $('#content_select_'+suffix).children().children().first().text(type); //请求类型
+    $('#interface_desc_'+suffix).val(description); //接口描述
     let obj = {'params':queryVO, 'headers':headerVO, 'body':bodyVO, 'response':responseVO};
     for(let key in obj){
         constructRightBottomData(key, obj[key], suffix);
@@ -613,9 +615,9 @@ function construnctionTreeChildNode(data, index, selectTree){
             text: method[obj.type] + '<span>'+obj.url+'</span><span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px" onclick="delClass(\''+obj.interfaceId+'\',\'interface\')"></span>',
             id: obj.interfaceId,
             name: obj.name,
-            //  color:"#fff",
-//              backColor: "rgba(0,0,0,0.95)",
-//              backColor: '#223043',
+            //color:"#fff",
+            //backColor: "rgba(0,0,0,0.95)",
+            //backColor: '#223043',
         };
         $("#"+selectTree).treeview("addNode", [index, { node: node }])
     }
@@ -682,10 +684,11 @@ let constructSaveOrUpdateData = () => {
     let data = {};
     data.interfaceVO = {
         "classId":$('#select_class_id').val(),
-        "name":"-",
+        "name": $('#interface_name_'+suffix).val(),
         "code":$('#interface_url_'+suffix).text(),
         "url":$('#url_text_'+suffix).val(),
-        "type": $('#content_select_'+suffix).children().children().first().text()
+        "type": $('#content_select_'+suffix).children().children().first().text(),
+        "description": $('#interface_desc_'+suffix).val()
     }
     data.queryVO = {
         "params": getVal('params', suffix),
