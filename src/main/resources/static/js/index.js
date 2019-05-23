@@ -6,6 +6,13 @@ $(function(){
 })
 let flag = false;
 
+const method = {
+    "POST":"<span style='background-color: #49cc90; padding: 6px 15px; margin-right: 10px'>POST</span>",
+    "PUT":"<span style='background-color: #fca130; padding: 6px 15px; margin-right: 10px'>PUT</span>",
+    "DELETE":"<span style='background-color: #f93e3e; padding: 6px 15px; margin-right: 10px'>DELETE</span>",
+    "GET":"<span style='background-color: #61affe; padding: 6px 15px; margin-right: 10px'>GET</span>",
+}
+
 /**
  * 获取选择当前tab页后缀
  */
@@ -264,7 +271,7 @@ function construnctionTree(data, selectTree){
         let obj = data[i];
         let parent = {
             index: i,
-            text: '<span title='+obj.url+'>'+obj.code+'</span><span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px;" onclick="delClass(\''+obj.classId+'\',\'class\')"></span>',
+            text: '<span title='+obj.url+'>'+obj.code+'</span><span class="glyphicon glyphicon-edit cursor" style="float: right; margin-right: 10px;" onclick="editClass(\''+obj.classId+'\')"></span><span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px;" onclick="delClass(\''+obj.classId+'\',\'class\')"></span>',
             id: obj.classId,
             icon:'glyphicon glyphicon-folder-close',
             selectable:false,
@@ -287,7 +294,7 @@ function construnctionTree(data, selectTree){
         onNodeExpanded: function(event, data){
             //折叠所有
             // $('#'+selectTree).treeview('collapseAll', { silent:true });
-            requestGetTreeChildNode('/ih/rest/apiService/v1/interfaces','GET',data.id, data.index, 'collections');
+            requestGetTreeChildNode('/ih/rest/apiService/v1/interfaces','GET',data.id, data.index, 'collection');
         },
         onNodeChecked: function (event,data) {
             console.log(data);
@@ -340,6 +347,7 @@ function tabControl(){
     let id_content = 'href_content_'+ran;
     let close_icon = 'close_icon_'+ran;
     let content = 'content_'+ran;
+    let interface_id = 'interface_id_'+ran;
     let interface_url = 'interface_url_'+ran;
     let interface_desc_icon = 'interface_desc_icon_'+ran;
     let interface_desc = 'interface_desc_'+ran;
@@ -370,7 +378,8 @@ function tabControl(){
         $(this).removeClass('active');
     })
     //追加内容
-    $('#right_top_tab_content > div:last').after('<div class="tab-pane active" id='+content+'>'+
+    $('#right_top_tab_content > div:last').after('<div class="tab-pane active" id='+content+'>' +
+        '<input id='+interface_id+' style="display: none" type="text"/>'+
         '<div class="mrg div-mrg"><span id='+interface_url+'>Untitled Request</span>' +
         '<span id='+interface_desc_icon+' class="glyphicon glyphicon-triangle-left cursor" onclick="interfaceDescription()"></span>' +
         '<input id='+interface_desc+' type="text" style="display: none; margin-top: 10px" class="form-control" placeholder="接口描述"/>' +
@@ -514,16 +523,51 @@ let requestInterfaceValue = (url, type) => {
     })
 }
 /**
+ * 删除数据请求
+ */
+function requestDeleteData(url,type){
+    $.ajax({
+        url:url,
+        type:type,
+        dataType:'json',
+        contentType: 'application/json',
+        success:function(resp){
+            console.log(resp);
+        },
+        error:function(resp){
+            console.log(resp);
+        }
+    })
+}
+/**
+ * 编辑类请求
+ */
+function requestEditClass(url,type){
+    $.ajax({
+        url:url,
+        type:type,
+        dataType:'json',
+        contentType: 'application/json',
+        success:function(resp){
+            console.log(resp);
+        },
+        error:function(resp){
+            console.log(resp);
+        }
+    })
+}
+/**
  * 数据填充
  * @param data
  */
 let construnctionInterfaceValue = (data) => {
-    let {name, code, url, type, queryVO, headerVO, bodyVO, responseVO} = data;
+    let {name, interfaceId, code, url, type, queryVO, headerVO, bodyVO, responseVO} = data;
     //获得id后缀
     let suffix = getSelectSuffix();
     // "classId":$('#select_class_id').val(),
     // "name":"-",
     $('#href_content_'+suffix+' nobr').text(name); //tab名称
+    $('#interface_id_'+suffix).val(interfaceId); //修改接口的ID
     $('#interface_url_'+suffix).text(code); //code
     $('#url_text_'+suffix).val(url); //url
     $('#content_select_'+suffix).children().children().first().text(type); //请求类型
@@ -548,6 +592,7 @@ let constructRightBottomData = (head, vo, suffix) => {
         for(let key in obj){
             $(trObj).find('input[name='+key+']').val(obj[key]);
         }
+        trObjs = $('#'+head+'_'+suffix+' tr');
     }
     $(trObjs).parent().children('tr:last-child').attr('flag', 'true') // 将最后输入框置为可自动增加
     if(vo.hasOwnProperty('example')){
@@ -565,7 +610,7 @@ function construnctionTreeChildNode(data, index, selectTree){
     for(let i = 0; i < data.length; i++){
         let obj = data[i];
         let node = {
-            text: obj.type + obj.url +'<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px" onclick="delClass()"></span>',
+            text: method[obj.type] + '<span>'+obj.url+'</span><span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px" onclick="delClass(\''+obj.interfaceId+'\',\'interface\')"></span>',
             id: obj.interfaceId,
             name: obj.name,
             //  color:"#fff",
@@ -599,18 +644,21 @@ function getVal(head, suffix){
     })
     return listVO;
 }
-/**
- * 请求类数据
- */
-function getClass(){
-    requestGetTree('/ih/rest/apiService/v1/classes','GET','collections');
-}
 
 /**
- * 保存请求类数据
+ * 判断是编辑还是保存
  */
-function saveInterfaceGetClass(){
-    requestGetTree('/ih/rest/apiService/v1/classes','GET','');
+let saveUpdateControll = () => {
+    //获得id后缀
+    let suffix = getSelectSuffix();
+    let interface_id = $('#interface_id_'+suffix).val();
+    if(interface_id != ''){
+        //修改
+        updateInterface(interface_id);
+    }else{
+        //保存
+        saveInterface();
+    }
 }
 /**
  * 保存类名
@@ -622,12 +670,13 @@ function saveClass(){
     })
     console.log(data);
     requestApi('/ih/rest/apiService/v1/class','POST', data);
-    $('#myModal').modal('hide')
+    $('#myModal').modal('hide');
 }
+
 /**
- *q保存接口数据
+ * 构建保存/编辑数据
  */
-function saveInterface(){
+let constructSaveOrUpdateData = () => {
     //获得id后缀
     let suffix = getSelectSuffix();
     let data = {};
@@ -652,6 +701,14 @@ function saveInterface(){
         "params": getVal('response', suffix),
         "example": eval('response_editor_'+suffix).getText()
     }
+    return data
+}
+/**
+ * 保存接口数据
+ */
+function saveInterface(){
+    //构建要保存的数据
+    let data = constructSaveOrUpdateData();
     console.log(data);
     requestApi('/ih/rest/apiService/v1/interface','POST', data);
 }
@@ -661,8 +718,41 @@ function saveInterface(){
  * @param id
  */
 function delClass(id, type){
-    // TODO 根据type判断是删除class还是interface
     console.log(id,type);
-    //组织冒泡事件
+    let url;
+    if(type == 'class'){
+        url = '/ih/rest/apiService/v1/class/'+id;
+    }else if(type == 'interface'){
+        url = '/ih/rest/apiService/v1/interface/'+id;
+    }
+    requestDeleteData(url,'DELETE');
+    //阻止冒泡事件
     window.event? window.event.cancelBubble = true : e.stopPropagation();
+}
+/**
+ * 编辑类
+ */
+let editClass = (classId) => {
+    requestEditClass('/ih/rest/apiService/v1/class/'+classId,'PUT');
+}
+/**
+ * 编辑接口
+ */
+let updateInterface = (interface_id) => {
+    //构建要保存的数据
+    let data = constructSaveOrUpdateData();
+    console.log(data);
+    requestApi('/ih/rest/apiService/v1/interface/'+interface_id,'PUT', data);
+}
+/**
+ * 查询文件夹(类)数据
+ */
+function getClass(){
+    requestGetTree('/ih/rest/apiService/v1/classes','GET','collection');
+}
+/**
+ * 保存Model框查询类数据
+ */
+let saveInterfaceGetClass = () => {
+    requestGetTree('/ih/rest/apiService/v1/classes','GET','');
 }

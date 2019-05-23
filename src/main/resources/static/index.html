@@ -30,22 +30,24 @@
                 <li role="presentation" class="cus-left-nav-pills cus-text-align active"><a href="#history" data-toggle="tab">历史记录</a></li>
                 <li role="presentation" class="cus-left-nav-pills cus-text-align"><a href="#collections" data-toggle="tab">文件夹</a></li>
             </ul>
-            <!--工具栏-->
-            <div class="mrg">
-                <div class="row" style="width: 100%">
-<!--                    <div class="col-md-1 cursor"><span class="glyphicon glyphicon-trash"></span></div>-->
-                    <div class="col-md-1 cursor flo" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span></div>
-                </div>
-                <!--分割线-->
-                <ul class="nav nav-list"><li class="divider"></li></ul>
-            </div>
+
             <!--导航栏对应内容-->
             <div id="left_tab_content" class="tab-content mrg">
                 <div class="tab-pane active" id="history">
-                    <p>历史记录</p>
+                    <!--分割线-->
+                    <ul class="nav nav-list"><li class="divider"></li></ul>
+                    <div id="his">历史记录</div>
                 </div>
                 <div class="tab-pane" id="collections" style="height: 100%; overflow: auto">
-                    <p>文件夹</p>
+                    <!--工具栏-->
+                    <div>
+                        <div class="row" style="width: 100%">
+                            <div class="col-md-1 cursor flo" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span></div>
+                        </div>
+                        <!--分割线-->
+                        <ul class="nav nav-list"><li class="divider"></li></ul>
+                    </div>
+                    <div id="collection">文件夹</div>
                 </div>
             </div>
         </div>
@@ -64,6 +66,7 @@
             <!--导航栏对应内容-->
             <div id="right_top_tab_content" class="tab-content mrg div-mrg right-bottom-border">
                 <div class="tab-pane active" id="content_default">
+                    <input id="interface_id_default" style="display: none" type="text"/>
                     <!--右侧接口名称-->
                     <div class="mrg div-mrg">
                         <span id="interface_url_default">Untitled Request</span>
@@ -94,9 +97,6 @@
                                     <input id="url_text_default" type="text" class="form-control" aria-label="..." onkeydown="urlTextUpdate()" onkeyup="urlTextUpdate()">
                                 </div>
                             </div>
-                            <!--<div class="col-md-1">-->
-                                <!--<button class="btn cus-btn">测试</button>-->
-                            <!--</div>btn btn-default-->
                             <div class="col-md-1">
                                 <button class="btn cus-btn" data-toggle="modal" data-target="#selectClassModal" onclick="saveInterfaceGetClass()">保存</button>
                             </div>
@@ -238,7 +238,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭
                     </button>
-                    <button type="button" class="btn btn-primary" onclick="saveInterface()">
+                    <button type="button" class="btn btn-primary" onclick="saveUpdateControll()">
                         提交
                     </button>
                 </div>

@@ -51,6 +51,10 @@
     .treeview .list-group-item{
         padding: 20px 0px !important;
     }
+    .treeview span.indent{
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    }
     /*navpills导航栏样式*/
     .nav-pills > li.active > a{
         color: #0f0f0f;
