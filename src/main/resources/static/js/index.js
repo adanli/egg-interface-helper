@@ -551,6 +551,7 @@ function requestEditClass(url,type){
         dataType:'json',
         contentType: 'application/json',
         success:function(resp){
+            constructClassVal(resp.data);
             console.log(resp);
         },
         error:function(resp){
@@ -559,7 +560,7 @@ function requestEditClass(url,type){
     })
 }
 /**
- * 数据填充
+ * 接口数据填充
  * @param data
  */
 let construnctionInterfaceValue = (data) => {
@@ -602,6 +603,23 @@ let constructRightBottomData = (head, vo, suffix) => {
         if(example != null){
             eval(head+'_editor_'+suffix).setText(example);
         }
+    }
+}
+/**
+ * 类数据填充
+ * @param head
+ * @param vo
+ * @param suffix
+ */
+let constructClassVal = (data) => {
+    $('#myModal').modal('show');
+    $('#classId').val(data.classId);
+    for(let key in data){
+        $('#input_class div').find('input[name='+key+']').val(data[key]);
+        if(key == 'name'){
+            continue;
+        }
+        $('#input_class div').find('input[name='+key+']').attr('disabled','disabled');
     }
 }
 /**
@@ -663,16 +681,34 @@ let saveUpdateControll = () => {
     }
 }
 /**
+ *
+ * 恢复类添加窗口默认
+ */
+let rsetClassModel = () => {
+    $('#input_class div').find('input').each(function() {
+        $(this).val('');
+        $(this).attr('disabled', false)
+    });
+}
+/**
  * 保存类名
  */
 function saveClass(){
     let data = {};
+    let classId = $('#classId').val();
     $('#input_class div input').each(function() {
         data[$(this).attr('name')] = $(this).val();
-    })
+    });
     console.log(data);
-    requestApi('/ih/rest/apiService/v1/class','POST', data);
+    if(classId != ''){
+        //修改类
+        requestApi('/ih/rest/apiService/v1/class/'+classId+'?className='+data.name,'PUT', {});
+    }else{
+        //添加类
+        requestApi('/ih/rest/apiService/v1/class','POST', data);
+    }
     $('#myModal').modal('hide');
+    rsetClassModel();
 }
 
 /**
@@ -736,7 +772,9 @@ function delClass(id, type){
  * 编辑类
  */
 let editClass = (classId) => {
-    requestEditClass('/ih/rest/apiService/v1/class/'+classId,'PUT');
+    requestEditClass('/ih/rest/apiService/v1/class/'+classId,'GET');
+    //阻止冒泡事件
+    window.event? window.event.cancelBubble = true : e.stopPropagation();
 }
 /**
  * 编辑接口
