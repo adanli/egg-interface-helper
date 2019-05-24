@@ -7,6 +7,7 @@ import com.egg.ih.biz.api.vo.params.BodyVO;
 import com.egg.ih.biz.api.vo.params.HeaderVO;
 import com.egg.ih.biz.api.vo.params.QueryVO;
 import com.egg.ih.biz.api.vo.params.ResponseVO;
+import com.egg.ih.log.annotation.LogOperation;
 import com.egg.ih.util.errorcode.DefaultErrorCode;
 import com.egg.ih.util.response.BaseResponse;
 import com.egg.ih.util.response.ResponseBuilder;
@@ -91,6 +92,7 @@ public class ApiController {
         return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.findInterfacesByClassId(classId));
     }
 
+    @LogOperation(service = "apiService", module = "api", description = "根据接口主键查询接口内容")
     @ApiOperation(notes = "/interface/{interfaceId}", value = "根据接口主键查询接口内容")
     @ApiImplicitParam(name = "interfaceId", value = "接口主键", dataType = "String", paramType = "path", required = true)
     @GetMapping(value = "/interface/{interfaceId}")
@@ -183,7 +185,7 @@ public class ApiController {
 
     @ApiOperation(notes = "/class/{classId}", value = "根据主键查询接口类")
     @ApiImplicitParam(name = "classId", value = "接口类主键", dataType = "String", paramType = "path")
-    @PutMapping(value = "/class/{classId}")
+    @GetMapping(value = "/class/{classId}")
     public BaseResponse<ClassVO> findClassById(@PathVariable String classId) {
         return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.findClassById(classId));
     }
