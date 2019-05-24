@@ -108,7 +108,6 @@
                         <!--导航栏-->
                         <ul id="right_bottom_tab_default" class="nav nav-pills cus-nav-right-pills mrg">
                             <li role="presentation" class="active"><a href="#params_default" data-toggle="tab">params</a></li>
-                            <!--<li role="presentation"><a href="#authorization_default" data-toggle="tab">authorization</a></li>-->
                             <li role="presentation"><a href="#headers_default" data-toggle="tab">headers</a></li>
                             <li role="presentation"><a href="#body_default" data-toggle="tab">body</a></li>
                             <li role="presentation"><a href="#response_default" data-toggle="tab">response</a></li>
@@ -122,15 +121,25 @@
                                         <td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>
                                         <td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>
                                         <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>
-                                        <td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>
+                                        <td>
+                                            <div class="input-group">
+                                                <input class="form-control" type="text" name="necessary" style="width: 100px" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>
+                                                <div class="input-group-btn">
+                                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                                                        <span class="caret dropdown-toggle" data-toggle="dropdown"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu pull-right">
+                                                        <li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>
+                                                        <li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>
                                         <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>
                                     </tr></tbody>
                                 </table>
                             </div>
-                            <!--<div class="tab-pane div-mrg" id="authorization_default">-->
-                                <!--<textarea class="form-control cus-textarea" rows="12">authorization</textarea>-->
-                            <!--</div>-->
                             <div class="tab-pane div-mrg" id="headers_default">
                                 <table class="table table-condensed">
                                     <caption>Headers</caption>
@@ -138,7 +147,20 @@
                                         <td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>
                                         <td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>
                                         <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>
-                                        <td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>
+                                        <td>
+                                            <div class="input-group">
+                                                <input class="form-control" type="text" name="necessary" style="width: 100px" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>
+                                                <div class="input-group-btn">
+                                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                                                        <span class="caret dropdown-toggle" data-toggle="dropdown"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu pull-right">
+                                                        <li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>
+                                                        <li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>
                                         <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>
                                     </tr></tbody>
@@ -151,7 +173,20 @@
                                         <td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>
                                         <td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>
                                         <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>
-                                        <td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/></td>
+                                        <td>
+                                            <div class="input-group">
+                                                <input class="form-control" type="text" name="necessary" style="width: 100px" disabled placeholder="是否必填" onkeydown="addBodyTrTd(this)"/>
+                                                <div class="input-group-btn">
+                                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                                                        <span class="caret dropdown-toggle" data-toggle="dropdown"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu pull-right">
+                                                        <li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>
+                                                        <li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>
                                         <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>
                                         <td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td>
@@ -166,7 +201,20 @@
                                         <td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>
                                         <td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>
                                         <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>
-                                        <td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/></td>
+                                        <td>
+                                            <div class="input-group">
+                                                <input class="form-control" type="text" name="necessary" style="width: 100px" disabled placeholder="是否必填" onkeydown="addBodyTrTd(this)"/>
+                                                <div class="input-group-btn">
+                                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                                                        <span class="caret dropdown-toggle" data-toggle="dropdown"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu pull-right">
+                                                        <li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>
+                                                        <li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>
                                         <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>
                                         <td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td>

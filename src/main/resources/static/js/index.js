@@ -100,12 +100,27 @@ function changeSelect(obj){
     let sel = $(obj).text();
     $(obj).parent().prev().children().first().text(sel);
 }
+/**
+ * select选择框修改
+ * @param obj
+ */
+let bottomValChangeSelect = (obj) => {
+    let sel = $(obj).text();
+    $(obj).parent().parent().prev().val(sel);
+}
 // params和header添加trtd
 let parHeaderTr = '<tr flag="false">' +
     '<td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>' +
     '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>' +
     '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>' +
-    '<td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>' +
+    '<td><div class="input-group">' +
+    '<input class="form-control" type="text" name="necessary" style="width: 100px" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>' +
+    '<div class="input-group-btn">' +
+    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">' +
+    '<span class="caret dropdown-toggle" data-toggle="dropdown"></span>' +
+    '</button><ul class="dropdown-menu pull-right"><li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>' +
+    '<li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>' +
+    '</ul></div></div></td>' +
     '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>' +
     '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td></tr>';
 // body和response添加trtd
@@ -113,7 +128,13 @@ let bodResponseTr = '<tr flag="false">' +
     '<td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>' +
     '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>' +
     '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>' +
-    '<td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/></td>' +
+    '<td><div class="input-group">' +
+    '<input class="form-control" type="text" name="necessary" style="width: 100px" disabled placeholder="是否必填" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/>' +
+    '<div class="input-group-btn">' +
+    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">' +
+    '<span class="caret dropdown-toggle" data-toggle="dropdown"></span></button>' +
+    '<ul class="dropdown-menu pull-right"><li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>\n' +
+    '<li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li></ul></div></div></td>' +
     '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>' +
     '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>' +
     '<td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td></tr>';
@@ -404,44 +425,92 @@ function tabControl(){
         '<li role="presentation"><a href='+href_response+' data-toggle="tab">response</a></li></ul>'+
         '<div id='+right_bottom_tab_content+' class="tab-content mrg">' +
         '<div class="tab-pane active div-mrg" id='+id_params+'>' +
-        '<table class="table table-condensed"><caption>Query Params</caption><tbody><tr flag="true">\n' +
-        '<td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>\n' +
-        '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>\n' +
-        '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>\n' +
-        '<td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>\n' +
-        '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>\n' +
-        '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>\n' +
-        '</tr></tbody></table></div>' +
+        '<table class="table table-condensed"><caption>Query Params</caption><tbody>' +
+        '<tr flag="true"><td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>' +
+        '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>' +
+        '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>' +
+        '<td><div class="input-group"><input class="form-control" type="text" name="necessary" style="width: 100px" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>' +
+        '<div class="input-group-btn"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">' +
+        '<span class="caret dropdown-toggle" data-toggle="dropdown"></span></button><ul class="dropdown-menu pull-right">\n' +
+        '<li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li><li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>' +
+        '</ul></div></div></td><td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>' +
+        '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td></tr>' +
+        '</tbody></table></div>' +
         '<div class="tab-pane div-mrg" id='+id_headers+'>' +
-        '<table class="table table-condensed"><caption>Headers</caption><tbody><tr flag="true">\n' +
-        '<td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>\n' +
-        '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>\n' +
-        '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>\n' +
-        '<td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addTrTd(this)"/></td>\n' +
-        '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>\n' +
-        '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>\n' +
-        '</tr></tbody></table></div>' +
+        '<table class="table table-condensed"><caption>Headers</caption><tbody>' +
+        '<tr flag="true">\n' +
+        '    <td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>\n' +
+        '    <td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>\n' +
+        '    <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>\n' +
+        '    <td>\n' +
+        '        <div class="input-group">\n' +
+        '            <input class="form-control" type="text" name="necessary" style="width: 100px" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>\n' +
+        '            <div class="input-group-btn">\n' +
+        '                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">\n' +
+        '                    <span class="caret dropdown-toggle" data-toggle="dropdown"></span>\n' +
+        '                </button>\n' +
+        '                <ul class="dropdown-menu pull-right">\n' +
+        '                    <li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>\n' +
+        '                    <li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>\n' +
+        '                </ul>\n' +
+        '            </div>\n' +
+        '        </div>\n' +
+        '    </td>\n' +
+        '    <td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>\n' +
+        '    <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>\n' +
+        '</tr>' +
+        '</tbody></table></div>' +
         '<div class="tab-pane div-mrg" id='+id_body+'>' +
-        '<table class="table table-condensed"><caption>Body</caption><tbody><tr flag="true">' +
-        '<td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>' +
-        '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>' +
-        '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>' +
-        '<td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/></td>' +
-        '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>' +
-        '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>' +
-        '<td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td>' +
-        '</tr></tbody></table>' +
+        '<table class="table table-condensed"><caption>Body</caption><tbody>' +
+        '<tr flag="true">\n' +
+        '    <td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>\n' +
+        '    <td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>\n' +
+        '    <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>\n' +
+        '    <td>\n' +
+        '        <div class="input-group">\n' +
+        '            <input class="form-control" type="text" name="necessary" style="width: 100px" disabled placeholder="是否必填" onkeydown="addBodyTrTd(this)"/>\n' +
+        '            <div class="input-group-btn">\n' +
+        '                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">\n' +
+        '                    <span class="caret dropdown-toggle" data-toggle="dropdown"></span>\n' +
+        '                </button>\n' +
+        '                <ul class="dropdown-menu pull-right">\n' +
+        '                    <li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>\n' +
+        '                    <li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>\n' +
+        '                </ul>\n' +
+        '            </div>\n' +
+        '        </div>\n' +
+        '   </td>\n' +
+        '    <td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>\n' +
+        '    <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>\n' +
+        '    <td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td>\n' +
+        '</tr>' +
+        '</tbody></table>' +
         '<div id='+body_json_editor+' class="cus-jsoneditor"></div>' +
         '</div><div class="tab-pane div-mrg" id='+id_response+'>' +
-        '<table class="table table-condensed"><caption>Response</caption><tbody><tr flag="true">' +
-        '<td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>' +
-        '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>' +
-        '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>' +
-        '<td><input class="form-control" type="text" name="necessary" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/></td>' +
-        '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>' +
-        '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>' +
-        '<td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td>' +
-        '</tr></tbody></table>' +
+        '<table class="table table-condensed"><caption>Response</caption><tbody>' +
+        '<tr flag="true">\n' +
+        '    <td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>\n' +
+        '    <td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>\n' +
+        '    <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>\n' +
+        '    <td>\n' +
+        '        <div class="input-group">\n' +
+        '            <input class="form-control" type="text" name="necessary" style="width: 100px" disabled placeholder="是否必填" onkeydown="addBodyTrTd(this)"/>\n' +
+        '            <div class="input-group-btn">\n' +
+        '                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">\n' +
+        '                    <span class="caret dropdown-toggle" data-toggle="dropdown"></span>\n' +
+        '                </button>\n' +
+        '                <ul class="dropdown-menu pull-right">\n' +
+        '                    <li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>\n' +
+        '                    <li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>\n' +
+        '                </ul>\n' +
+        '            </div>\n' +
+        '        </div>\n' +
+        '    </td>\n' +
+        '    <td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>\n' +
+        '    <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>\n' +
+        '    <td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td>\n' +
+        '</tr>' +
+        '</tbody></table>' +
         '<div id='+response_json_editor+' class="cus-jsoneditor"></div></div></div></div></div>');
     //判断是否显示关闭图标
     showOrHide();
@@ -659,6 +728,9 @@ function getVal(head, suffix){
         })
         if(JSON.stringify(val) == '{}'){
             return true;
+        }
+        if(val.necessary != ''){
+            val.necessary = val.necessary == '是'?'Y':'N';
         }
         listVO.push(val);
     })
