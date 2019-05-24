@@ -17,7 +17,7 @@ public interface ApiService {
      * @param ihClassVO
      * @return
      */
-    int saveClass(ClassVO ihClassVO);
+    boolean saveClass(ClassVO ihClassVO);
 
     /**
      * 保存接口
@@ -28,7 +28,7 @@ public interface ApiService {
      * @param responseVO 返回值
      * @return
      */
-    int saveInterface(InterfaceVO interfaceVO, QueryVO queryVO, HeaderVO headerVO, BodyVO bodyVO, ResponseVO responseVO) ;
+    boolean saveInterface(InterfaceVO interfaceVO, QueryVO queryVO, HeaderVO headerVO, BodyVO bodyVO, ResponseVO responseVO) ;
 
     /**
      * 查询所有类, 将类名以字典形式顺利展示
@@ -68,7 +68,7 @@ public interface ApiService {
      * @param className
      * @return
      */
-    int updateClass(String classId, String className);
+    boolean updateClass(String classId, String className);
 
     /**
      * 更新接口
@@ -79,6 +79,11 @@ public interface ApiService {
      * @param responseVO 返回值
      * @return
      */
-    int updateInterface(InterfaceVO interfaceVO, QueryVO queryVO, HeaderVO headerVO, BodyVO bodyVO, ResponseVO responseVO) ;
+    boolean updateInterface(InterfaceVO interfaceVO, QueryVO queryVO, HeaderVO headerVO, BodyVO bodyVO, ResponseVO responseVO) ;
+
+    /**
+     * 根据类主键查询类
+     */
+    ClassVO findClassById(String classId);
 
 }

@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,7 +47,7 @@ public class ApiController {
     @ApiOperation(notes = "/class", value = "创建接口类")
     @ApiImplicitParam(name = "ihClassVO", value = "接口类", dataType = "com.egg.ih.biz.api.vo.IhClassVO", paramType = "body", required = true)
     @PostMapping(value = "/class")
-    public BaseResponse<Integer> createClass(@RequestBody ClassVO classVO) {
+    public BaseResponse<Boolean> createClass(@RequestBody ClassVO classVO) {
 
         return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.saveClass(classVO));
     }
@@ -56,7 +57,7 @@ public class ApiController {
             @ApiImplicitParam(name = "map", value = "封装map对象, 包含params、headers、body、response", dataType = "Map", paramType = "body")
     })
     @PostMapping(value = "/interface")
-    public BaseResponse<Integer> createInterface(@RequestBody Map<String, Object> map) {
+    public BaseResponse<Boolean> createInterface(@RequestBody Map<String, Object> map) {
 
         ParamClass paramClass = this.assembleMap(map);
 
@@ -119,7 +120,7 @@ public class ApiController {
         @ApiImplicitParam(name = "className", value = "接口类名称", dataType = "String", paramType = "query", required = true)
     })
     @PutMapping(value = "/class/{classId}")
-    public BaseResponse<Integer> updateClass(@PathVariable String classId, @RequestParam String className) {
+    public BaseResponse<Boolean> updateClass(@PathVariable String classId, @RequestParam String className) {
         return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.updateClass(classId, className));
     }
 
@@ -133,10 +134,11 @@ public class ApiController {
             @ApiImplicitParam(name = "responseVO", value = "返回值类", dataType = "IhResponseVO", paramType = "query")
     })
     @PutMapping(value = "/interface/{interfaceId}")
-    public BaseResponse updateInterfaceById(@RequestBody Map<String, Object> map) {
+    public BaseResponse updateInterfaceById(@PathVariable String interfaceId, @RequestBody Map<String, Object> map) {
         ParamClass paramClass = this.assembleMap(map);
 
-        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.saveInterface(paramClass.getInterfaceVO(),
+        paramClass.getInterfaceVO().setInterfaceId(interfaceId);
+        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.updateInterface(paramClass.getInterfaceVO(),
                 paramClass.getQuery(),
                 paramClass.getHeader(),
                 paramClass.getBody(),
@@ -177,6 +179,13 @@ public class ApiController {
         paramClass.setResponse(responseVO);
 
         return paramClass;
+    }
+
+    @ApiOperation(notes = "/class/{classId}", value = "根据主键查询接口类")
+    @ApiImplicitParam(name = "classId", value = "接口类主键", dataType = "String", paramType = "path")
+    @PutMapping(value = "/class/{classId}")
+    public BaseResponse<ClassVO> findClassById(@PathVariable String classId) {
+        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.findClassById(classId));
     }
 
     @Data

@@ -2,6 +2,8 @@ package com.egg.ih.constant;
 
 import lombok.Getter;
 
+import java.util.Arrays;
+
 /**
  * @author adanl
  */
@@ -62,6 +64,11 @@ public class BaseConstant {
 
         private String name;
         private String code;
+
+        public static String getNameByCode(String code) {
+            return Arrays.stream(是否必填.values()).filter(c -> c.getCode().equals(code)).findFirst().orElseGet(null).getName();
+        }
+
     }
 
     @Getter

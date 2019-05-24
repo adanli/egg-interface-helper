@@ -2,6 +2,9 @@ package com.egg.ih.biz.api.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.egg.ih.biz.api.service.ApiService;
+import com.egg.ih.biz.api.service.IhClassService;
+import com.egg.ih.biz.api.service.IhInterfaceService;
+import com.egg.ih.biz.api.service.IhParamsService;
 import com.egg.ih.biz.api.vo.ClassVO;
 import com.egg.ih.biz.api.vo.InterfaceVO;
 import com.egg.ih.biz.api.vo.params.*;
@@ -12,6 +15,7 @@ import com.egg.ih.db.mapper.IhParamsMapper;
 import com.egg.ih.db.model.IhClass;
 import com.egg.ih.db.model.IhInterface;
 import com.egg.ih.db.model.IhParams;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,13 +32,11 @@ import java.util.function.Supplier;
 @Service
 public class ApiServiceImpl implements ApiService {
     @Autowired
-    private IhClassMapper ihClassMapper;
-
+    private IhClassService ihClassService;
     @Autowired
-    private IhInterfaceMapper ihInterfaceMapper;
-
+    private IhInterfaceService ihInterfaceService;
     @Autowired
-    private IhParamsMapper ihParamsMapper;
+    private IhParamsService ihParamsService;
 
     private Function<ClassVO, IhClass> classVO2Class = vo -> {
         IhClass ihClass = new IhClass();
@@ -58,6 +60,7 @@ public class ApiServiceImpl implements ApiService {
     private Function<IhParams, ParamVO> param2VO = param -> {
         ParamVO paramVO = new ParamVO();
         BeanUtils.copyProperties(param, paramVO);
+        paramVO.setNecessary(BaseConstant.是否必填.getNameByCode(param.getNecessary()));
         return paramVO;
     };
 
@@ -98,34 +101,40 @@ public class ApiServiceImpl implements ApiService {
 
 
     @Override
-    public int saveClass(ClassVO ihClassVO) {
+    public boolean saveClass(ClassVO ihClassVO) {
         IhClass ihClass = classVO2Class.apply(ihClassVO);
-        return ihClassMapper.insert(ihClass);
+        return ihClassService.saveOrUpdate(ihClass);
     }
 
     @Override
-    public int saveInterface(InterfaceVO interfaceVO, QueryVO queryVO, HeaderVO headerVO, BodyVO bodyVO, ResponseVO responseVO) {
+    public boolean saveInterface(InterfaceVO interfaceVO, QueryVO queryVO, HeaderVO headerVO, BodyVO bodyVO, ResponseVO responseVO) {
 
         IhInterface ihInterface = interfaceVO2Interface.apply(interfaceVO);
         // 保存接口
-        int returnId = ihInterfaceMapper.insert(ihInterface);
+        boolean flag = ihInterfaceService.saveOrUpdate(ihInterface);
+
+        // 保存接口参数
+        this.saveParamsVOs(ihInterface.getInterfaceId(), queryVO, headerVO, bodyVO, responseVO);
+
+        return flag;
+    }
+
+    private void saveParamsVOs(String interfaceId, QueryVO queryVO, HeaderVO headerVO, BodyVO bodyVO, ResponseVO responseVO) {
         // 保存接口参数
         if(queryVO!=null && queryVO.getParams()!=null) {
-            this.saveParams(queryVO, ihInterface.getInterfaceId(), BaseConstant.参数存储位置.QUERY.name());
+            this.saveParams(queryVO, interfaceId, BaseConstant.参数存储位置.QUERY.name());
         }
         if(headerVO!=null && headerVO.getParams()!=null) {
-            this.saveParams(headerVO, ihInterface.getInterfaceId(), BaseConstant.参数存储位置.HEADER.name());
+            this.saveParams(headerVO, interfaceId, BaseConstant.参数存储位置.HEADER.name());
         }
         if(bodyVO!=null && bodyVO.getParams()!=null) {
-            this.saveParams(bodyVO, ihInterface.getInterfaceId(), BaseConstant.参数存储位置.BODY.name());
-            saveExample(bodyVO.getExample().getBytes(), BaseConstant.参数存储位置.BODY.name(), ihInterface.getInterfaceId());
+            this.saveParams(bodyVO, interfaceId, BaseConstant.参数存储位置.BODY.name());
+            saveExample(bodyVO.getExample().getBytes(), BaseConstant.参数存储位置.BODY.name(), interfaceId);
         }
         if(responseVO!=null && responseVO.getParams()!=null) {
-            this.saveParams(responseVO, ihInterface.getInterfaceId(), BaseConstant.参数存储位置.RESPONSE.name());
-            saveExample(responseVO.getExample().getBytes(), BaseConstant.参数存储位置.RESPONSE.name(), ihInterface.getInterfaceId());
+            this.saveParams(responseVO, interfaceId, BaseConstant.参数存储位置.RESPONSE.name());
+            saveExample(responseVO.getExample().getBytes(), BaseConstant.参数存储位置.RESPONSE.name(), interfaceId);
         }
-
-        return returnId;
     }
 
     private void saveParams(AbstractParamVO param, String interfaceId, String position) {
@@ -138,14 +147,17 @@ public class ApiServiceImpl implements ApiService {
             p.setPosition(position);
             p.setInterfaceId(interfaceId);
             return p;
-        }).forEach(p -> ihParamsMapper.insert(p));
+        }).forEach(p -> {
+            ihParamsService.saveOrUpdate(p);
+        });
+
     }
 
     @Override
     public List<ClassVO> findClasses() {
         QueryWrapper<IhClass> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(IhClass::getValid, BaseConstant.有效性.有效.getCode());
-        List<IhClass> li = ihClassMapper.selectList(wrapper);
+        List<IhClass> li = ihClassService.list(wrapper);
         if(li!=null && li.size()>0) {
             List<ClassVO> list = new ArrayList<>(li.size());
             li.stream().forEach(clazz -> {
@@ -166,7 +178,7 @@ public class ApiServiceImpl implements ApiService {
         QueryWrapper<IhInterface> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(IhInterface::getClassId, classId);
         wrapper.lambda().eq(IhInterface::getValid, BaseConstant.有效性.有效.getCode());
-        List<IhInterface> li = ihInterfaceMapper.selectList(wrapper);
+        List<IhInterface> li = ihInterfaceService.list(wrapper);
         List<InterfaceVO> list = new ArrayList<>(li.size());
         li.stream().forEach(inter -> {
             InterfaceVO vo = new InterfaceVO();
@@ -201,7 +213,7 @@ public class ApiServiceImpl implements ApiService {
 
         if(ihInterface != null) {
             ihInterface.setValid(BaseConstant.有效性.无效.getCode());
-            ihInterfaceMapper.updateById(ihInterface);
+            ihInterfaceService.saveOrUpdate(ihInterface);
         }
 
     }
@@ -212,20 +224,20 @@ public class ApiServiceImpl implements ApiService {
 
         if(ihClass != null) {
             ihClass.setValid(BaseConstant.有效性.无效.getCode());
-            ihClassMapper.updateById(ihClass);
+            ihClassService.saveOrUpdate(ihClass);
         }
     }
 
     @Override
-    public int updateClass(String classId, String className) {
+    public boolean updateClass(String classId, String className) {
 
         IhClass ihClass = this.findOrgClassById(classId);
         if(ihClass != null) {
             ihClass.setName(className);
-            return ihClassMapper.updateById(ihClass);
+            return ihClassService.saveOrUpdate(ihClass);
         }
 
-        return 0;
+        return Boolean.FALSE;
     }
 
     private void saveExample(byte[] example, String position, String interfaceId) {
@@ -236,7 +248,7 @@ public class ApiServiceImpl implements ApiService {
         exampleParams.setUpdateTime(new Date());
         exampleParams.setInterfaceId(interfaceId);
         exampleParams.setExample(example);
-        ihParamsMapper.insert(exampleParams);
+        ihParamsService.saveOrUpdate(exampleParams);
     }
 
     /**
@@ -247,7 +259,7 @@ public class ApiServiceImpl implements ApiService {
     public void setParamsByInterfaceId(InterfaceVO interfaceVO) {
         QueryWrapper<IhParams> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(IhParams::getInterfaceId, interfaceVO.getInterfaceId());
-        List<IhParams> list = ihParamsMapper.selectList(wrapper);
+        List<IhParams> list = ihParamsService.list(wrapper);
         if(list!=null && list.size()>0) {
             QueryVO queryVO = querySupplier.get();
             HeaderVO headerVO = headerSupplier.get();
@@ -273,7 +285,7 @@ public class ApiServiceImpl implements ApiService {
                         break;
                     }
                     case "RESPONSE": {
-                        if(param.getFlag().equals(BaseConstant.例子位置.example.getCode())) {
+                        if(param.getFlag().equals(BaseConstant.例子位置.query.getCode())) {
                             responseVO.getParams().add(param2VO.apply(param));
                         }else {
                             responseVO.setExample(new String(param.getExample(), Charset.defaultCharset()));
@@ -298,14 +310,14 @@ public class ApiServiceImpl implements ApiService {
         QueryWrapper<IhClass> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(IhClass::getValid, BaseConstant.有效性.有效.getCode());
         wrapper.lambda().eq(IhClass::getClassId, id);
-        return ihClassMapper.selectOne(wrapper);
+        return ihClassService.getOne(wrapper);
     }
 
     private IhInterface findOrgInterfaceById(String id) {
         QueryWrapper<IhInterface> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(IhInterface::getInterfaceId, id);
-        wrapper.lambda().eq(IhInterface::getValid, BaseConstant.有效性.有效.getCode());
-        return ihInterfaceMapper.selectOne(wrapper);
+        wrapper.lambda().eq(IhInterface::getInterfaceId, id).eq(IhInterface::getValid, BaseConstant.有效性.有效.getCode());
+        return ihInterfaceService.getOne(wrapper);
+
     }
 
     /**
@@ -318,13 +330,32 @@ public class ApiServiceImpl implements ApiService {
      * @return
      */
     @Override
-    public int updateInterface(InterfaceVO interfaceVO, QueryVO queryVO, HeaderVO headerVO, BodyVO bodyVO, ResponseVO responseVO) {
+    public boolean updateInterface(InterfaceVO interfaceVO, QueryVO queryVO, HeaderVO headerVO, BodyVO bodyVO, ResponseVO responseVO) {
         // 删除参数
         QueryWrapper<IhParams> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(IhParams::getInterfaceId, interfaceVO.getInterfaceId());
-        ihParamsMapper.selectList(wrapper).stream().forEach(p -> ihParamsMapper.deleteById(p.getParamId()));
+        ihParamsService.list(wrapper).stream().forEach(p -> ihParamsService.removeById(p.getParamId()));
 
-        return this.saveInterface(interfaceVO, queryVO, headerVO, bodyVO, responseVO);
+        IhInterface ihInterface = new IhInterface();
+        BeanUtils.copyProperties(interfaceVO, ihInterface);
+        boolean flag = ihInterfaceService.saveOrUpdate(ihInterface);
+
+        this.saveParamsVOs(ihInterface.getInterfaceId(), queryVO, headerVO, bodyVO, responseVO);
+        return flag;
+    }
+
+    @Override
+    public ClassVO findClassById(String classId) {
+        QueryWrapper<IhClass> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(IhClass::getClassId, classId).eq(IhClass::getValid, BaseConstant.有效性.有效.getCode());
+        IhClass ihClass = ihClassService.getOne(wrapper);
+        if(ihClass == null) {
+            return null;
+        }
+        ClassVO classVO = new ClassVO();
+        BeanUtils.copyProperties(ihClass, classVO);
+
+        return classVO;
     }
 
 }
