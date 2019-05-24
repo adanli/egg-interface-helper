@@ -579,13 +579,15 @@ function requestGetTree(url, type, selectTree){
         type:type,
         contentType: 'application/json',
         success:function(resp){
-            if(selectTree == ''){ // 构建可选择文件夹
-                construnctionSelectClass(resp.data);
-            }else{ //构建类树
-                if(selectTree == 'his'){
-                    constructHistoryTree(resp.data, selectTree);
-                }else{
-                    constructCollectionTree(resp.data, selectTree);
+            if(resp.data != null){
+                if(selectTree == ''){ // 构建可选择文件夹
+                    construnctionSelectClass(resp.data);
+                }else{ //构建类树
+                    if(selectTree == 'his'){
+                        constructHistoryTree(resp.data, selectTree);
+                    }else{
+                        constructCollectionTree(resp.data, selectTree);
+                    }
                 }
             }
         },
