@@ -1,26 +1,22 @@
 package com.egg.ih.biz.api.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.egg.ih.biz.api.service.ApiService;
-import com.egg.ih.biz.api.service.IhClassService;
-import com.egg.ih.biz.api.service.IhInterfaceService;
-import com.egg.ih.biz.api.service.IhParamsService;
+import com.egg.ih.biz.api.service.*;
 import com.egg.ih.biz.api.vo.ClassVO;
 import com.egg.ih.biz.api.vo.InterfaceVO;
 import com.egg.ih.biz.api.vo.params.*;
 import com.egg.ih.constant.BaseConstant;
-import com.egg.ih.db.mapper.IhClassMapper;
-import com.egg.ih.db.mapper.IhInterfaceMapper;
-import com.egg.ih.db.mapper.IhParamsMapper;
 import com.egg.ih.db.model.IhClass;
+import com.egg.ih.db.model.IhHiOper;
 import com.egg.ih.db.model.IhInterface;
 import com.egg.ih.db.model.IhParams;
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.egg.ih.log.vo.HiOperVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.Charset;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -37,6 +33,8 @@ public class ApiServiceImpl implements ApiService {
     private IhInterfaceService ihInterfaceService;
     @Autowired
     private IhParamsService ihParamsService;
+    @Autowired
+    private IhHiOperService ihHiOperService;
 
     private Function<ClassVO, IhClass> classVO2Class = vo -> {
         IhClass ihClass = new IhClass();
@@ -356,6 +354,32 @@ public class ApiServiceImpl implements ApiService {
         BeanUtils.copyProperties(ihClass, classVO);
 
         return classVO;
+    }
+
+    @Override
+    public List<String> findHistoryDate() {
+        return ihHiOperService.findHistoryByDate();
+    }
+
+    @Override
+    public List<HiOperVO> findHistoryByDate(String date) {
+        String year = String.valueOf(LocalDateTime.now().getYear());
+
+        String startTime = year + "-" + date + " 00:00:00";
+        String endTime = year + "-" + date + " 23:59:59";
+        QueryWrapper<IhHiOper> wrapper = new QueryWrapper<>();
+        wrapper.lambda().between(IhHiOper::getCreateTime, startTime, endTime).orderByDesc(IhHiOper::getCreateTime);
+        List<IhHiOper> li = ihHiOperService.list(wrapper);
+
+        List<HiOperVO> list = new ArrayList<>(li.size());
+        li.stream().forEach(o -> {
+            HiOperVO vo = new HiOperVO();
+            BeanUtils.copyProperties(o, vo);
+            list.add(vo);
+        });
+
+
+        return list;
     }
 
 }

@@ -7,7 +7,8 @@ import com.egg.ih.biz.api.vo.params.BodyVO;
 import com.egg.ih.biz.api.vo.params.HeaderVO;
 import com.egg.ih.biz.api.vo.params.QueryVO;
 import com.egg.ih.biz.api.vo.params.ResponseVO;
-import com.egg.ih.log.annotation.LogOperation;
+import com.egg.ih.log.service.LogService;
+import com.egg.ih.log.vo.HiOperVO;
 import com.egg.ih.util.errorcode.DefaultErrorCode;
 import com.egg.ih.util.response.BaseResponse;
 import com.egg.ih.util.response.ResponseBuilder;
@@ -17,10 +18,11 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +35,8 @@ import java.util.Map;
 public class ApiController {
     @Autowired
     private ApiService apiService;
+    @Autowired
+    private LogService logService;
     private static final Gson gson = new Gson();
 
     /**
@@ -92,12 +96,20 @@ public class ApiController {
         return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.findInterfacesByClassId(classId));
     }
 
-    @LogOperation(service = "apiService", module = "api", description = "根据接口主键查询接口内容")
     @ApiOperation(notes = "/interface/{interfaceId}", value = "根据接口主键查询接口内容")
     @ApiImplicitParam(name = "interfaceId", value = "接口主键", dataType = "String", paramType = "path", required = true)
     @GetMapping(value = "/interface/{interfaceId}")
-    public BaseResponse<InterfaceVO> findInterfaceById(@PathVariable String interfaceId) {
-        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.findInterfaceById(interfaceId));
+    public BaseResponse<InterfaceVO> findInterfaceById(@PathVariable String interfaceId, HttpServletRequest request) {
+
+        InterfaceVO interfaceVO = apiService.findInterfaceById(interfaceId);
+        // 保存日志
+        HiOperVO history = new HiOperVO();
+        history.setInterfaceId(interfaceVO.getInterfaceId());
+        history.setOperIp(request.getRemoteAddr());
+        history.setUrl(interfaceVO.getUrl());
+        logService.saveLog(history);
+
+        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, interfaceVO);
     }
 
     @ApiOperation(notes = "/class/{classId}", value = "根据类主键删除接口类")
@@ -188,6 +200,19 @@ public class ApiController {
     @GetMapping(value = "/class/{classId}")
     public BaseResponse<ClassVO> findClassById(@PathVariable String classId) {
         return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.findClassById(classId));
+    }
+
+    @ApiOperation(notes = "/interface/history/date", value = "查询历史记录记录的日期列表")
+    @GetMapping(value = "/interface/history/date")
+    public BaseResponse<List<String>> findHistoryDate() {
+        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.findHistoryDate());
+    }
+
+    @ApiOperation(notes = "/interface/history", value = "根据操作日期查询历史记录")
+    @ApiImplicitParam(name = "date", value = "历史记录记录日期", dataType = "String", paramType = "query")
+    @GetMapping(value = "/interface/history")
+    public BaseResponse<List<HiOperVO>> findHistoryByDate(String date) {
+        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.findHistoryByDate(date));
     }
 
     @Data

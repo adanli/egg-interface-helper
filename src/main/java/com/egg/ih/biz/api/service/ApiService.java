@@ -5,6 +5,7 @@ import com.egg.ih.biz.api.vo.params.BodyVO;
 import com.egg.ih.biz.api.vo.params.HeaderVO;
 import com.egg.ih.biz.api.vo.params.QueryVO;
 import com.egg.ih.biz.api.vo.params.ResponseVO;
+import com.egg.ih.log.vo.HiOperVO;
 
 import java.util.List;
 
@@ -83,7 +84,22 @@ public interface ApiService {
 
     /**
      * 根据类主键查询类
+     * @param classId
+     * @return
      */
     ClassVO findClassById(String classId);
+
+    /**
+     * 查询历史记录记录的日期列表
+     * @return
+     */
+    List<String> findHistoryDate();
+
+    /**
+     * 根据操作日期查询历史记录
+     * @param
+     * @return
+     */
+    List<HiOperVO> findHistoryByDate(String date);
 
 }

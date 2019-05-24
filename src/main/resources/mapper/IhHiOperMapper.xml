@@ -13,4 +13,9 @@
         <result column="oper_ip" property="operIp" />
     </resultMap>
 
+    <select id="findHistoryByDate" resultType="java.lang.String">
+        select date_format(create_time, "%m-%d") as date from ih_hi_oper
+          group by date_format(create_time, "%m-%d");
+    </select>
+
 </mapper>
