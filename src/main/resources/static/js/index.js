@@ -8,10 +8,10 @@ $(function(){
 let flag = false;
 
 const method = {
-    "POST":"<span style='background-color: #49cc90; padding: 6px 15px; margin-right: 10px'>POST</span>",
-    "PUT":"<span style='background-color: #fca130; padding: 6px 15px; margin-right: 10px'>PUT</span>",
-    "DELETE":"<span style='background-color: #f93e3e; padding: 6px 15px; margin-right: 10px'>DELETE</span>",
-    "GET":"<span style='background-color: #61affe; padding: 6px 15px; margin-right: 10px'>GET</span>",
+    "POST":"<span style='color: #49cc90; font-weight: bold; padding: 0px 0px; margin-right: 10px'>POST</span>",
+    "PUT":"<span style='color: #fca130; font-weight: bold; padding: 0px 0px; margin-right: 10px'>PUT</span>",
+    "DELETE":"<span style='color: #f93e3e; font-weight: bold; padding: 0px 0px; margin-right: 10px'>DELETE</span>",
+    "GET":"<span style='color: #61affe; font-weight: bold; padding: 0px 0px; margin-right: 10px'>GET</span>",
 }
 
 /**
