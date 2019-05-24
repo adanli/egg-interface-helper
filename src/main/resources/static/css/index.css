@@ -81,10 +81,6 @@
         overflow: hidden;
         background-color: #D3D3D3;
     }
-    /*搜索框样式*/
-    .search {
-        border-radius:10px;
-    }
     /*图标指针变化及大小*/
     .cursor{
         cursor: pointer;

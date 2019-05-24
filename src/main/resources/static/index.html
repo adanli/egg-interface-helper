@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>设计模式</title>
     <link rel="stylesheet" href="css/bootstrap/css/bootstrap.css" />
     <!--    <link rel="stylesheet" href="css/bootstrap/css/bootstrap.min.css" />-->
     <link rel="stylesheet" href="css/bootstrap/css/bootstrap-treeview.css" />
@@ -21,9 +21,22 @@
         <!--左-->
         <div class="col-md-2">
             <!--搜索框-->
-            <div class="input-group search search mrg div-mrg">
-                <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
-                <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+            <div class="input-group mrg div-mrg">
+                <!--<span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>-->
+                <!--<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">-->
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" style="width: 100%" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span>设计模式</span>
+                        <span style="text-align: center; float: right">
+                            <span class="caret"></span>
+                        </span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="./index.html">设计模式</a></li>
+                        <li><a href="./browsemode.html">浏览模式</a></li>
+                        <li><a href="#">测试模式</a></li>
+                    </ul>
+                </div>
             </div>
             <!--导航栏-->
             <ul id="left_tab" class="nav nav-pills mrg">
