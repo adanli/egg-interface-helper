@@ -1,5 +1,6 @@
 $(function(){
     getClass(); //类数据
+    getHistory(); //历史记录
 
     //初始化json编辑器
     initJsonEditor('default');
@@ -7,10 +8,10 @@ $(function(){
 let flag = false;
 
 const method = {
-    "POST":"<span style='background-color: #49cc90; padding: 6px 15px; margin-right: 10px'>POST</span>",
-    "PUT":"<span style='background-color: #fca130; padding: 6px 15px; margin-right: 10px'>PUT</span>",
-    "DELETE":"<span style='background-color: #f93e3e; padding: 6px 15px; margin-right: 10px'>DELETE</span>",
-    "GET":"<span style='background-color: #61affe; padding: 6px 15px; margin-right: 10px'>GET</span>",
+    "POST":"<span style='color: #49cc90; font-weight: bold; padding: 0px 0px; margin-right: 10px'>POST</span>",
+    "PUT":"<span style='color: #fca130; font-weight: bold; padding: 0px 0px; margin-right: 10px'>PUT</span>",
+    "DELETE":"<span style='color: #f93e3e; font-weight: bold; padding: 0px 0px; margin-right: 10px'>DELETE</span>",
+    "GET":"<span style='color: #61affe; font-weight: bold; padding: 0px 0px; margin-right: 10px'>GET</span>",
 }
 
 /**
@@ -114,7 +115,7 @@ let parHeaderTr = '<tr flag="false">' +
     '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>' +
     '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>' +
     '<td><div class="input-group">' +
-    '<input class="form-control" type="text" name="necessary" style="width: 100px" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>' +
+    '<input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>' +
     '<div class="input-group-btn">' +
     '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">' +
     '<span class="caret dropdown-toggle" data-toggle="dropdown"></span>' +
@@ -129,7 +130,7 @@ let bodResponseTr = '<tr flag="false">' +
     '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>' +
     '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>' +
     '<td><div class="input-group">' +
-    '<input class="form-control" type="text" name="necessary" style="width: 100px" disabled placeholder="是否必填" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/>' +
+    '<input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/>' +
     '<div class="input-group-btn">' +
     '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">' +
     '<span class="caret dropdown-toggle" data-toggle="dropdown"></span></button>' +
@@ -284,9 +285,9 @@ function setSelectClass(obj){
     $('#select_class_id').val($(obj).attr('id'));
 }
 /**
- * 构建树数据
+ * 构建类树数据
  */
-function construnctionTree(data, selectTree){
+function constructCollectionTree(data, selectTree){
     let treeData = [];
     for(let i = 0; i < data.length; i++){
         let obj = data[i];
@@ -329,6 +330,39 @@ function construnctionTree(data, selectTree){
                 //请求tab数据
                 requestInterfaceValue('/ih/rest/apiService/v1/interface/'+data.id,'GET');
             };
+        },
+    });
+}
+/**
+ * 构建历史记录树数据
+ */
+let constructHistoryTree = (data, selectTree) => {
+    let treeData = [];
+    for(let i = 0; i < data.length; i++){
+        let val = data[i];
+        let parent = {
+            index: i,
+            text: val,
+            icon:'glyphicon glyphicon-folder-close',
+            selectable:false,
+            nodes:[]
+        }
+        treeData.push(parent);
+    }
+    $('#'+selectTree).treeview({
+        data: treeData,         // 数据源
+        emptyIcon: '',    //没有子节点的节点图标
+        multiSelect: false,    //多选
+        levels: 0,
+        expandIcon:"glyphicon glyphicon-triangle-right",
+        collapseIcon: "glyphicon glyphicon-triangle-bottom",
+        showBorder: true,
+        borderColor: "#fff",
+        selectedBackColor: '#f5f5f5',
+        selectedColor: '#000',
+        onNodeExpanded: function(event, data){
+            requestGetTreeHistoryChildNode('/ih/rest/apiService/v1/interface/history?date='+data.text,'GET', data.index, selectTree);
+            // requestGetTreeChildNode('/ih/rest/apiService/v1/interfaces','GET',data.id, data.index, 'collection');
         },
     });
 }
@@ -403,7 +437,7 @@ function tabControl(){
     //追加内容
     $('#right_top_tab_content > div:last').after('<div class="tab-pane active" id='+content+'>' +
         '<div class="mrg div-mrg"><input id='+interface_name+' class="form-control cus-interface-name" type="text" placeholder="接口名称" />' +
-        '<span id='+interface_url+'>Untitled Request</span>' +
+        '<span id='+interface_url+'></span>' +
         '<span id='+interface_desc_icon+' class="glyphicon glyphicon-triangle-left cursor" onclick="interfaceDescription()"></span>' +
         '<input id='+interface_desc+' type="text" style="display: none; margin-top: 10px" class="form-control" placeholder="接口描述"/>' +
         '</div><ul class="nav nav-list"><li class="divider"></li></ul><div class="mrg div-mrg">' +
@@ -429,7 +463,7 @@ function tabControl(){
         '<tr flag="true"><td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>' +
         '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>' +
         '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>' +
-        '<td><div class="input-group"><input class="form-control" type="text" name="necessary" style="width: 100px" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>' +
+        '<td><div class="input-group"><input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>' +
         '<div class="input-group-btn"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">' +
         '<span class="caret dropdown-toggle" data-toggle="dropdown"></span></button><ul class="dropdown-menu pull-right">\n' +
         '<li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li><li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>' +
@@ -444,7 +478,7 @@ function tabControl(){
         '    <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>\n' +
         '    <td>\n' +
         '        <div class="input-group">\n' +
-        '            <input class="form-control" type="text" name="necessary" style="width: 100px" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>\n' +
+        '            <input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>\n' +
         '            <div class="input-group-btn">\n' +
         '                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">\n' +
         '                    <span class="caret dropdown-toggle" data-toggle="dropdown"></span>\n' +
@@ -468,7 +502,7 @@ function tabControl(){
         '    <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>\n' +
         '    <td>\n' +
         '        <div class="input-group">\n' +
-        '            <input class="form-control" type="text" name="necessary" style="width: 100px" disabled placeholder="是否必填" onkeydown="addBodyTrTd(this)"/>\n' +
+        '            <input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" onkeydown="addBodyTrTd(this)"/>\n' +
         '            <div class="input-group-btn">\n' +
         '                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">\n' +
         '                    <span class="caret dropdown-toggle" data-toggle="dropdown"></span>\n' +
@@ -494,7 +528,7 @@ function tabControl(){
         '    <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>\n' +
         '    <td>\n' +
         '        <div class="input-group">\n' +
-        '            <input class="form-control" type="text" name="necessary" style="width: 100px" disabled placeholder="是否必填" onkeydown="addBodyTrTd(this)"/>\n' +
+        '            <input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" onkeydown="addBodyTrTd(this)"/>\n' +
         '            <div class="input-group-btn">\n' +
         '                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">\n' +
         '                    <span class="caret dropdown-toggle" data-toggle="dropdown"></span>\n' +
@@ -545,10 +579,16 @@ function requestGetTree(url, type, selectTree){
         type:type,
         contentType: 'application/json',
         success:function(resp){
-            if(selectTree == ''){ // 构建可选择文件夹
-                construnctionSelectClass(resp.data);
-            }else{ //构建类树
-                construnctionTree(resp.data, selectTree);
+            if(resp.data != null){
+                if(selectTree == ''){ // 构建可选择文件夹
+                    construnctionSelectClass(resp.data);
+                }else{ //构建类树
+                    if(selectTree == 'his'){
+                        constructHistoryTree(resp.data, selectTree);
+                    }else{
+                        constructCollectionTree(resp.data, selectTree);
+                    }
+                }
             }
         },
         error:function(resp){
@@ -569,7 +609,7 @@ function requestGetTreeChildNode(url, type, classId, index, selectTree){
         },
         contentType: 'application/json',
         success:function(resp){
-            construnctionTreeChildNode(resp.data, index, selectTree);
+            constructCollectionTreeChildNode(resp.data, index, selectTree);
         },
         error:function(resp){
             console.log(resp);
@@ -577,6 +617,22 @@ function requestGetTreeChildNode(url, type, classId, index, selectTree){
     })
 }
 
+/**
+ * 请求历史记录树子集数据
+ */
+let requestGetTreeHistoryChildNode = (url, type, index, selectTree) => {
+    $.ajax({
+        url:url,
+        type:type,
+        contentType: 'application/json',
+        success:function(resp){
+            constructHitoryTreeChildNode(resp.data, index, selectTree);
+        },
+        error:function(resp){
+            console.log(resp);
+        }
+    })
+}
 /**
  * 请求接口数据
  */
@@ -694,7 +750,7 @@ let constructClassVal = (data) => {
 /**
  * 构建树子集数据
  */
-function construnctionTreeChildNode(data, index, selectTree){
+function constructCollectionTreeChildNode(data, index, selectTree){
     $("#"+selectTree).treeview("deleteNode", [index, { node: {}}])
     for(let i = 0; i < data.length; i++){
         let obj = data[i];
@@ -705,6 +761,20 @@ function construnctionTreeChildNode(data, index, selectTree){
             //color:"#fff",
             //backColor: "rgba(0,0,0,0.95)",
             //backColor: '#223043',
+        };
+        $("#"+selectTree).treeview("addNode", [index, { node: node }])
+    }
+}
+/**
+ * 构建历史记录树子集数据
+ */
+function constructHitoryTreeChildNode(data, index, selectTree){
+    $("#"+selectTree).treeview("deleteNode", [index, { node: {}}])
+    for(let i = 0; i < data.length; i++){
+        let obj = data[i];
+        let node = {
+            id: obj.interfaceId,
+            text: method[obj.type] + obj.url,
         };
         $("#"+selectTree).treeview("addNode", [index, { node: node }])
     }
@@ -757,6 +827,7 @@ let saveUpdateControll = () => {
  * 恢复类添加窗口默认
  */
 let rsetClassModel = () => {
+    $('#classId').val('');
     $('#input_class div').find('input').each(function() {
         $(this).val('');
         $(this).attr('disabled', false)
@@ -862,6 +933,13 @@ let updateInterface = (interface_id) => {
  */
 function getClass(){
     requestGetTree('/ih/rest/apiService/v1/classes','GET','collection');
+}
+
+/**
+ * 查询历史记录时间
+ */
+let getHistory = () => {
+    requestGetTree('/ih/rest/apiService/v1/interface/history/date','GET','his');
 }
 /**
  * 保存Model框查询类数据
