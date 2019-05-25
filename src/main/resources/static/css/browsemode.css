@@ -1,0 +1,31 @@
+    /*选中样式*/
+    .cus-select{
+        background-color: #f03357 !important;
+    }
+    /*统一外边框*/
+    .mrg{
+        margin: 20px 0px;
+    }
+    /*图标变化*/
+    .cursor{
+        cursor: pointer;
+    }
+
+    .nav-pills > li.active > a{
+        color: #0f0f0f;
+        background-color: #fff;
+    }
+    .nav-pills > li.active{
+        border-bottom: 2px solid #FF5733;
+    }
+    .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover{
+        color: #0f0f0f;
+        background-color: #fff;
+    }
+    .nav > li > a:hover{
+        color: #CDCDCD;
+        background-color: #fff;
+    }
+    a{
+        color: #CDCDCD;
+    }

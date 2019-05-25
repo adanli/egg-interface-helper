@@ -146,7 +146,6 @@ function addTrTd(obj){
     let flag = $(obj).parent().parent().attr('flag');
     if(flag == 'true'){
         $(obj).parent().parent().attr('flag','false');
-        // $('#content_'+suffix+' #table_tbody tr:last')
         $(obj).parent().parent().last().after(parHeaderTr);
         $(obj).parent().parent().parent().children('tr:last-child').attr('flag','true');
     }
@@ -362,7 +361,6 @@ let constructHistoryTree = (data, selectTree) => {
         selectedColor: '#000',
         onNodeExpanded: function(event, data){
             requestGetTreeHistoryChildNode('/ih/rest/apiService/v1/interface/history?date='+data.text,'GET', data.index, selectTree);
-            // requestGetTreeChildNode('/ih/rest/apiService/v1/interfaces','GET',data.id, data.index, 'collection');
         },
     });
 }
@@ -564,6 +562,7 @@ function requestApi(url,type,data){
         success:function(resp){
             console.log(resp);
             $('#selectClassModal').modal('hide');
+            getClass();
         },
         error:function(resp){
             console.log(resp);
@@ -660,6 +659,7 @@ function requestDeleteData(url,type){
         contentType: 'application/json',
         success:function(resp){
             console.log(resp);
+            getClass();
         },
         error:function(resp){
             console.log(resp);
@@ -775,6 +775,7 @@ function constructHitoryTreeChildNode(data, index, selectTree){
         let node = {
             id: obj.interfaceId,
             text: method[obj.type] + obj.url,
+            selectable:false
         };
         $("#"+selectTree).treeview("addNode", [index, { node: node }])
     }
