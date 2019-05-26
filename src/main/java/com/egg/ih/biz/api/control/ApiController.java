@@ -103,11 +103,11 @@ public class ApiController {
 
         InterfaceVO interfaceVO = apiService.findInterfaceById(interfaceId);
         // 保存日志
-        HiOperVO history = new HiOperVO();
+        /*HiOperVO history = new HiOperVO();
         history.setInterfaceId(interfaceVO.getInterfaceId());
         history.setOperIp(request.getRemoteAddr());
         history.setUrl(interfaceVO.getUrl());
-        logService.saveLog(history);
+        logService.saveLog(history);*/
 
         return ResponseBuilder.build(DefaultErrorCode.SUCCESS, interfaceVO);
     }
