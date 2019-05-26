@@ -746,22 +746,35 @@ let saveInterfaceGetClass = () => {
 
 
 /**
- * 清空目录modal
+ * 清空目录modal并隐藏
  */
 let clearDirectoryModal = () => {
     $('#directory_input div input').each(function() {
         $(this).val('');
     });
     $('#directoryModal').modal('hide');
+    //隐藏切换按钮
+    $('#directoryModal .modal-header .btn').css('display','none');
 }
 /**
- * 清空类Modal
+ * 清空类Modal并隐藏
  */
 let clearClassModal = () => {
     $('#class_input div input').each(function() {
         $(this).val('');
     });
     $('#classModal').modal('hide');
+}
+/**
+ * Modal切换
+ */
+let modalSwitch = (that) => {
+    let type = $(that).attr('cus-type');
+    let arr = type.split(',');
+    $('#'+arr[1]+'Modal').modal('hide');
+    $('#'+arr[0]+'Modal .modal-header .btn').css('display','inline');
+    $('#'+arr[0]+'Modal').modal('show');
+    $('#'+arr[0]+'_parent_id').val($('#'+arr[1]+'_parent_id').val());
 }
 /**
  * 请求
@@ -821,7 +834,11 @@ let saveOrUpdateDirectory = () => {
         requestString('/ih/rest/apiService/v1/directory/'+data.directoryId,'PUT', data);
     }else{
         //添加目录
-        request('/ih/rest/apiService/v1/directory?name='+data.name,'POST', {});
+        let url = '/ih/rest/apiService/v1/directory?name='+data.name;
+        if(data.parentDirectoryId != ''){
+            url += '&parentId='+data.parentDirectoryId;
+        }
+        request(url,'POST', {});
     }
     //清空modal并隐藏
     clearDirectoryModal();

@@ -249,6 +249,9 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         &times;
                     </button>
+                    <button type="button" class="btn btn-default" aria-hidden="true" style="display:none; float:right; margin-right: 10px; opacity: 10" cus-type="class,directory" onclick="modalSwitch(this)">
+                        切换至添加类
+                    </button>
                     <h4 class="modal-title" id="directoryModalLabel">
                         添加目录
                     </h4>
@@ -278,6 +281,9 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         &times;
+                    </button>
+                    <button type="button" class="btn btn-default" aria-hidden="true" style="float:right; margin-right: 10px; opacity: 10" cus-type="directory,class" onclick="modalSwitch(this)">
+                        切换至添加目录
                     </button>
                     <h4 class="modal-title" id="classModalLabel">
                         添加类
