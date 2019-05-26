@@ -33,7 +33,7 @@ let renderingBottomDetailedData = (key, vo) => {
         str += '</tr></thead><tbody>';
         for(let i = 0; i < params.length; i++){
             let obj = params[i];
-            str += '<tr><td>'+obj.code+'</td><td>'+obj.type+'</td><td>'+obj.description+'</td><td>'+obj.necessary+'</td><td>'+obj.maxLength+'</td><td>'+obj.remark+'</td>';
+            str += '<tr><td>'+obj.code+'</td><td>'+obj.type.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</td><td>'+obj.description+'</td><td>'+obj.necessary+'</td><td>'+obj.maxLength+'</td><td>'+obj.remark+'</td>';
             if(key == 'body' || key == 'response'){
                 str+= '<td>'+obj.parent+'</td>';
             }

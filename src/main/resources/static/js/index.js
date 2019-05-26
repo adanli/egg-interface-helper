@@ -284,88 +284,6 @@ function setSelectClass(obj){
     $('#select_class_id').val($(obj).attr('id'));
 }
 /**
- * 构建类树数据
- */
-function constructCollectionTree(data, selectTree){
-    let treeData = [];
-    for(let i = 0; i < data.length; i++){
-        let obj = data[i];
-        let parent = {
-            index: i,
-            text: '<span title='+obj.url+'>'+obj.code+'</span><span class="glyphicon glyphicon-edit cursor" style="float: right; margin-right: 10px;" onclick="editClass(\''+obj.classId+'\')"></span><span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px;" onclick="delClass(\''+obj.classId+'\',\'class\')"></span>',
-            id: obj.classId,
-            icon:'glyphicon glyphicon-folder-close',
-            selectable:false,
-            nodes:[]
-        }
-        treeData.push(parent);
-    }
-    $('#'+selectTree).treeview({
-        data: treeData,         // 数据源
-        emptyIcon: '',    //没有子节点的节点图标
-        multiSelect: false,    //多选
-        levels: 0,
-        expandIcon:"glyphicon glyphicon-triangle-right",
-        collapseIcon: "glyphicon glyphicon-triangle-bottom",
-        showBorder: true,
-        borderColor: "#fff",
-        selectedBackColor: '#f5f5f5',
-        selectedColor: '#000',
-        // onhoverColor: "#1f1f1f",
-        onNodeExpanded: function(event, data){
-            //折叠所有
-            // $('#'+selectTree).treeview('collapseAll', { silent:true });
-            requestGetTreeChildNode('/ih/rest/apiService/v1/interfaces','GET',data.id, data.index, 'collection');
-        },
-        onNodeChecked: function (event,data) {
-            console.log(data);
-        },
-        onNodeSelected: function (event, data) {
-            console.log(data);
-            //判断是否添加tab
-            if(whetherAddTab(data.id)){
-                //添加tab
-                tabControl();
-                //请求tab数据
-                requestInterfaceValue('/ih/rest/apiService/v1/interface/'+data.id,'GET');
-            };
-        },
-    });
-}
-/**
- * 构建历史记录树数据
- */
-let constructHistoryTree = (data, selectTree) => {
-    let treeData = [];
-    for(let i = 0; i < data.length; i++){
-        let val = data[i];
-        let parent = {
-            index: i,
-            text: val,
-            icon:'glyphicon glyphicon-folder-close',
-            selectable:false,
-            nodes:[]
-        }
-        treeData.push(parent);
-    }
-    $('#'+selectTree).treeview({
-        data: treeData,         // 数据源
-        emptyIcon: '',    //没有子节点的节点图标
-        multiSelect: false,    //多选
-        levels: 0,
-        expandIcon:"glyphicon glyphicon-triangle-right",
-        collapseIcon: "glyphicon glyphicon-triangle-bottom",
-        showBorder: true,
-        borderColor: "#fff",
-        selectedBackColor: '#f5f5f5',
-        selectedColor: '#000',
-        onNodeExpanded: function(event, data){
-            requestGetTreeHistoryChildNode('/ih/rest/apiService/v1/interface/history?date='+data.text,'GET', data.index, selectTree);
-        },
-    });
-}
-
-/**
  * 判断是否添加tab
  */
 let whetherAddTab = (name) => {
@@ -633,6 +551,120 @@ let requestGetTreeHistoryChildNode = (url, type, index, selectTree) => {
     })
 }
 /**
+ * 构建类树数据
+ */
+function constructCollectionTree(data, selectTree){
+    let treeData = [];
+    for(let i = 0; i < data.length; i++){
+        let obj = data[i];
+        let parent = {
+            index: i,
+            text: '<span title='+obj.url+'>'+obj.code+'</span><span class="glyphicon glyphicon-edit cursor" style="float: right; margin-right: 10px;" onclick="editClass(\''+obj.classId+'\')"></span><span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px;" onclick="delClass(\''+obj.classId+'\',\'class\')"></span>',
+            id: obj.classId,
+            icon:'glyphicon glyphicon-folder-close',
+            selectable:false,
+            nodes:[]
+        }
+        treeData.push(parent);
+    }
+    $('#'+selectTree).treeview({
+        data: treeData,         // 数据源
+        emptyIcon: '',    //没有子节点的节点图标
+        multiSelect: false,    //多选
+        levels: 0,
+        expandIcon:"glyphicon glyphicon-triangle-right",
+        collapseIcon: "glyphicon glyphicon-triangle-bottom",
+        showBorder: true,
+        borderColor: "#fff",
+        selectedBackColor: '#f5f5f5',
+        selectedColor: '#000',
+        // onhoverColor: "#1f1f1f",
+        onNodeExpanded: function(event, data){
+            //折叠所有
+            // $('#'+selectTree).treeview('collapseAll', { silent:true });
+            requestGetTreeChildNode('/ih/rest/apiService/v1/interfaces','GET',data.id, data.index, 'collection');
+        },
+        onNodeChecked: function (event,data) {
+            console.log(data);
+        },
+        onNodeSelected: function (event, data) {
+            console.log(data);
+            //判断是否添加tab
+            if(whetherAddTab(data.id)){
+                //添加tab
+                tabControl();
+                //请求tab数据
+                requestInterfaceValue('/ih/rest/apiService/v1/interface/'+data.id,'GET');
+            };
+        },
+    });
+}
+/**
+ * 构建历史记录树数据
+ */
+let constructHistoryTree = (data, selectTree) => {
+    let treeData = [];
+    for(let i = 0; i < data.length; i++){
+        let val = data[i];
+        let parent = {
+            index: i,
+            text: val,
+            icon:'glyphicon glyphicon-folder-close',
+            selectable:false,
+            nodes:[]
+        }
+        treeData.push(parent);
+    }
+    $('#'+selectTree).treeview({
+        data: treeData,         // 数据源
+        emptyIcon: '',    //没有子节点的节点图标
+        multiSelect: false,    //多选
+        levels: 0,
+        expandIcon:"glyphicon glyphicon-triangle-right",
+        collapseIcon: "glyphicon glyphicon-triangle-bottom",
+        showBorder: true,
+        borderColor: "#fff",
+        selectedBackColor: '#f5f5f5',
+        selectedColor: '#000',
+        onNodeExpanded: function(event, data){
+            requestGetTreeHistoryChildNode('/ih/rest/apiService/v1/interface/history?date='+data.text,'GET', data.index, selectTree);
+        },
+    });
+}
+/**
+ * 构建树子集数据
+ */
+function constructCollectionTreeChildNode(data, index, selectTree){
+    $("#"+selectTree).treeview("deleteNode", [index, { node: {}}])
+    for(let i = 0; i < data.length; i++){
+        let obj = data[i];
+        let node = {
+            text: method[obj.type] + '<span>'+obj.url+'</span><span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px" onclick="delClass(\''+obj.interfaceId+'\',\'interface\')"></span>',
+            id: obj.interfaceId,
+            name: obj.name,
+            //color:"#fff",
+            //backColor: "rgba(0,0,0,0.95)",
+            //backColor: '#223043',
+        };
+        $("#"+selectTree).treeview("addNode", [index, { node: node }])
+    }
+}
+/**
+ * 构建历史记录树子集数据
+ */
+function constructHitoryTreeChildNode(data, index, selectTree){
+    $("#"+selectTree).treeview("deleteNode", [index, { node: {}}])
+    for(let i = 0; i < data.length; i++){
+        let obj = data[i];
+        let node = {
+            id: obj.interfaceId,
+            text: method[obj.type] + obj.url,
+            selectable:false
+        };
+        $("#"+selectTree).treeview("addNode", [index, { node: node }])
+    }
+}
+/**
  * 请求接口数据
  */
 let requestInterfaceValue = (url, type) => {
@@ -745,39 +777,6 @@ let constructClassVal = (data) => {
             continue;
         }
         $('#input_class div').find('input[name='+key+']').attr('disabled','disabled');
-    }
-}
-/**
- * 构建树子集数据
- */
-function constructCollectionTreeChildNode(data, index, selectTree){
-    $("#"+selectTree).treeview("deleteNode", [index, { node: {}}])
-    for(let i = 0; i < data.length; i++){
-        let obj = data[i];
-        let node = {
-            text: method[obj.type] + '<span>'+obj.url+'</span><span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px" onclick="delClass(\''+obj.interfaceId+'\',\'interface\')"></span>',
-            id: obj.interfaceId,
-            name: obj.name,
-            //color:"#fff",
-            //backColor: "rgba(0,0,0,0.95)",
-            //backColor: '#223043',
-        };
-        $("#"+selectTree).treeview("addNode", [index, { node: node }])
-    }
-}
-/**
- * 构建历史记录树子集数据
- */
-function constructHitoryTreeChildNode(data, index, selectTree){
-    $("#"+selectTree).treeview("deleteNode", [index, { node: {}}])
-    for(let i = 0; i < data.length; i++){
-        let obj = data[i];
-        let node = {
-            id: obj.interfaceId,
-            text: method[obj.type] + obj.url,
-            selectable:false
-        };
-        $("#"+selectTree).treeview("addNode", [index, { node: node }])
     }
 }
 /**
