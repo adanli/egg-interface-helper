@@ -455,7 +455,7 @@ public class ApiServiceImpl implements ApiService {
     private List<DirectoryVO> findDirectoryVOsByParentDirectory(String directoryId) {
         QueryWrapper<IhDirectory> dWrapper = new QueryWrapper<>();
         if(directoryId == null) {
-            dWrapper.lambda().eq(IhDirectory::getValid, BaseConstant.有效性.有效.getCode());
+            dWrapper.lambda().eq(IhDirectory::getValid, BaseConstant.有效性.有效.getCode()).isNull(IhDirectory::getParentDirectoryId);
         }else {
             dWrapper.lambda().eq(IhDirectory::getParentDirectoryId, directoryId).eq(IhDirectory::getValid, BaseConstant.有效性.有效.getCode());
         }
