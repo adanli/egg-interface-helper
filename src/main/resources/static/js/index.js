@@ -1,6 +1,6 @@
 $(function(){
-    getClass(); //类数据
-    getHistory(); //历史记录
+    requestDirectory();
+    // getHistory(); //历史记录
 
     //初始化json编辑器
     initJsonEditor('default');
@@ -480,7 +480,6 @@ function requestApi(url,type,data){
         success:function(resp){
             console.log(resp);
             $('#selectClassModal').modal('hide');
-            getClass();
         },
         error:function(resp){
             console.log(resp);
@@ -513,27 +512,6 @@ function requestGetTree(url, type, selectTree){
         }
     })
 }
-
-/**
- * 请求树子集数据
- */
-function requestGetTreeChildNode(url, type, classId, index, selectTree){
-    $.ajax({
-        url:url,
-        type:type,
-        data: {
-            classId:classId
-        },
-        contentType: 'application/json',
-        success:function(resp){
-            constructCollectionTreeChildNode(resp.data, index, selectTree);
-        },
-        error:function(resp){
-            console.log(resp);
-        }
-    })
-}
-
 /**
  * 请求历史记录树子集数据
  */
@@ -549,55 +527,6 @@ let requestGetTreeHistoryChildNode = (url, type, index, selectTree) => {
             console.log(resp);
         }
     })
-}
-/**
- * 构建类树数据
- */
-function constructCollectionTree(data, selectTree){
-    let treeData = [];
-    for(let i = 0; i < data.length; i++){
-        let obj = data[i];
-        let parent = {
-            index: i,
-            text: '<span title='+obj.url+'>'+obj.code+'</span><span class="glyphicon glyphicon-edit cursor" style="float: right; margin-right: 10px;" onclick="editClass(\''+obj.classId+'\')"></span><span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px;" onclick="delClass(\''+obj.classId+'\',\'class\')"></span>',
-            id: obj.classId,
-            icon:'glyphicon glyphicon-folder-close',
-            selectable:false,
-            nodes:[]
-        }
-        treeData.push(parent);
-    }
-    $('#'+selectTree).treeview({
-        data: treeData,         // 数据源
-        emptyIcon: '',    //没有子节点的节点图标
-        multiSelect: false,    //多选
-        levels: 0,
-        expandIcon:"glyphicon glyphicon-triangle-right",
-        collapseIcon: "glyphicon glyphicon-triangle-bottom",
-        showBorder: true,
-        borderColor: "#fff",
-        selectedBackColor: '#f5f5f5',
-        selectedColor: '#000',
-        // onhoverColor: "#1f1f1f",
-        onNodeExpanded: function(event, data){
-            //折叠所有
-            // $('#'+selectTree).treeview('collapseAll', { silent:true });
-            requestGetTreeChildNode('/ih/rest/apiService/v1/interfaces','GET',data.id, data.index, 'collection');
-        },
-        onNodeChecked: function (event,data) {
-            console.log(data);
-        },
-        onNodeSelected: function (event, data) {
-            console.log(data);
-            //判断是否添加tab
-            if(whetherAddTab(data.id)){
-                //添加tab
-                tabControl();
-                //请求tab数据
-                requestInterfaceValue('/ih/rest/apiService/v1/interface/'+data.id,'GET');
-            };
-        },
-    });
 }
 /**
  * 构建历史记录树数据
@@ -631,24 +560,7 @@ let constructHistoryTree = (data, selectTree) => {
         },
     });
 }
-/**
- * 构建树子集数据
- */
-function constructCollectionTreeChildNode(data, index, selectTree){
-    $("#"+selectTree).treeview("deleteNode", [index, { node: {}}])
-    for(let i = 0; i < data.length; i++){
-        let obj = data[i];
-        let node = {
-            text: method[obj.type] + '<span>'+obj.url+'</span><span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px" onclick="delClass(\''+obj.interfaceId+'\',\'interface\')"></span>',
-            id: obj.interfaceId,
-            name: obj.name,
-            //color:"#fff",
-            //backColor: "rgba(0,0,0,0.95)",
-            //backColor: '#223043',
-        };
-        $("#"+selectTree).treeview("addNode", [index, { node: node }])
-    }
-}
+
 /**
  * 构建历史记录树子集数据
  */
@@ -674,42 +586,6 @@ let requestInterfaceValue = (url, type) => {
         contentType: 'application/json',
         success:function(resp){
             construnctionInterfaceValue(resp.data);
-        },
-        error:function(resp){
-            console.log(resp);
-        }
-    })
-}
-/**
- * 删除数据请求
- */
-function requestDeleteData(url,type){
-    $.ajax({
-        url:url,
-        type:type,
-        dataType:'json',
-        contentType: 'application/json',
-        success:function(resp){
-            console.log(resp);
-            getClass();
-        },
-        error:function(resp){
-            console.log(resp);
-        }
-    })
-}
-/**
- * 编辑类请求
- */
-function requestEditClass(url,type){
-    $.ajax({
-        url:url,
-        type:type,
-        dataType:'json',
-        contentType: 'application/json',
-        success:function(resp){
-            constructClassVal(resp.data);
-            console.log(resp);
         },
         error:function(resp){
             console.log(resp);
@@ -763,23 +639,6 @@ let constructRightBottomData = (head, vo, suffix) => {
     }
 }
 /**
- * 类数据填充
- * @param head
- * @param vo
- * @param suffix
- */
-let constructClassVal = (data) => {
-    $('#myModal').modal('show');
-    $('#classId').val(data.classId);
-    for(let key in data){
-        $('#input_class div').find('input[name='+key+']').val(data[key]);
-        if(key == 'name'){
-            continue;
-        }
-        $('#input_class div').find('input[name='+key+']').attr('disabled','disabled');
-    }
-}
-/**
  * 获取数据
  * @param head
  * @param suffix
@@ -823,38 +682,6 @@ let saveUpdateControll = () => {
     }
 }
 /**
- *
- * 恢复类添加窗口默认
- */
-let rsetClassModel = () => {
-    $('#classId').val('');
-    $('#input_class div').find('input').each(function() {
-        $(this).val('');
-        $(this).attr('disabled', false)
-    });
-}
-/**
- * 保存类名
- */
-function saveClass(){
-    let data = {};
-    let classId = $('#classId').val();
-    $('#input_class div input').each(function() {
-        data[$(this).attr('name')] = $(this).val();
-    });
-    console.log(data);
-    if(classId != ''){
-        //修改类
-        requestApi('/ih/rest/apiService/v1/class/'+classId+'?className='+data.name,'PUT', {});
-    }else{
-        //添加类
-        requestApi('/ih/rest/apiService/v1/class','POST', data);
-    }
-    $('#myModal').modal('hide');
-    rsetClassModel();
-}
-
-/**
  * 构建保存/编辑数据
  */
 let constructSaveOrUpdateData = () => {
@@ -894,31 +721,6 @@ function saveInterface(){
     console.log(data);
     requestApi('/ih/rest/apiService/v1/interface','POST', data);
 }
-
-/**
- * 删除
- * @param id
- */
-function delClass(id, type){
-    console.log(id,type);
-    let url;
-    if(type == 'class'){
-        url = '/ih/rest/apiService/v1/class/'+id;
-    }else if(type == 'interface'){
-        url = '/ih/rest/apiService/v1/interface/'+id;
-    }
-    requestDeleteData(url,'DELETE');
-    //阻止冒泡事件
-    window.event? window.event.cancelBubble = true : e.stopPropagation();
-}
-/**
- * 编辑类
- */
-let editClass = (classId) => {
-    requestEditClass('/ih/rest/apiService/v1/class/'+classId,'GET');
-    //阻止冒泡事件
-    window.event? window.event.cancelBubble = true : e.stopPropagation();
-}
 /**
  * 编辑接口
  */
@@ -927,12 +729,6 @@ let updateInterface = (interface_id) => {
     let data = constructSaveOrUpdateData();
     console.log(data);
     requestApi('/ih/rest/apiService/v1/interface/'+interface_id,'PUT', data);
-}
-/**
- * 查询文件夹(类)数据
- */
-function getClass(){
-    requestGetTree('/ih/rest/apiService/v1/classes','GET','collection');
 }
 
 /**
@@ -946,4 +742,243 @@ let getHistory = () => {
  */
 let saveInterfaceGetClass = () => {
     requestGetTree('/ih/rest/apiService/v1/classes','GET','');
+}
+
+
+/**
+ * 清空目录modal
+ */
+let clearDirectoryModal = () => {
+    $('#directory_input div input').each(function() {
+        $(this).val('');
+    });
+    $('#directoryModal').modal('hide');
+}
+/**
+ * 清空类Modal
+ */
+let clearClassModal = () => {
+    $('#class_input div input').each(function() {
+        $(this).val('');
+    });
+    $('#classModal').modal('hide');
+}
+/**
+ * 请求
+ * @param url
+ * @param type
+ * @param data
+ */
+let request = (url, type, data) => {
+    let response = null;
+    $.ajax({
+        url:url,
+        type:type,
+        data: data,
+        async: false,
+        contentType: 'application/json',
+        success:function(resp){
+            if(resp.data != null){
+                response = resp.data;
+            }
+        },
+        error:function(resp){
+            console.log(resp);
+        }
+    })
+    return response;
+}
+/**
+ * 请求
+ * @param url
+ * @param type
+ * @param data
+ */
+let requestString = (url, type, data) => {
+    $.ajax({
+        url:url,
+        type:type,
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        success:function(resp){
+            console.log(resp)
+        },
+        error:function(resp){
+            console.log(resp);
+        }
+    })
+}
+/**
+ * 保存OR修改目录
+ */
+let saveOrUpdateDirectory = () => {
+    let data = {};
+    $('#directory_input div input').each(function() {
+        data[$(this).attr('name')] = $(this).val();
+    });
+    if(data.directoryId != ''){
+        //修改目录
+        requestString('/ih/rest/apiService/v1/directory/'+data.directoryId,'PUT', data);
+    }else{
+        //添加目录
+        request('/ih/rest/apiService/v1/directory?name='+data.name,'POST', {});
+    }
+    //清空modal并隐藏
+    clearDirectoryModal();
+}
+/**
+ * 保存Or修改类名
+ */
+function saveOrUpdateClass(){
+    let data = {};
+    $('#class_input div input').each(function() {
+        data[$(this).attr('name')] = $(this).val();
+    });
+    console.log(data);
+    if(data.classId != ''){
+        //修改类
+        request('/ih/rest/apiService/v1/class/'+data.classId+'?className='+data.name,'PUT', {});
+    }else{
+        //添加类
+        requestString('/ih/rest/apiService/v1/class','POST', data);
+    }
+    //清空modal并隐藏
+    clearClassModal();
+}
+/**
+ * 删除目录Or类Or接口
+ */
+let del = (id, type) => {
+    let url;
+    if(type == 'directory'){
+        url = '/ih/rest/apiService/v1/directory/'+id;
+    }else if(type == 'class'){
+        url = '/ih/rest/apiService/v1/class/'+id;
+    }else if(type == 'interface'){
+        url = '/ih/rest/apiService/v1/interface/'+id;
+    }
+    requestString(url,'DELETE',{});
+    //阻止冒泡事件
+    window.event? window.event.cancelBubble = true : e.stopPropagation();
+}
+/**
+ * 编辑
+ */
+let edit = (id, type) => {
+    let url;
+    if(type == 'directory'){
+        url = '/ih/rest/apiService/v1/directory/'+id;
+    }else if(type == 'class'){
+        url = '/ih/rest/apiService/v1/class/'+id;
+    }
+    let response = request(url,'GET',{});
+    for(let key in response){
+        $('#'+type+'_input div').find('input[name='+key+']').val(response[key]);
+    }
+    $('#'+type+'Modal').modal('show');
+    //阻止冒泡事件
+    window.event? window.event.cancelBubble = true : e.stopPropagation();
+}
+
+/**
+ * 请求目录
+ */
+let requestDirectory = () => {
+    let directory = request('/ih/rest/apiService/v1/directory','GET',{});
+    constructCollectionTree(directory);
+}
+/**
+ * 请求子集
+ */
+let requestChild = (directoryId) => {
+    let child = request('/ih/rest/apiService/v1/directory','GET',{parentId:directoryId});
+    if(child.class.length <= 0 && child.directory.length <= 0){return false;};
+    constructCollectionTree(child);
+}
+/**
+ * 构造数据
+ * @param data
+ */
+let constructCollectionTree = (data) => {
+    let treeData = [];
+    let clazz = data.class;
+    let directory = data.directory;
+    if(clazz.length > 0){
+        for(let i = 0; i < clazz.length; i++){
+            let obj = clazz[i];
+            let parent = {
+                index: i,
+                text: '<span title='+obj.url+'>'+obj.code+'</span>' +
+                    '<span class="glyphicon glyphicon-edit cursor" style="float: right; margin-right: 10px;" onclick="edit(\''+obj.classId+'\',\'class\')"></span>' +
+                    '<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px;" onclick="del(\''+obj.classId+'\',\'class\')"></span>',
+                id: obj.classId,
+                icon:'glyphicon glyphicon-copyright-mark',
+                selectable:false,
+                nodes: []
+            }
+            treeData.push(parent);
+        }
+    }
+    if(directory.length > 0){
+        for(let i in directory){
+            let obj = directory[i];
+            let node = {
+                text: '<span onclick="requestChild(\''+obj.directoryId+'\')">'+obj.name+'</span>' +
+                    '<span class="glyphicon glyphicon-plus cursor" style="float: right; margin-right: 10px;" onclick="$(\'#class_parent_id\').val(\''+obj.directoryId+'\');$(\'#classModal\').modal(\'show\')"></span>' +
+                    '<span class="glyphicon glyphicon-edit cursor" style="float: right; margin-right: 10px;" onclick="edit(\''+obj.directoryId+'\',\'directory\')"></span>' +
+                    '<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px;" onclick="del(\''+obj.directoryId+'\',\'directory\')"></span>',
+                id: obj.directoryId,
+                icon:'glyphicon glyphicon-folder-close',
+                selectable:false,
+            }
+            treeData.push(node);
+        }
+    }
+    $('#collection').treeview({
+        data: treeData,         // 数据源
+        emptyIcon: '',    //没有子节点的节点图标
+        multiSelect: false,    //多选
+        levels: 0,
+        expandIcon:"glyphicon glyphicon-triangle-right",
+        collapseIcon: "glyphicon glyphicon-triangle-bottom",
+        showBorder: true,
+        borderColor: "#fff",
+        selectedBackColor: '#f5f5f5',
+        selectedColor: '#000',
+        onNodeExpanded: function(event, data){
+            //折叠所有
+            // $('#'+selectTree).treeview('collapseAll', { silent:true });
+            let interface = request('/ih/rest/apiService/v1/interfaces','GET',{classId:data.id});
+            constructCollectionTreeChildNode(interface, data.index);
+        },
+        onNodeChecked: function (event,data) {
+            console.log(data);
+        },
+        onNodeSelected: function (event, data) {
+            console.log(data);
+            //判断是否添加tab
+            if(whetherAddTab(data.id)){
+                //添加tab
+                tabControl();
+                //请求tab数据
+                requestInterfaceValue('/ih/rest/apiService/v1/interface/'+data.id,'GET');
+            };
+        },
+    });
+}
+/**
+ * 构建接口数据
+ */
+function constructCollectionTreeChildNode(data, index){
+    $("#collection").treeview("deleteNode", [index, { node: {}}])
+    for(let i in data){
+        let obj = data[i];
+        let node = {
+            text: method[obj.type] + '<span>'+obj.url+'</span>' +
+                '<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px" onclick="del(\''+obj.interfaceId+'\',\'interface\')"></span>',
+            id: obj.interfaceId,
+            name: obj.name,
+        };
+        $("#collection").treeview("addNode", [index, { node: node }])
+    }
 }
