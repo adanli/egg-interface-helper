@@ -3,13 +3,11 @@ package com.egg.ih.biz.api.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.egg.ih.biz.api.service.*;
 import com.egg.ih.biz.api.vo.ClassVO;
+import com.egg.ih.biz.api.vo.DirectoryVO;
 import com.egg.ih.biz.api.vo.InterfaceVO;
 import com.egg.ih.biz.api.vo.params.*;
 import com.egg.ih.constant.BaseConstant;
-import com.egg.ih.db.model.IhClass;
-import com.egg.ih.db.model.IhHiOper;
-import com.egg.ih.db.model.IhInterface;
-import com.egg.ih.db.model.IhParams;
+import com.egg.ih.db.model.*;
 import com.egg.ih.log.vo.HiOperVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +25,8 @@ import java.util.function.Supplier;
  */
 @Service
 public class ApiServiceImpl implements ApiService {
+    @Autowired
+    private IhDirectoryService ihDirectoryService;
     @Autowired
     private IhClassService ihClassService;
     @Autowired
@@ -380,6 +380,94 @@ public class ApiServiceImpl implements ApiService {
 
 
         return list;
+    }
+
+    @Override
+    public boolean saveDirectory(String name, String parentId) {
+        IhDirectory directory = new IhDirectory();
+        directory.setName(name);
+        directory.setParentDirectoryId(parentId);
+        directory.setCreateTime(new Date());
+        directory.setUpdateTime(new Date());
+        directory.setValid(BaseConstant.有效性.有效.getCode());
+        return ihDirectoryService.saveOrUpdate(directory);
+    }
+
+    @Override
+    public boolean updateDirectory(DirectoryVO directoryVO) {
+        IhDirectory directory = new IhDirectory();
+        BeanUtils.copyProperties(directoryVO, directory);
+        return ihDirectoryService.saveOrUpdate(directory);
+    }
+
+    @Override
+    public Map<String, Object> findByParentDirectoryId(String parentDirectoryId) {
+        Map<String, Object> map = new HashMap<>(3);
+
+        // class
+        List<ClassVO> classVOS = this.findClassVOsByDirectoryId(parentDirectoryId);
+        map.put("class", classVOS);
+
+        // directory
+        List<DirectoryVO> directoryVOS = this.findDirectoryVOsByParentDirectory(parentDirectoryId);
+        map.put("directory", directoryVOS);
+
+
+        return map;
+    }
+
+    @Override
+    public boolean deleteDirectory(String directoryId) {
+        List<ClassVO> classVOS = this.findClassVOsByDirectoryId(directoryId);
+        if(classVOS.size() != 0) {
+            return Boolean.FALSE;
+        }
+        List<DirectoryVO> directoryVOS = this.findDirectoryVOsByParentDirectory(directoryId);
+        if(directoryVOS.size() != 0) {
+            return Boolean.FALSE;
+        }
+
+        IhDirectory directory = ihDirectoryService.getById(directoryId);
+        if(directory != null) {
+            directory.setValid(BaseConstant.有效性.无效.getCode());
+            directory.setDeleteTime(new Date());
+            return ihDirectoryService.saveOrUpdate(directory);
+        }
+
+        return Boolean.FALSE;
+    }
+
+    private List<ClassVO> findClassVOsByDirectoryId(String directoryId) {
+        QueryWrapper<IhClass> cWrapper = new QueryWrapper<>();
+        cWrapper.lambda().eq(IhClass::getDirectoryId, directoryId).eq(IhClass::getValid, BaseConstant.有效性.有效.getCode());
+        List<IhClass> classes = ihClassService.list(cWrapper);
+        List<ClassVO> classVOS = new ArrayList<>(classes.size());
+
+        classes.forEach(c -> {
+            ClassVO vo = new ClassVO();
+            BeanUtils.copyProperties(c, vo);
+            classVOS.add(vo);
+        });
+
+        return classVOS;
+    }
+
+    private List<DirectoryVO> findDirectoryVOsByParentDirectory(String directoryId) {
+        QueryWrapper<IhDirectory> dWrapper = new QueryWrapper<>();
+        if(directoryId == null) {
+            dWrapper.lambda().eq(IhDirectory::getValid, BaseConstant.有效性.有效.getCode());
+        }else {
+            dWrapper.lambda().eq(IhDirectory::getParentDirectoryId, directoryId).eq(IhDirectory::getValid, BaseConstant.有效性.有效.getCode());
+        }
+        List<IhDirectory> directories = ihDirectoryService.list(dWrapper);
+        List<DirectoryVO> directoryVOS = new ArrayList<>(directories.size());
+        directories.forEach(d -> {
+            DirectoryVO vo = new DirectoryVO();
+            BeanUtils.copyProperties(d, vo);
+            directoryVOS.add(vo);
+        });
+
+        return directoryVOS;
     }
 
 }

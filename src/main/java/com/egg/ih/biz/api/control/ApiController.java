@@ -2,11 +2,13 @@ package com.egg.ih.biz.api.control;
 
 import com.egg.ih.biz.api.service.ApiService;
 import com.egg.ih.biz.api.vo.ClassVO;
+import com.egg.ih.biz.api.vo.DirectoryVO;
 import com.egg.ih.biz.api.vo.InterfaceVO;
 import com.egg.ih.biz.api.vo.params.BodyVO;
 import com.egg.ih.biz.api.vo.params.HeaderVO;
 import com.egg.ih.biz.api.vo.params.QueryVO;
 import com.egg.ih.biz.api.vo.params.ResponseVO;
+import com.egg.ih.biz.ex.BaseErrorCode;
 import com.egg.ih.log.service.LogService;
 import com.egg.ih.log.vo.HiOperVO;
 import com.egg.ih.util.errorcode.DefaultErrorCode;
@@ -22,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -213,6 +214,47 @@ public class ApiController {
     @GetMapping(value = "/interface/history")
     public BaseResponse<List<HiOperVO>> findHistoryByDate(String date) {
         return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.findHistoryByDate(date));
+    }
+
+    @ApiOperation(notes = "/directory", value = "新增目录")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "name", value = "目录名", dataType = "String", paramType = "query"),
+        @ApiImplicitParam(name = "name", value = "父级目录ID", dataType = "String", paramType = "query")
+    })
+    @PostMapping(value = "/directory")
+    public BaseResponse<Boolean> saveDirectory(String name, @RequestParam(required = false) String parentId) {
+        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.saveDirectory(name, parentId));
+    }
+
+    @ApiOperation(notes = "/directory/{directoryId}", value = "更新目录")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "directoryVO", value = "目录对象", dataType = "DirectoryVO", paramType = "query"),
+            @ApiImplicitParam(name = "directoryId", value = "目录主键", dataType = "String", paramType = "path")
+    })
+    @PutMapping(value = "/directory/{directoryId}")
+    public BaseResponse<Boolean> updateDirectory(@RequestBody DirectoryVO directoryVO, @PathVariable String directoryId) {
+        directoryVO.setDirectoryId(directoryId);
+        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.updateDirectory(directoryVO));
+    }
+
+    @ApiOperation(notes = "directoryId", value = "根据父级ID查询目录")
+    @ApiImplicitParam(name = "parentId", value = "父级目录主键", dataType = "String", paramType = "query")
+    @GetMapping("/directory")
+    public BaseResponse<Map<String, Object>> findDirectoryByParentId(String parentId) {
+        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.findByParentDirectoryId(parentId));
+    }
+
+    @ApiOperation(notes = "/directory/{directoryId}", value = "根据ID删除目录")
+    @ApiImplicitParam(name = "directoryId", value = "目录主键", dataType = "String", paramType = "path")
+    @DeleteMapping("/directory/{directoryId}")
+    public BaseResponse deleteDirectory(@PathVariable String directoryId) {
+
+        boolean flag = apiService.deleteDirectory(directoryId);
+        if(flag) {
+            return ResponseBuilder.build(DefaultErrorCode.SUCCESS);
+        }
+
+        return ResponseBuilder.build(BaseErrorCode.无法删除);
     }
 
     @Data

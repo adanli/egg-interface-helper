@@ -5,11 +5,17 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * @author Administrator
+ * @author adanl
  */
 @Data
-public class ClassVO {
-    private String classId;
+public class DirectoryVO {
+    private String directoryId;
+
+    private String name;
+
+    private String code;
+
+    private String description;
 
     private String state;
 
@@ -23,15 +29,5 @@ public class ClassVO {
 
     private Date deleteTime;
 
-    private String name;
-
-    private String code;
-
-    private String description;
-
-    private String url;
-
-    private String directoryId;
+    private String parentDirectoryId;
 }
-
-

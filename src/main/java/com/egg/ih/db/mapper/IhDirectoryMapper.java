@@ -1,6 +1,6 @@
 package com.egg.ih.db.mapper;
 
-import com.egg.ih.db.model.IhClass;
+import com.egg.ih.db.model.IhDirectory;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,6 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2019-05-26
  */
 @Mapper
-public interface IhClassMapper extends BaseMapper<IhClass> {
+public interface IhDirectoryMapper extends BaseMapper<IhDirectory> {
 
 }

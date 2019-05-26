@@ -14,13 +14,17 @@ import java.io.Serializable;
  * @author lhx
  * @since 2019-05-26
  */
-public class IhClass extends Model<IhClass> {
+public class IhDirectory extends Model<IhDirectory> {
 
-    private static final long serialVersionUID=1L;
+private static final long serialVersionUID=1L;
     @TableId(type = IdType.UUID)
-    private String classId;
-
     private String directoryId;
+
+    private String name;
+
+    private String code;
+
+    private String description;
 
     private String state;
 
@@ -34,22 +38,8 @@ public class IhClass extends Model<IhClass> {
 
     private Date deleteTime;
 
-    private String name;
+    private String parentDirectoryId;
 
-    private String code;
-
-    private String description;
-
-    private String url;
-
-
-    public String getClassId() {
-        return classId;
-    }
-
-    public void setClassId(String classId) {
-        this.classId = classId;
-    }
 
     public String getDirectoryId() {
         return directoryId;
@@ -57,6 +47,30 @@ public class IhClass extends Model<IhClass> {
 
     public void setDirectoryId(String directoryId) {
         this.directoryId = directoryId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getState() {
@@ -107,58 +121,33 @@ public class IhClass extends Model<IhClass> {
         this.deleteTime = deleteTime;
     }
 
-    public String getName() {
-        return name;
+    public String getParentDirectoryId() {
+        return parentDirectoryId;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
+    public void setParentDirectoryId(String parentDirectoryId) {
+        this.parentDirectoryId = parentDirectoryId;
     }
 
     @Override
     protected Serializable pkVal() {
-        return this.classId;
+        return this.directoryId;
     }
 
     @Override
     public String toString() {
-        return "IhClass{" +
-        "classId=" + classId +
-        ", directoryId=" + directoryId +
+        return "IhDirectory{" +
+        "directoryId=" + directoryId +
+        ", name=" + name +
+        ", code=" + code +
+        ", description=" + description +
         ", state=" + state +
         ", flag=" + flag +
         ", valid=" + valid +
         ", createTime=" + createTime +
         ", updateTime=" + updateTime +
         ", deleteTime=" + deleteTime +
-        ", name=" + name +
-        ", code=" + code +
-        ", description=" + description +
-        ", url=" + url +
+        ", parentDirectoryId=" + parentDirectoryId +
         "}";
     }
 }

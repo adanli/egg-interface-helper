@@ -8,6 +8,7 @@ import com.egg.ih.biz.api.vo.params.ResponseVO;
 import com.egg.ih.log.vo.HiOperVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Administrator
@@ -102,4 +103,32 @@ public interface ApiService {
      */
     List<HiOperVO> findHistoryByDate(String date);
 
+    /**
+     * 保存目录
+     * @param name
+     * @param parentId
+     * @return
+     */
+    boolean saveDirectory(String name, String parentId);
+
+    /**
+     * 更新目录
+     * @param directoryVO
+     * @return
+     */
+    boolean updateDirectory(DirectoryVO directoryVO);
+
+    /**
+     * 通过父级目录主键查询内容
+     * @param parentDirectoryId
+     * @return
+     */
+    Map<String, Object> findByParentDirectoryId(String parentDirectoryId);
+
+    /**
+     * 根据主键删除目录
+     * @param directoryId
+     * @return
+     */
+    boolean deleteDirectory(String directoryId);
 }
