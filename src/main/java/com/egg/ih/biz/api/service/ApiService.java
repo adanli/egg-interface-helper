@@ -131,4 +131,11 @@ public interface ApiService {
      * @return
      */
     boolean deleteDirectory(String directoryId);
+
+    /**
+     * 根据主键查询目录
+     * @param directoryId
+     * @return
+     */
+    DirectoryVO findDirectoryById(String directoryId);
 }

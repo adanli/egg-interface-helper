@@ -257,6 +257,13 @@ public class ApiController {
         return ResponseBuilder.build(BaseErrorCode.无法删除);
     }
 
+    @ApiOperation(notes = "/directory/{directoryId}", value = "根据目录ID查询目录")
+    @ApiImplicitParam(name = "directoryId", value = "目录主键", dataType = "String", paramType = "path")
+    @GetMapping(value = "/directory/{directoryId}")
+    public BaseResponse<DirectoryVO> findDirectoryById(@PathVariable String directoryId) {
+        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.findDirectoryById(directoryId));
+    }
+
     @Data
     class ParamClass {
         private InterfaceVO interfaceVO;

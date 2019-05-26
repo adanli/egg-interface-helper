@@ -437,6 +437,20 @@ public class ApiServiceImpl implements ApiService {
         return Boolean.FALSE;
     }
 
+    @Override
+    public DirectoryVO findDirectoryById(String directoryId) {
+
+        QueryWrapper<IhDirectory> wrapper = new QueryWrapper();
+        wrapper.lambda().eq(IhDirectory::getDirectoryId, directoryId).eq(IhDirectory::getValid, BaseConstant.有效性.有效.getCode());
+        IhDirectory directory = ihDirectoryService.getOne(wrapper);
+        if(directory != null) {
+            DirectoryVO directoryVO = new DirectoryVO();
+            BeanUtils.copyProperties(directory, directoryVO);
+            return directoryVO;
+        }
+        return null;
+    }
+
     private List<ClassVO> findClassVOsByDirectoryId(String directoryId) {
         QueryWrapper<IhClass> cWrapper = new QueryWrapper<>();
         cWrapper.lambda().eq(IhClass::getDirectoryId, directoryId).eq(IhClass::getValid, BaseConstant.有效性.有效.getCode());
