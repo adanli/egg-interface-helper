@@ -755,6 +755,7 @@ let clearDirectoryModal = () => {
     $('#directoryModal').modal('hide');
     //隐藏切换按钮
     $('#directoryModal .modal-header .btn').css('display','none');
+    $('#classModal .modal-header .btn').css('display','none');
 }
 /**
  * 清空类Modal并隐藏
@@ -764,6 +765,9 @@ let clearClassModal = () => {
         $(this).val('');
     });
     $('#classModal').modal('hide');
+    //隐藏切换按钮
+    $('#directoryModal .modal-header .btn').css('display','none');
+    $('#classModal .modal-header .btn').css('display','none');
 }
 /**
  * Modal切换
@@ -909,8 +913,10 @@ let requestDirectory = () => {
  */
 let requestChild = (directoryId) => {
     let child = request('/ih/rest/apiService/v1/directory','GET',{parentId:directoryId});
-    if(child.class.length <= 0 && child.directory.length <= 0){return false;};
+    // if(child.class.length <= 0 && child.directory.length <= 0){return false;};
     constructCollectionTree(child);
+    //阻止冒泡事件
+    window.event? window.event.cancelBubble = true : e.stopPropagation();
 }
 /**
  * 构造数据
@@ -941,7 +947,7 @@ let constructCollectionTree = (data) => {
             let obj = directory[i];
             let node = {
                 text: '<span onclick="requestChild(\''+obj.directoryId+'\')">'+obj.name+'</span>' +
-                    '<span class="glyphicon glyphicon-plus cursor" style="float: right; margin-right: 10px;" onclick="$(\'#class_parent_id\').val(\''+obj.directoryId+'\');$(\'#classModal\').modal(\'show\')"></span>' +
+                    '<span class="glyphicon glyphicon-plus cursor" style="float: right; margin-right: 10px;" onclick="$(\'#class_parent_id\').val(\''+obj.directoryId+'\');$(\'#classModal .modal-header .btn\').css(\'display\',\'inline\');$(\'#classModal\').modal(\'show\')"></span>' +
                     '<span class="glyphicon glyphicon-edit cursor" style="float: right; margin-right: 10px;" onclick="edit(\''+obj.directoryId+'\',\'directory\')"></span>' +
                     '<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px;" onclick="del(\''+obj.directoryId+'\',\'directory\')"></span>',
                 id: obj.directoryId,
