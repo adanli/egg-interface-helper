@@ -900,7 +900,19 @@ let edit = (id, type) => {
     //阻止冒泡事件
     window.event? window.event.cancelBubble = true : e.stopPropagation();
 }
-
+/**
+ * 返回上级
+ * @type {Array}
+ */
+let backSuperiorData = [];
+let backSuperior = () => {
+    let val = backSuperiorData.pop();
+    if(val == 'null'){
+        requestDirectory();
+    }else{
+        requestChild(val,'');
+    }
+}
 /**
  * 请求目录
  */
@@ -911,7 +923,10 @@ let requestDirectory = () => {
 /**
  * 请求子集
  */
-let requestChild = (directoryId) => {
+let requestChild = (directoryId, parentDirectoryId) => {
+    if(parentDirectoryId != ''){
+        backSuperiorData.push(parentDirectoryId); //记录上级
+    }
     let child = request('/ih/rest/apiService/v1/directory','GET',{parentId:directoryId});
     // if(child.class.length <= 0 && child.directory.length <= 0){return false;};
     constructCollectionTree(child);
@@ -931,7 +946,7 @@ let constructCollectionTree = (data) => {
             let obj = clazz[i];
             let parent = {
                 index: i,
-                text: '<span title='+obj.url+'>'+obj.code+'</span>' +
+                text: '<span class="cursor" title='+obj.url+'>'+obj.code+'</span>' +
                     '<span class="glyphicon glyphicon-edit cursor" style="float: right; margin-right: 10px;" onclick="edit(\''+obj.classId+'\',\'class\')"></span>' +
                     '<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px;" onclick="del(\''+obj.classId+'\',\'class\')"></span>',
                 id: obj.classId,
@@ -946,7 +961,7 @@ let constructCollectionTree = (data) => {
         for(let i in directory){
             let obj = directory[i];
             let node = {
-                text: '<span onclick="requestChild(\''+obj.directoryId+'\')">'+obj.name+'</span>' +
+                text: '<span class="cursor" onclick="requestChild(\''+obj.directoryId+'\',\''+obj.parentDirectoryId+'\')">'+obj.name+'</span>' +
                     '<span class="glyphicon glyphicon-plus cursor" style="float: right; margin-right: 10px;" onclick="$(\'#class_parent_id\').val(\''+obj.directoryId+'\');$(\'#classModal .modal-header .btn\').css(\'display\',\'inline\');$(\'#classModal\').modal(\'show\')"></span>' +
                     '<span class="glyphicon glyphicon-edit cursor" style="float: right; margin-right: 10px;" onclick="edit(\''+obj.directoryId+'\',\'directory\')"></span>' +
                     '<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px;" onclick="del(\''+obj.directoryId+'\',\'directory\')"></span>',

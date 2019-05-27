@@ -82,10 +82,12 @@
         background-color: #D3D3D3;
     }
     /*图标指针变化及大小*/
+    .treeview .list-group-item {
+        cursor: auto !important;
+    }
     .cursor{
         cursor: pointer;
         font-size: 10px;
-
     }
     /*设置右顶导航栏navtabs导航样式*/
     .cus-nav-tabs{
