@@ -10,6 +10,21 @@
     .cursor{
         cursor: pointer;
     }
+    /*input样式*/
+    input{
+        border: 0px !important;
+        box-shadow: inset 0 0px 0px rgba(0, 0, 0, .075) !important;
+    }
+    .cus-input{
+        border-bottom: 2px solid #D3D3D3 !important;
+    }
+    .form-control[disabled]{
+        background-color: #fff;
+    }
+    /*树样式*/
+    .treeview span.icon{
+        margin-right: 12px !important;
+    }
 
     .nav-pills > li.active > a{
         color: #0f0f0f;
