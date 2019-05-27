@@ -2,7 +2,6 @@ package com.egg.ih.biz.service.impl;
 
 import com.egg.ih.biz.service.ExportService;
 import org.apache.poi.xwpf.usermodel.*;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTblWidth;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -17,20 +16,33 @@ public class ExportServiceImpl implements ExportService {
     @Override
     public void exportWord() throws Exception{
         XWPFDocument document= new XWPFDocument();
+        XWPFNumbering numbering = document.createNumbering();
         
         //Write the Document in file system
         FileOutputStream out = new FileOutputStream(new File("D:\\temp\\接口文档.docx"));
         // 添加标题
         XWPFParagraph paragraph = document.createParagraph();
         paragraph.setAlignment(ParagraphAlignment.LEFT);
+//        paragraph.setNumID(BigInteger.ONE);
+
         XWPFRun run = paragraph.createRun();
-        run.setText("1.基础信息维护");
+        run.setText("基础信息维护");
         run.setFontSize(16);
         run.setBold(true);
         run.setFontFamily("宋体(中文正文)");
 
-        paragraph = document.createParagraph();
+        run.addBreak(BreakType.TEXT_WRAPPING);
+        run.setText("车型与品牌关系", 1);
+        run.setFontSize(12);
+        run.setBold(true);
+        run.setFontFamily("宋体(中文正文)");
+
+
+
+
+        /*paragraph = document.createParagraph();
         paragraph.setAlignment(ParagraphAlignment.LEFT);
+        paragraph.setNumID(BigInteger.valueOf(2));
         run = paragraph.createRun();
         run.setText("1.1车型与品牌关系");
         run.setFontSize(12);
@@ -118,7 +130,9 @@ public class ExportServiceImpl implements ExportService {
         run.setFontFamily("宋体(中文正文)");
 
         XWPFTable table = document.createTable();
-        table.getCTTbl().addNewTblPr().addNewTblW().setType(STTblWidth.DXA);
+        CTTblWidth width = table.getCTTbl().addNewTblPr().addNewTblW();
+        width.setType(STTblWidth.DXA);
+        width.setW(BigInteger.valueOf(9072));
 
         XWPFTableRow row = table.createRow();
         XWPFTableCell cell = row.addNewTableCell();
@@ -147,7 +161,7 @@ public class ExportServiceImpl implements ExportService {
 
         cell = row.addNewTableCell();
         cell.setText("备注");
-        
+        */
 
         document.write(out);
         out.close();

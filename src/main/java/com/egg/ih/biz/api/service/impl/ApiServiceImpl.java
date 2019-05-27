@@ -9,6 +9,7 @@ import com.egg.ih.biz.api.vo.params.*;
 import com.egg.ih.constant.BaseConstant;
 import com.egg.ih.db.model.*;
 import com.egg.ih.log.vo.HiOperVO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -402,7 +403,17 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     public Map<String, Object> findByParentDirectoryId(String parentDirectoryId) {
-        Map<String, Object> map = new HashMap<>(3);
+        Map<String, Object> map = new HashMap<>(4);
+
+        // breadCrumbs
+        List<String> title = new ArrayList<>();
+        String parentId = parentDirectoryId;
+        while (parentId != null) {
+            DirectoryVO directoryVO = this.findDirectoryById(parentId);
+            title.add(directoryVO.getName());
+            parentId = directoryVO.getParentDirectoryId();
+        }
+        map.put("breadCrumbs", StringUtils.join(title.toArray(), "/"));
 
         // class
         List<ClassVO> classVOS = this.findClassVOsByDirectoryId(parentDirectoryId);
