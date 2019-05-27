@@ -406,11 +406,11 @@ public class ApiServiceImpl implements ApiService {
         Map<String, Object> map = new HashMap<>(4);
 
         // breadCrumbs
-        List<String> title = new ArrayList<>();
+        LinkedList<String> title = new LinkedList<>();
         String parentId = parentDirectoryId;
         while (parentId != null) {
             DirectoryVO directoryVO = this.findDirectoryById(parentId);
-            title.add(directoryVO.getName());
+            title.addFirst(directoryVO.getName());
             parentId = directoryVO.getParentDirectoryId();
         }
         map.put("breadCrumbs", StringUtils.join(title.toArray(), "/"));
