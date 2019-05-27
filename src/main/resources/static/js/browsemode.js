@@ -1,17 +1,94 @@
 $(function(){
-    constructDataList();
+    constructDataList(); //构建类数据
+    renderingTreeData(); //渲染树数据
 })
 /**
- * 请求树数据
+ * 根据目录组合数据
+ * @param url
+ * @param type
+ * @constructor
  */
-let renderingTreeData = (arr, data) => {
-    let response = request('/ih/rest/apiService/v1/directory','GET',data);
-    let directory = data.directory;
-    if(directory > 0){
+let constructDataListByDirectory = (params) => {
+    let data = request('/ih/rest/apiService/v1/directory','GET', params); //请求父LIST
+    let clazz = data.class;
+    if(clazz.length > 0){
+        for(let i = 0; i < clazz.length; i++){
+            let obj = clazz[i];
+            obj .childData = request('/ih/rest/apiService/v1/interfaces', 'GET',{classId:obj.classId});
+        }
+        console.log(clazz);
+        renderingData(clazz);
+    }
+}
+
+/**
+ * 构建树数据
+ * @param params
+ * @returns {Array}
+ */
+let constructTreeData = (params) => {
+    let nodes = [];
+    let {directory} = request('/ih/rest/apiService/v1/directory','GET', params);
+    if(directory.length > 0){
         for(let i in directory){
             let obj = directory[i];
-            renderingTreeData({parentId:obj.directoryId});
+            let node = {
+                id: obj.directoryId,
+                icon:'glyphicon glyphicon-folder-close',
+                text: obj.name,
+                nodes: constructTreeData({parentId:obj.directoryId})
+            }
+            nodes.push(node);
         }
+    }
+    return nodes;
+}
+/**
+ * 渲染树数据
+ */
+let renderingTreeData = () => {
+    let treeData = constructTreeData({});
+    $('#val').treeview({
+        data: treeData,         // 数据源
+        emptyIcon: '',    //没有子节点的节点图标
+        multiSelect: false,    //多选
+        levels: 0,
+        expandIcon:"glyphicon glyphicon-triangle-right",
+        collapseIcon: "glyphicon glyphicon-triangle-bottom",
+        showBorder: true,
+        borderColor: "#fff",
+        selectedBackColor: '#f5f5f5',
+        selectedColor: '#000',
+        onNodeExpanded: function(event, data){
+            //阻止冒泡事件
+            window.event? window.event.cancelBubble = true : e.stopPropagation();
+        },
+        onNodeCollapsed: function (event, data) {
+            window.event? window.event.cancelBubble = true : e.stopPropagation();
+        },
+        onNodeSelected: function (event, data) {
+            console.log(data);
+            $('#tree_select button').first().text(data.text);
+            constructDataListByDirectory({parentId:data.id});
+        },
+    });
+}
+/**
+ * 左侧tab点击请求数据
+ */
+let leftTabControl = (that) => {
+    if($(that).hasClass('cus-select')){
+        $(that).removeClass('cus-select');
+        $('#synopsis').css('display', 'inline');
+        $('#detailed').css('display', 'none');
+    }else{
+        $('#left tr').removeClass('cus-select');
+        $(that).addClass('cus-select');
+        $('#synopsis').css('display', 'none');
+        $('#detailed').css('display', 'inline');
+        let interface_id = $(that).attr('interface_id')
+        let data = request('/ih/rest/apiService/v1/interface/'+interface_id,'GET',{});
+        renderingDetailedData(data);
     }
 }
 /**
@@ -63,28 +140,27 @@ let renderingBottomDetailedData = (key, vo) => {
     }
 }
 /**
- * 左侧tab点击请求数据
+ * 组合数据
+ * @param url
+ * @param type
+ * @constructor
  */
-let leftTabControl = (that) => {
-    if($(that).hasClass('cus-select')){
-        $(that).removeClass('cus-select');
-        $('#form').css('display', 'inline');
-        $('#detailed').css('display', 'none');
-    }else{
-        $('#left tr').removeClass('cus-select');
-        $(that).addClass('cus-select');
-        $('#form').css('display', 'none');
-        $('#detailed').css('display', 'inline');
-        let interface_id = $(that).attr('interface_id')
-        let data = request('/ih/rest/apiService/v1/interface/'+interface_id,'GET',{});
-        renderingDetailedData(data);
+let constructDataList = (url, type) => {
+    let data = request('/ih/rest/apiService/v1/classes','GET', {}); //请求父LIST
+    for(let i = 0; i < data.length; i++){
+        let obj = data[i];
+        obj .childData = request('/ih/rest/apiService/v1/interfaces', 'GET',{classId:obj.classId});
     }
+    console.log(data);
+    renderingData(data);
 }
 /**
  * 渲染数据
  * @param data
  */
 let renderingData = (data) => {
+    $('#left').empty();
+    $('#form').empty();
     let leftStr = '';
     let rightStr = '';
     for(let i = 0; i < data.length; i++){
@@ -105,21 +181,6 @@ let renderingData = (data) => {
     }
     $('#left').append(leftStr);
     $('#form').append(rightStr);
-}
-/**
- * 组合数据
- * @param url
- * @param type
- * @constructor
- */
-let constructDataList = (url, type) => {
-    let data = request('/ih/rest/apiService/v1/classes','GET', {}); //请求父LIST
-    for(let i = 0; i < data.length; i++){
-        let obj = data[i];
-        obj .childData = request('/ih/rest/apiService/v1/interfaces', 'GET',{classId:obj.classId});
-    }
-    console.log(data);
-    renderingData(data);
 }
 /**
  * 请求数据
