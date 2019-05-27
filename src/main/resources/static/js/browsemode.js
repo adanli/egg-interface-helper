@@ -2,6 +2,19 @@ $(function(){
     constructDataList();
 })
 /**
+ * 请求树数据
+ */
+let renderingTreeData = (arr, data) => {
+    let response = request('/ih/rest/apiService/v1/directory','GET',data);
+    let directory = data.directory;
+    if(directory > 0){
+        for(let i in directory){
+            let obj = directory[i];
+            renderingTreeData({parentId:obj.directoryId});
+        }
+    }
+}
+/**
  * 渲染详细数据
  */
 let renderingDetailedData = (data) => {
