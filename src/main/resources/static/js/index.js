@@ -86,10 +86,10 @@ function urlTextUpdate(){
     let url_text_val = $('#url_text_'+suffix).val();
     if(url_text_val != ""){
         $('#href_content_'+suffix+' nobr').text(url_text_val);
-        $('#interface_url_'+suffix).text(url_text_val);
+        // $('#interface_url_'+suffix).text(url_text_val);
     }else{
         $('#href_content_'+suffix+' nobr').text('Untitled Request');
-        $('#interface_url_'+suffix).text('Untitled Request');
+        // $('#interface_url_'+suffix).text('Untitled Request');
     }
 }
 
@@ -320,8 +320,8 @@ function tabControl(){
     let content = 'content_'+ran;
     let interface_id = 'interface_id_'+ran;
     let interface_name = 'interface_name_'+ran;
-    let interface_url = 'interface_url_'+ran;
-    let interface_desc_icon = 'interface_desc_icon_'+ran;
+    // let interface_url = 'interface_url_'+ran;
+    // let interface_desc_icon = 'interface_desc_icon_'+ran;
     let interface_desc = 'interface_desc_'+ran;
     let content_select = 'content_select_'+ran;
     let url_text = 'url_text_'+ran;
@@ -353,9 +353,9 @@ function tabControl(){
     //追加内容
     $('#right_top_tab_content > div:last').after('<div class="tab-pane active" id='+content+'>' +
         '<div class="mrg div-mrg"><input id='+interface_name+' class="form-control cus-interface-name" type="text" placeholder="接口名称" />' +
-        '<span id='+interface_url+'></span>' +
-        '<span id='+interface_desc_icon+' class="glyphicon glyphicon-triangle-left cursor" onclick="interfaceDescription()"></span>' +
-        '<input id='+interface_desc+' type="text" style="display: none; margin-top: 10px" class="form-control" placeholder="接口描述"/>' +
+        // '<span id='+interface_url+'></span>' +
+        // '<span id='+interface_desc_icon+' class="glyphicon glyphicon-triangle-left cursor" onclick="interfaceDescription()"></span>' +
+        '<input id='+interface_desc+' type="text" style="margin-top: 10px" class="form-control cus-interface-description" placeholder="接口描述"/>' +
         '</div><ul class="nav nav-list"><li class="divider"></li></ul><div class="mrg div-mrg">' +
         '<div class="row"><div class="col-md-11"><div class="input-group"><div id='+content_select+' class="input-group-btn">' +
         '<button type="button" class="btn btn-default dropdown-toggle" style="width: 100px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
@@ -907,17 +907,26 @@ let edit = (id, type) => {
 let backSuperiorData = [];
 let backSuperior = () => {
     let val = backSuperiorData.pop();
-    if(val == 'null'){
+    if(val == 'null' || val == undefined){
         requestDirectory();
     }else{
         requestChild(val,'');
     }
 }
 /**
+ * 组装面包屑
+ */
+let constructBreadCrumb = (breadCrumb) => {
+    $('#breadcrumb').empty();
+    $('#breadcrumb').append(breadCrumb);
+}
+/**
  * 请求目录
  */
 let requestDirectory = () => {
     let directory = request('/ih/rest/apiService/v1/directory','GET',{});
+    //面包屑
+    constructBreadCrumb(directory.breadCrumbs);
     constructCollectionTree(directory);
 }
 /**
@@ -928,6 +937,8 @@ let requestChild = (directoryId, parentDirectoryId) => {
         backSuperiorData.push(parentDirectoryId); //记录上级
     }
     let child = request('/ih/rest/apiService/v1/directory','GET',{parentId:directoryId});
+    //面包屑
+    constructBreadCrumb(child.breadCrumbs);
     // if(child.class.length <= 0 && child.directory.length <= 0){return false;};
     constructCollectionTree(child);
     //阻止冒泡事件
