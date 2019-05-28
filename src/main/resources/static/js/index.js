@@ -839,6 +839,9 @@ let saveOrUpdateDirectory = () => {
     $('#directory_input div input').each(function() {
         data[$(this).attr('name')] = $(this).val();
     });
+    if(data.parentDirectoryId == ''){
+        delete data.parentDirectoryId
+    }
     if(data.directoryId != ''){
         //修改目录
         requestString('/ih/rest/apiService/v1/directory/'+data.directoryId,'PUT', data);
