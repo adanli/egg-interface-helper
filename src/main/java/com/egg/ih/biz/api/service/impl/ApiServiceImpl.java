@@ -281,6 +281,7 @@ public class ApiServiceImpl implements ApiService {
                         }else {
                             bodyVO.setExample(new String(param.getExample(), Charset.defaultCharset()));
                         }
+
                         break;
                     }
                     case "RESPONSE": {
@@ -289,12 +290,17 @@ public class ApiServiceImpl implements ApiService {
                         }else {
                             responseVO.setExample(new String(param.getExample(), Charset.defaultCharset()));
                         }
+
                         break;
                     }
                     default:
                         break;
                 }
             });
+
+            // 根据父级排序
+            Collections.sort(bodyVO.getParams(), new ParamComparator());
+            Collections.sort(responseVO.getParams(), new ParamComparator());
 
             interfaceVO.setQueryVO(queryVO);
             interfaceVO.setHeaderVO(headerVO);
@@ -303,6 +309,20 @@ public class ApiServiceImpl implements ApiService {
 
         }
 
+    }
+
+    class ParamComparator implements Comparator<ParamVO> {
+
+        @Override
+        public int compare(ParamVO o1, ParamVO o2) {
+            if(o1.getParent() == null) {
+                return -100;
+            }else if(o2.getParent() == null) {
+                return -200;
+            }else {
+                return o1.getParent().compareTo(o2.getParamId());
+            }
+        }
     }
 
     private IhClass findOrgClassById(String id) {
