@@ -95,6 +95,7 @@ public class ExportServiceImpl implements ExportService {
         cRun.setBold(true);
         newLine(cRun);
         cRun = classRun.apply(cParagraph);
+        cRun.addTab();
         cRun.setText("查询和配置汽车车型与汽车品牌之间的关系。");
         cRun.setBold(false);
         cRun.setFontSize(12);
@@ -105,22 +106,27 @@ public class ExportServiceImpl implements ExportService {
         iRun.setText("1.1.1 查询车型与品牌的关系");
         newLine(iRun);
         iRun = interfaceRun.apply(iParagraph);
-        setInterfaceInfo(iRun, "接口说明。");
+        setInterfaceInfo(iRun, "接口说明");
         iRun = interfaceRun.apply(iParagraph);
+        iRun.addTab();
         setInterfaceInfo(iRun, "根据车型代码和品牌名称模糊查询车型与品牌的关系。");
         iRun = interfaceRun.apply(iParagraph);
         setInterfaceInfo(iRun, "接口版本");
         iRun = interfaceRun.apply(iParagraph);
+        iRun.addTab();
         setInterfaceInfo(iRun, "v1");
         iRun = interfaceRun.apply(iParagraph);
         setInterfaceInfo(iRun, "接口地址");
         iRun = interfaceRun.apply(iParagraph);
+        iRun.addTab();
         setInterfaceInfo(iRun, "/rest/carBrandService/v1/carBrandRels");
         iRun = interfaceRun.apply(iParagraph);
         setInterfaceInfo(iRun, "数据提交方式");
         iRun = interfaceRun.apply(iParagraph);
+        iRun.addTab();
         setInterfaceInfo(iRun, GET);
         iRun = interfaceRun.apply(iParagraph);
+        iRun.addTab();
         setInterfaceInfo(iRun, "输入参数");
         XWPFTable table = paramTable.apply(document);
 
@@ -131,37 +137,37 @@ public class ExportServiceImpl implements ExportService {
         XWPFTableRow row = table.getRow(0);
         XWPFTableCell cell = row.getCell(0);
         cell.setText("参数名称");
-        cell = row.getCell(1);
+        cell = row.createCell();
         cell.setText("数据类型");
-        cell = row.getCell(2);
+        cell = row.createCell();
         cell.setText("属性描述");
-        cell = row.getCell(3);
+        cell = row.createCell();
         cell.setText("存储位置");
-        cell = row.getCell(4);
+        cell = row.createCell();
         cell.setText("是否必填");
-        cell = row.getCell(5);
+        cell = row.createCell();
         cell.setText("最大长度");
-        cell = row.getCell(6);
+        cell = row.createCell();
         cell.setText("备注");
-        row = table.createRow();
-        cell = row.getCell(0);
+        row = table.insertNewTableRow(1);
+        cell = row.createCell();
         cell.setText("carModel");
-        cell = row.getCell(1);
+        cell = row.createCell();
         cell.setText("String");
-        cell = row.getCell(2);
+        cell = row.createCell();
         cell.setText("车型代码");
-        cell = row.getCell(3);
+        cell = row.createCell();
         cell.setText("query");
-        cell = row.getCell(4);
+        cell = row.createCell();
         cell.setText("否");
-        cell = row.getCell(5);
+        cell = row.createCell();
         cell.setText("32");
-        cell = row.getCell(6);
+        cell = row.createCell();
         cell.setText("");
-
 
         document.write(out);
         out.close();
+        document.close();
 
     }
 
