@@ -85,22 +85,31 @@
             <!--详细数据-->
             <div id="detailed" style="display: none">
                 <div class="row mrg">
-                    <div class="col-md-3 cus-input">
-                        <input id="name" class="form-control cus-interface-name" type="text" disabled placeholder="接口名称" />
+                    <div class="col-md-3">
+                        <div class="cus-input">
+                            <input id="name" class="form-control cus-interface-name" type="text" disabled placeholder="接口名称" />
+                        </div>
                     </div>
-                    <div class="col-md-9 cus-input">
-                        <input id="description" type="text" class="form-control" disabled placeholder="接口描述"/>
+                    <div class="col-md-9">
+                        <div class="cus-input">
+                            <input id="description" type="text" class="form-control" disabled placeholder="接口描述"/>
+                        </div>
                     </div>
                 </div>
                 <div class="row mrg">
-                    <div class="col-md-1">
-                        <button type="button" class="btn btn-default dropdown-toggle" disabled style="width: 100px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span id="type">&nbsp</span>
-                        </button>
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <div id="content_select_default" class="input-group-btn">
+                                <button type="button" class="btn btn-default dropdown-toggle" disabled style="width: 100px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span id="type">&nbsp</span>
+                                </button>
+                            </div>
+                            <input id="url" type="text" class="form-control" disabled placeholder="URL" aria-label="..."/>
+                        </div>
                     </div>
-                    <div class="col-md-11 cus-input">
-                        <input id="url" type="text" class="form-control" disabled placeholder="URL" aria-label="..."/>
-                    </div>
+                    <!--<div class="col-md-10">-->
+<!---->
+                    <!--</div>-->
                 </div>
                 <div class="row mrg">
                     <div class="mrg">

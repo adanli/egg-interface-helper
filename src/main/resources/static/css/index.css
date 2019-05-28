@@ -118,6 +118,9 @@
         border: 0px;
         box-shadow: inset 0 0px 0px rgba(0, 0, 0, .075)
     }
+    .cus-input{
+        border-bottom: 1px solid #D3D3D3 !important;
+    }
     /*右下input框*/
     .cus-right-bottom-input input{
         border: 0px;

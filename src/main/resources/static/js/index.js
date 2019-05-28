@@ -352,10 +352,10 @@ function tabControl(){
     })
     //追加内容
     $('#right_top_tab_content > div:last').after('<div class="tab-pane active" id='+content+'>' +
-        '<div class="mrg div-mrg"><input id='+interface_name+' class="form-control cus-interface-name" type="text" placeholder="接口名称" />' +
+        '<div class="mrg div-mrg"><input id='+interface_name+' class="form-control cus-interface-name cus-input" type="text" placeholder="接口名称" />' +
         // '<span id='+interface_url+'></span>' +
         // '<span id='+interface_desc_icon+' class="glyphicon glyphicon-triangle-left cursor" onclick="interfaceDescription()"></span>' +
-        '<input id='+interface_desc+' type="text" style="margin-top: 10px" class="form-control cus-interface-description" placeholder="接口描述"/>' +
+        '<input id='+interface_desc+' type="text" style="margin-top: 10px" class="form-control cus-interface-description cus-input" placeholder="接口描述"/>' +
         '</div><ul class="nav nav-list"><li class="divider"></li></ul><div class="mrg div-mrg">' +
         '<div class="row"><div class="col-md-11"><div class="input-group"><div id='+content_select+' class="input-group-btn">' +
         '<button type="button" class="btn btn-default dropdown-toggle" style="width: 100px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
