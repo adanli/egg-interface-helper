@@ -1,27 +1,33 @@
 $(function(){
+    //请求目录数据
     requestDirectory();
     // getHistory(); //历史记录
-
     //初始化json编辑器
     initJsonEditor('default');
-    let availableTags = [
-        "String",
-        "Integer"
-    ];
-
-    $('#type').autocomplete({
-        source: availableTags
-    });
+    //初始化AutoComplete
+    initAutoComplete(availableTags);
 })
-let flag = false;
-
+// let flag = false;
+//AutoComplete数据
+const availableTags = [
+    "String",
+    "Integer"
+];
+//请求类型数据
 const method = {
     "POST":"<span style='color: #49cc90; font-weight: bold; padding: 0px 0px; margin-right: 10px'>POST</span>",
     "PUT":"<span style='color: #fca130; font-weight: bold; padding: 0px 0px; margin-right: 10px'>PUT</span>",
     "DELETE":"<span style='color: #f93e3e; font-weight: bold; padding: 0px 0px; margin-right: 10px'>DELETE</span>",
     "GET":"<span style='color: #61affe; font-weight: bold; padding: 0px 0px; margin-right: 10px'>GET</span>",
 }
-
+/**
+ * 初始化加载autoComplete
+ */
+let initAutoComplete = (availableTags) => {
+    $('.type').autocomplete({
+        source: availableTags
+    });
+}
 /**
  * 获取选择当前tab页后缀
  */
@@ -29,7 +35,6 @@ function getSelectSuffix() {
     let suffix = $('#right_top_tab .active').attr('suffix');
     return suffix;
 }
-
 /**
  * 首个tab是否显示关闭
  */
@@ -47,7 +52,7 @@ function showOrHide(){
     }
 }
 /**
- * 关闭tab控制
+ * tab关闭图标控制
  */
 function closeTabContro(){
     //获得id后缀
@@ -69,9 +74,9 @@ function closeTabContro(){
     //判断是否显示关闭
     showOrHide();
 }
-/**
+/*/!**
  * 接口描述图标点击控制
- */
+ *!/
 function interfaceDescription() {
     //获得id后缀
     let suffix = getSelectSuffix();
@@ -84,9 +89,9 @@ function interfaceDescription() {
         $('#interface_desc_'+suffix).css('display','inline');
         flag = true;
     }
-}
+}*/
 /**
- * URL名称修改
+ * URL动态修改
  */
 function urlTextUpdate(){
     //获得id后缀
@@ -100,9 +105,8 @@ function urlTextUpdate(){
         // $('#interface_url_'+suffix).text('Untitled Request');
     }
 }
-
 /**
- * select选择框修改
+ * 请求类型select选择框修改
  * @param obj
  */
 function changeSelect(obj){
@@ -110,7 +114,7 @@ function changeSelect(obj){
     $(obj).parent().prev().children().first().text(sel);
 }
 /**
- * select选择框修改
+ * 是否必填select选择框修改
  * @param obj
  */
 let bottomValChangeSelect = (obj) => {
@@ -166,7 +170,6 @@ function addBodyTrTd(obj){
         $(obj).parent().parent().parent().children('tr:last-child').attr('flag','true');
     }
 }
-
 /**
  * 初始化json编辑器
  */
@@ -272,7 +275,6 @@ function analysisJson(suffix, json, i, parent, type){
     }
     return i;
 }
-
 /**
  * 选择文件夹构建
  */
@@ -290,20 +292,6 @@ function construnctionSelectClass(data){
  */
 function setSelectClass(obj){
     $('#select_class_id').val($(obj).attr('id'));
-}
-/**
- * 判断是否添加tab
- */
-let whetherAddTab = (name) => {
-    let flag = true;
-    $('#right_top_tab li a input').each(function(){
-        let val = $(this).val();
-        if(name == val){
-            flag = false;
-            return false;
-        }
-    })
-    return flag;
 }
 /**
  * 生成随机ID
@@ -1022,6 +1010,20 @@ let constructCollectionTree = (data) => {
             };
         },
     });
+}
+/**
+ * 判断是否添加tab
+ */
+let whetherAddTab = (name) => {
+    let flag = true;
+    $('#right_top_tab li a input').each(function(){
+        let val = $(this).val();
+        if(name == val){
+            flag = false;
+            return false;
+        }
+    })
+    return flag;
 }
 /**
  * 构建接口数据
