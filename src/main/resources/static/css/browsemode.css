@@ -30,8 +30,9 @@
         color: #0f0f0f;
         background-color: #fff;
     }
+    /*params headers body response 选中下划线*/
     .nav-pills > li.active{
-        border-bottom: 2px solid #FF5733;
+        border-bottom: 2px solid #1890FF;
     }
     .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover{
         color: #0f0f0f;
