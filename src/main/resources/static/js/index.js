@@ -4,6 +4,14 @@ $(function(){
 
     //初始化json编辑器
     initJsonEditor('default');
+    let availableTags = [
+        "String",
+        "Integer"
+    ];
+
+    $('#type').autocomplete({
+        source: availableTags
+    });
 })
 let flag = false;
 
