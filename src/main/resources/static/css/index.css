@@ -59,6 +59,10 @@
         margin-left: 0px !important;
         margin-right: 0px !important;
     }
+    #collection li{
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
     /*navpills导航栏样式*/
     .nav-pills > li.active > a{
         color: #0f0f0f;

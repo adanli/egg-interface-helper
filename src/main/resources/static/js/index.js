@@ -124,7 +124,7 @@ let bottomValChangeSelect = (obj) => {
 // params和header添加trtd
 let parHeaderTr = '<tr flag="false">' +
     '<td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>' +
-    '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>' +
+    '<td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>' +
     '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>' +
     '<td><div class="input-group">' +
     '<input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>' +
@@ -139,7 +139,7 @@ let parHeaderTr = '<tr flag="false">' +
 // body和response添加trtd
 let bodResponseTr = '<tr flag="false">' +
     '<td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>' +
-    '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>' +
+    '<td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>' +
     '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>' +
     '<td><div class="input-group">' +
     '<input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/>' +
@@ -160,6 +160,8 @@ function addTrTd(obj){
         $(obj).parent().parent().attr('flag','false');
         $(obj).parent().parent().last().after(parHeaderTr);
         $(obj).parent().parent().parent().children('tr:last-child').attr('flag','true');
+        //初始化AutoComplete
+        initAutoComplete(availableTags);
     }
 }
 function addBodyTrTd(obj){
@@ -168,6 +170,8 @@ function addBodyTrTd(obj){
         $(obj).parent().parent().attr('flag','false');
         $(obj).parent().parent().last().after(bodResponseTr);
         $(obj).parent().parent().parent().children('tr:last-child').attr('flag','true');
+        //初始化AutoComplete
+        initAutoComplete(availableTags);
     }
 }
 /**
@@ -261,6 +265,8 @@ function analysisJson(suffix, json, i, parent, type){
     for(name in json){
         if(i > len - 2){
             $('#'+type+suffix+' tr:last').after(bodResponseTr);
+            //初始化AutoComplete
+            initAutoComplete(availableTags);
         }
         obj.eq(i).find('td:first').find('input').val(name);
         obj.eq(i).find('td:last').find('input').val(parent);
@@ -373,7 +379,7 @@ function tabControl(){
         '<div class="tab-pane active div-mrg" id='+id_params+'>' +
         '<table class="table table-condensed"><caption>Query Params</caption><tbody>' +
         '<tr flag="true"><td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>' +
-        '<td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>' +
+        '<td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>' +
         '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>' +
         '<td><div class="input-group"><input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>' +
         '<div class="input-group-btn"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">' +
@@ -386,7 +392,7 @@ function tabControl(){
         '<table class="table table-condensed"><caption>Headers</caption><tbody>' +
         '<tr flag="true">\n' +
         '    <td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>\n' +
-        '    <td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>\n' +
+        '    <td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>\n' +
         '    <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>\n' +
         '    <td>\n' +
         '        <div class="input-group">\n' +
@@ -410,7 +416,7 @@ function tabControl(){
         '<table class="table table-condensed"><caption>Body</caption><tbody>' +
         '<tr flag="true">\n' +
         '    <td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>\n' +
-        '    <td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>\n' +
+        '    <td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>\n' +
         '    <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>\n' +
         '    <td>\n' +
         '        <div class="input-group">\n' +
@@ -436,7 +442,7 @@ function tabControl(){
         '<table class="table table-condensed"><caption>Response</caption><tbody>' +
         '<tr flag="true">\n' +
         '    <td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>\n' +
-        '    <td><input class="form-control" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>\n' +
+        '    <td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>\n' +
         '    <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>\n' +
         '    <td>\n' +
         '        <div class="input-group">\n' +
@@ -462,6 +468,8 @@ function tabControl(){
     showOrHide();
     //初始化json编辑器
     initJsonEditor(ran);
+    //初始化AutoComplete
+    initAutoComplete(availableTags);
 }
 /**
  * 请求
@@ -633,6 +641,8 @@ let constructRightBottomData = (head, vo, suffix) => {
             eval(head+'_editor_'+suffix).setText(example);
         }
     }
+    //初始化AutoComplete
+    initAutoComplete(availableTags);
 }
 /**
  * 获取数据
@@ -954,6 +964,7 @@ let constructCollectionTree = (data) => {
             let parent = {
                 index: i,
                 text: '<span class="cursor" title='+obj.url+'>'+obj.code+'</span>' +
+                    '<br>' +
                     '<span class="glyphicon glyphicon-edit cursor" style="float: right; margin-right: 10px;" onclick="edit(\''+obj.classId+'\',\'class\')"></span>' +
                     '<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px;" onclick="del(\''+obj.classId+'\',\'class\')"></span>',
                 id: obj.classId,
@@ -968,7 +979,8 @@ let constructCollectionTree = (data) => {
         for(let i in directory){
             let obj = directory[i];
             let node = {
-                text: '<span class="cursor" onclick="requestChild(\''+obj.directoryId+'\',\''+obj.parentDirectoryId+'\')">'+obj.name+'</span>' +
+                text: '<span class="cursor" onclick="requestChild(\''+obj.directoryId+'\',\''+obj.parentDirectoryId+'\')" title="'+obj.name+'">'+obj.name+'</span>' +
+                    '<br>' +
                     '<span class="glyphicon glyphicon-plus cursor" style="float: right; margin-right: 10px;" onclick="$(\'#class_parent_id\').val(\''+obj.directoryId+'\');$(\'#classModal .modal-header .btn\').css(\'display\',\'inline\');$(\'#classModal\').modal(\'show\')"></span>' +
                     '<span class="glyphicon glyphicon-edit cursor" style="float: right; margin-right: 10px;" onclick="edit(\''+obj.directoryId+'\',\'directory\')"></span>' +
                     '<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px;" onclick="del(\''+obj.directoryId+'\',\'directory\')"></span>',
@@ -1033,7 +1045,8 @@ function constructCollectionTreeChildNode(data, index){
     for(let i in data){
         let obj = data[i];
         let node = {
-            text: method[obj.type] + '<span>'+obj.url+'</span>' +
+            text: method[obj.type] + '<span class="cursor" title="'+obj.url+'">'+obj.url+'</span>' +
+                '<br>' +
                 '<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px" onclick="del(\''+obj.interfaceId+'\',\'interface\')"></span>',
             id: obj.interfaceId,
             name: obj.name,
