@@ -39,7 +39,7 @@ private static final long serialVersionUID=1L;
 
     private String description;
 
-    private String position;
+    private Integer position;
 
     private String necessary;
 
@@ -141,11 +141,11 @@ private static final long serialVersionUID=1L;
         this.description = description;
     }
 
-    public String getPosition() {
+    public Integer getPosition() {
         return position;
     }
 
-    public void setPosition(String position) {
+    public void setPosition(Integer position) {
         this.position = position;
     }
 

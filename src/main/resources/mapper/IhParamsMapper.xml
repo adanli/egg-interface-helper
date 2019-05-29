@@ -20,4 +20,13 @@
         <result column="type" property="type" />
     </resultMap>
 
+    <select id="findParamsByInterfaceId" resultType="com.egg.ih.db.model.IhParams">
+      select * from ih_params
+        where interface_id = #{interfaceId}
+        order by position asc;
+    </select>
+
 </mapper>
+
+
+

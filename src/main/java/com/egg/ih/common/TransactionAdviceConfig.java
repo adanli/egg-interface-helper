@@ -26,7 +26,7 @@ public class TransactionAdviceConfig {
 
         RuleBasedTransactionAttribute requiredTx = new RuleBasedTransactionAttribute(TransactionDefinition.PROPAGATION_REQUIRED,
                 Collections.singletonList(new RollbackRuleAttribute(Exception.class)));
-        requiredTx.setTimeout(5);
+        requiredTx.setTimeout(60*1000);
         Map<String, TransactionAttribute> txMap = new HashMap<>(11);
         txMap.put("save*", requiredTx);
         txMap.put("update*", requiredTx);

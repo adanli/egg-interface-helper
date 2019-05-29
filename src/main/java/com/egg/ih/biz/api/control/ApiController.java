@@ -9,7 +9,6 @@ import com.egg.ih.biz.api.vo.params.HeaderVO;
 import com.egg.ih.biz.api.vo.params.QueryVO;
 import com.egg.ih.biz.api.vo.params.ResponseVO;
 import com.egg.ih.biz.ex.BaseErrorCode;
-import com.egg.ih.log.service.LogService;
 import com.egg.ih.log.vo.HiOperVO;
 import com.egg.ih.util.errorcode.DefaultErrorCode;
 import com.egg.ih.util.response.BaseResponse;
@@ -36,8 +35,6 @@ import java.util.Map;
 public class ApiController {
     @Autowired
     private ApiService apiService;
-    @Autowired
-    private LogService logService;
     private static final Gson gson = new Gson();
 
     /**
@@ -103,12 +100,6 @@ public class ApiController {
     public BaseResponse<InterfaceVO> findInterfaceById(@PathVariable String interfaceId, HttpServletRequest request) {
 
         InterfaceVO interfaceVO = apiService.findInterfaceById(interfaceId);
-        // 保存日志
-        /*HiOperVO history = new HiOperVO();
-        history.setInterfaceId(interfaceVO.getInterfaceId());
-        history.setOperIp(request.getRemoteAddr());
-        history.setUrl(interfaceVO.getUrl());
-        logService.saveLog(history);*/
 
         return ResponseBuilder.build(DefaultErrorCode.SUCCESS, interfaceVO);
     }
