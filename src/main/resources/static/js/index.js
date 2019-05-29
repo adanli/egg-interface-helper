@@ -148,7 +148,8 @@ let parHeaderTr = '<tr flag="false">' +
     '<li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>' +
     '</ul></div></div></td>' +
     '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>' +
-    '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td></tr>';
+    '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>' +
+    '<td><span class="glyphicon glyphicon-remove param-remove-icon cursor" onclick="removmeParams(this)"></span></td></tr>';
 // body和response添加trtd
 let bodResponseTr = '<tr flag="false">' +
     '<td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>' +
@@ -167,6 +168,9 @@ let bodResponseTr = '<tr flag="false">' +
  */
 function addTrTd(obj){
     let flag = $(obj).parent().parent().attr('flag');
+    if($(obj).parent().parent().parent().find('tr').length > 0){
+        $('.param-remove-icon').css('display','inline');
+    }
     if(flag == 'true'){
         $(obj).parent().parent().attr('flag','false');
         $(obj).parent().parent().last().after(parHeaderTr);
@@ -432,7 +436,8 @@ function tabControl(){
         '            </div>\n' +
         '        </td>\n' +
         '        <td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>\n' +
-        '        <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>\n' +
+        '        <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>' +
+        '<td><span class="glyphicon glyphicon-remove param-remove-icon cursor" style="display: none" onclick="removmeParams(this)"></span></td>' +
         '    </tr></tbody>\n' +
         '</table>' +
         '</div>' +
@@ -456,7 +461,8 @@ function tabControl(){
         '        </div>\n' +
         '    </td>\n' +
         '    <td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>\n' +
-        '    <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>\n' +
+        '    <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>' +
+        '<td><span class="glyphicon glyphicon-remove param-remove-icon cursor" style="display: none" onclick="removmeParams(this)"></span></td>' +
         '</tr>' +
         '</tbody></table></div>' +
         '<div class="tab-pane div-mrg" id='+id_body+'>' +
@@ -687,7 +693,17 @@ let saveInterfaceGetClass = () => {
     requestGetTree('/ih/rest/apiService/v1/classes','GET','');
 }
 
-
+/**
+ * 移除params
+ */
+let removmeParams = (that) => {
+    let len = $(that).parent().parent().parent().find('tr').length - 2;
+    $(that).parent().parent().parent().find('tr').eq(len).attr('flag', 'true');
+    $(that).parent().parent().remove();
+    if(len < 1){
+        $('.param-remove-icon').css('display','none');
+    }
+}
 /**
  * 清空目录modal并隐藏
  */

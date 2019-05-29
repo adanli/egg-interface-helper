@@ -163,6 +163,10 @@
         top:35%;
         margin-left: 10px;
     }
+    /*参数删除图标*/
+    .param-remove-icon{
+        margin: 50% auto;
+    }
     /*统一margin*/
     .mrg {
         /*margin: 15px 15px;*/
