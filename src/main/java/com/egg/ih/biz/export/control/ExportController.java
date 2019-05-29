@@ -23,7 +23,7 @@ public class ExportController {
     private ExportService exportService;
 
     @ApiOperation(notes = "/word", value = "导出word文档")
-    @GetMapping(value = "/word")
+    @PostMapping(value = "/word")
     public void exportWord(HttpServletResponse response) throws Exception{
         XWPFDocument document = exportService.exportWord();
 
