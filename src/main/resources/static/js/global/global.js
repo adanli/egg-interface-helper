@@ -1,3 +1,5 @@
+//防止编辑清空
+let bodyResponseData = {};
 /**
  * 解析前准备工作
  */
@@ -52,4 +54,26 @@ let analysisJson = (suffix, json, parent, type) => {
     if(i != 0){
         $(obj).prepend(str);
     }
+}
+/**
+ * 填充body/response input 数据
+ */
+let constructBodyResponseData = (suffix, vo, head) => {
+    let obj = $('#'+head+'_div_'+suffix+' tr');
+    $(obj).each(function(){
+        console.log($(this).find('input[name=code]').val());
+        let codeVal = $(this).find('input[name=code]').val();
+        let parentVal = $(this).find('input[name=parent]').val();
+        // $(this).find('input').each(function(){
+        for(let i in vo){
+            let obj = vo[i];
+            if(codeVal == obj.code && (parentVal == obj.parent || obj.parent == null)){
+                for(let key in obj){
+                    $(this).find('input[name='+key+']').val(obj[key]);
+                }
+                // console.log(obj);
+            };
+        }
+        // })
+    })
 }

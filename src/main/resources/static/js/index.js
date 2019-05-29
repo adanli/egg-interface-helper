@@ -264,6 +264,13 @@ function getBodyJsonData(suffix){
     let i = 0; //修改索引值
     // analysisJson(suffix, json, i, '', 'body_');
     preparatoryWork(suffix, json, '', 'body');
+    //填充body/response input 数据
+    if(bodyResponseData.hasOwnProperty('bodyResponse'+suffix)){
+        let obj = bodyResponseData['bodyResponse'+suffix];
+        for(let key in obj){
+            constructBodyResponseData(suffix, obj[key].params, key);
+        }
+    }
     //初始化AutoComplete
     initAutoComplete(availableTags);
 }
@@ -273,6 +280,13 @@ function getResponseJsonData(suffix){
     let i = 0; //修改索引值
     // analysisJson(suffix, json, i, '', 'response_');
     preparatoryWork(suffix, json, '', 'response');
+    //填充body/response input 数据
+    if(bodyResponseData.hasOwnProperty('bodyResponse'+suffix)){
+        let obj = bodyResponseData['bodyResponse'+suffix];
+        for(let key in obj){
+            constructBodyResponseData(suffix, obj[key].params, key);
+        }
+    }
     //初始化AutoComplete
     initAutoComplete(availableTags);
 }
@@ -521,9 +535,12 @@ let construnctionInterfaceValue = (data) => {
     }*/
     let queryHeadersObj = {'params':queryVO, 'headers':headerVO};
     let bodyResponseObj = {'body':bodyVO, 'response':responseVO};
+    // params/header数据
     for(let key in queryHeadersObj){
         constructRightBottomData(key, queryHeadersObj[key], suffix);
     }
+    bodyResponseData['bodyResponse'+suffix] = bodyResponseObj;
+    //body/response数据
     for(let key in bodyResponseObj){
         preparatoryWork(suffix, $.parseJSON(bodyResponseObj[key].example), '', key);
     }
@@ -537,28 +554,6 @@ let construnctionInterfaceValue = (data) => {
     for(let key in bodyResponseObj){
         constructBodyResponseData(suffix, bodyResponseObj[key].params, key);
     }
-}
-/**
- * 填充body/response input 数据
- */
-let constructBodyResponseData = (suffix, vo, head) => {
-    let obj = $('#'+head+'_div_'+suffix+' tr');
-    $(obj).each(function(){
-        console.log($(this).find('input[name=code]').val());
-        let codeVal = $(this).find('input[name=code]').val();
-        let parentVal = $(this).find('input[name=parent]').val();
-        // $(this).find('input').each(function(){
-            for(let i in vo){
-                let obj = vo[i];
-                if(codeVal == obj.code && (parentVal == obj.parent || obj.parent == null)){
-                    for(let key in obj){
-                        $(this).find('input[name='+key+']').val(obj[key]);
-                    }
-                    // console.log(obj);
-                };
-            }
-        // })
-    })
 }
 /**
  * 填充example数据

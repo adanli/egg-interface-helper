@@ -100,13 +100,66 @@ let renderingDetailedData = (data) => {
     $('#description').val(description);
     $('#type').text(type);
     $('#url').val(url);
-    let obj = {'query':queryVO, 'headers':headerVO, 'body':bodyVO, 'response':responseVO};
+    let obj = {'query':queryVO, 'headers':headerVO};
+    let bodyResponseObj = {'body':bodyVO, 'response':responseVO};
+    //params/headers
     for(let key in obj){
         renderingBottomDetailedData(key, obj[key]);
         console.log(obj[key]);
     }
+    //body/response
+    for(let key in bodyResponseObj){
+        preparatoryWork('default', $.parseJSON(bodyResponseObj[key].example), '', key);
+    }
+    //填充example数据
+    for(let key in bodyResponseObj){
+        constructExampleData('default', bodyResponseObj[key], key);
+    }
+    //填充body/response input 数据
+    for(let key in bodyResponseObj){
+        constructBodyResponseData('default', bodyResponseObj[key].params, key);
+    }
+    //将所有input置为不可点击
+    $('.tab-content input').attr('disabled',true);
+    $('.tab-content input').attr('placeholder','');
+    $('.tab-content input').unbind();;
+}
+/**
+ * 填充example数据
+ */
+let constructExampleData = (suffix, vo,  head) => {
+    if(vo.hasOwnProperty('example')){
+        let example = vo.example;
+        if(example != null){
+            $('#'+head+'_div_'+suffix).append('<textarea class="form-control" disabled placeholder="Json字符串" rows='+example.split('\n').length+'>'+example+'</textarea>');
+        }
+    }
 }
 let renderingBottomDetailedData = (key, vo) => {
+    $('#'+key).empty();
+    let params = vo.params;
+    if(JSON.stringify(params) != '[]'){
+        let str = '<table class="table table-condensed"><thead><tr>' +
+            '         <th>参数名称</th>' +
+            '         <th>数据类型</th>' +
+            '         <th>属性描述</th>' +
+            '         <th>是否必填</th>' +
+            '         <th>最大长度</th>' +
+            '         <th>备注</th></tr></thead><tbody>';
+        for(let i = 0; i < params.length; i++){
+            let obj = params[i];
+            for(let key in obj){
+                if(obj[key] == null){
+                    obj[key] = '';
+                }
+            }
+            str += '<tr><td>'+obj.code+'</td><td>'+obj.type.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</td><td>'+obj.description+'</td><td>'+obj.necessary+'</td><td>'+obj.maxLength+'</td><td>'+obj.remark+'</td></tr>';
+        }
+        str += '</tbody></table>';
+        $('#'+key).append(str);
+    }
+}
+/*let renderingBottomDetailedData = (key, vo) => {
     $('#'+key).empty();
     let params = vo.params;
     if(JSON.stringify(params) != '[]'){
@@ -143,7 +196,7 @@ let renderingBottomDetailedData = (key, vo) => {
             }
         }
     }
-}
+}*/
 /**
  * 组合数据
  * @param url
