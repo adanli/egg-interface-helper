@@ -1,10 +1,12 @@
 package com.egg.ih.db.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.util.Date;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -42,6 +44,16 @@ public class IhClass extends Model<IhClass> {
 
     private String url;
 
+    @TableField(exist = false)
+    private List<IhInterface> interfaces;
+
+    public List<IhInterface> getInterfaces() {
+        return interfaces;
+    }
+
+    public void setInterfaces(List<IhInterface> interfaces) {
+        this.interfaces = interfaces;
+    }
 
     public String getClassId() {
         return classId;

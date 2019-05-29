@@ -4,6 +4,8 @@ import com.egg.ih.db.model.IhDirectory;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * <p>
  *  Mapper 接口
@@ -14,5 +16,9 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface IhDirectoryMapper extends BaseMapper<IhDirectory> {
-
+    /**
+     * 查询目录列表
+     * @return
+     */
+    List<IhDirectory> findDirectory();
 }

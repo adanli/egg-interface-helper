@@ -1,10 +1,12 @@
 package com.egg.ih.db.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.util.Date;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -40,6 +42,27 @@ private static final long serialVersionUID=1L;
 
     private String parentDirectoryId;
 
+    @TableField(exist = false)
+    private List<IhClass> classes;
+
+    @TableField(exist = false)
+    private List<IhDirectory> directories;
+
+    public List<IhClass> getClasses() {
+        return classes;
+    }
+
+    public void setClasses(List<IhClass> classes) {
+        this.classes = classes;
+    }
+
+    public List<IhDirectory> getDirectories() {
+        return directories;
+    }
+
+    public void setDirectories(List<IhDirectory> directories) {
+        this.directories = directories;
+    }
 
     public String getDirectoryId() {
         return directoryId;

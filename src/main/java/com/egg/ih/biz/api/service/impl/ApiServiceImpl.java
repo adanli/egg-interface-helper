@@ -121,17 +121,17 @@ public class ApiServiceImpl implements ApiService {
     private void saveParamsVOs(String interfaceId, QueryVO queryVO, HeaderVO headerVO, BodyVO bodyVO, ResponseVO responseVO) {
         // 保存接口参数
         if(queryVO!=null && queryVO.getParams()!=null) {
-            this.saveParams(queryVO, interfaceId, BaseConstant.参数存储位置.QUERY.name());
+            this.saveParams(queryVO, interfaceId, BaseConstant.参数存储位置.QUERY.getName());
         }
         if(headerVO!=null && headerVO.getParams()!=null) {
-            this.saveParams(headerVO, interfaceId, BaseConstant.参数存储位置.HEADER.name());
+            this.saveParams(headerVO, interfaceId, BaseConstant.参数存储位置.HEADER.getName());
         }
         if(bodyVO!=null && bodyVO.getParams()!=null) {
-            this.saveParams(bodyVO, interfaceId, BaseConstant.参数存储位置.BODY.name());
-            saveExample(bodyVO.getExample().getBytes(), BaseConstant.参数存储位置.BODY.name(), interfaceId);
+            this.saveParams(bodyVO, interfaceId, BaseConstant.参数存储位置.BODY.getName());
+            saveExample(bodyVO.getExample().getBytes(), BaseConstant.参数存储位置.BODY.getName(), interfaceId);
         }
         if(responseVO!=null && responseVO.getParams()!=null) {
-            this.saveParams(responseVO, interfaceId, BaseConstant.参数存储位置.RESPONSE.name());
+            this.saveParams(responseVO, interfaceId, BaseConstant.参数存储位置.RESPONSE.getName());
             saveExample(responseVO.getExample().getBytes(), BaseConstant.参数存储位置.RESPONSE.name(), interfaceId);
         }
     }
@@ -143,7 +143,7 @@ public class ApiServiceImpl implements ApiService {
             inQuery.accept(p);
             p.setCreateTime(new Date());
             p.setUpdateTime(new Date());
-            p.setPosition(position);
+            p.setPosition(BaseConstant.参数存储位置.getCodeByName(position));
             p.setInterfaceId(interfaceId);
             return p;
         }).forEach(p -> {
@@ -242,7 +242,7 @@ public class ApiServiceImpl implements ApiService {
     private void saveExample(byte[] example, String position, String interfaceId) {
         IhParams exampleParams = new IhParams();
         inExample.accept(exampleParams);
-        exampleParams.setPosition(position);
+        exampleParams.setPosition(BaseConstant.参数存储位置.getCodeByName(position));
         exampleParams.setCreateTime(new Date());
         exampleParams.setUpdateTime(new Date());
         exampleParams.setInterfaceId(interfaceId);
@@ -267,15 +267,15 @@ public class ApiServiceImpl implements ApiService {
 
             list.stream().forEach(param -> {
                 switch (param.getPosition()) {
-                    case "QUERY": {
+                    case 0: {
                         queryVO.getParams().add(param2VO.apply(param));
                         break;
                     }
-                    case "HEADER": {
+                    case 1: {
                         headerVO.getParams().add(param2VO.apply(param));
                         break;
                     }
-                    case "BODY": {
+                    case 2: {
                         if(param.getFlag().equals(BaseConstant.例子位置.query.getCode())) {
                             bodyVO.getParams().add(param2VO.apply(param));
                         }else {
@@ -284,7 +284,7 @@ public class ApiServiceImpl implements ApiService {
 
                         break;
                     }
-                    case "RESPONSE": {
+                    case 3: {
                         if(param.getFlag().equals(BaseConstant.例子位置.query.getCode())) {
                             responseVO.getParams().add(param2VO.apply(param));
                         }else {

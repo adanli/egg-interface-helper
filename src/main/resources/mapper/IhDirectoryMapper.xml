@@ -14,7 +14,20 @@
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
         <result column="delete_time" property="deleteTime" />
-        <result column="parent_derectory_id" property="parentDerectoryId" />
+        <result column="parent_directory_id" property="parentDirectoryId" />
     </resultMap>
+
+    <resultMap id="directory" type="com.egg.ih.db.model.IhDirectory">
+        <collection property="classes"
+                    javaType="java.util.ArrayList"
+                    ofType="com.egg.ih.db.model.IhDirectory"
+                    column="directory_id"
+                    select="com.egg.ih.db.mapper.IhClassMapper.findClassesByDirectoryId"/>
+    </resultMap>
+
+    <select id="findDirectory" resultMap="directory">
+        select * from ih_directory
+          where valid = 'Y';
+    </select>
 
 </mapper>

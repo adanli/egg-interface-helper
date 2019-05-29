@@ -16,4 +16,18 @@
         <result column="description" property="description" />
     </resultMap>
 
+    <resultMap id="clazz" type="com.egg.ih.db.model.IhClass">
+        <collection property="interfaces"
+                javaType="java.util.ArrayList"
+                ofType="com.egg.ih.db.model.IhClass"
+                column="class_id"
+                select="com.egg.ih.db.mapper.IhInterfaceMapper.findInterfacesByClassId"/>
+    </resultMap>
+    
+    <select id="findClassesByDirectoryId" resultMap="clazz">
+        select * from ih_class
+          where directory_id = #{directoryId}
+          and valid = 'Y';
+    </select>
+
 </mapper>

@@ -1,5 +1,6 @@
 package com.egg.ih.constant;
 
+import com.egg.ih.biz.api.vo.InterfaceVO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -67,14 +68,47 @@ public class BaseConstant {
         private String code;
 
         public static String getNameByCode(String code) {
-            return Arrays.stream(是否必填.values()).filter(c -> c.getCode().equals(code)).findFirst().orElseGet(null).getName();
+            是否必填 p = Arrays.stream(是否必填.values()).filter(c -> c.getCode().equals(code)).findFirst().orElseGet(null);
+            if(p == null) {
+                return null;
+            }
+            return p.getName();
         }
 
     }
 
     @Getter
     public enum 参数存储位置 {
-        QUERY, HEADER, BODY, RESPONSE
+//        QUERY, HEADER, BODY, RESPONSE
+        QUERY("query", 0),
+        HEADER("header", 1),
+        BODY("body", 2),
+        RESPONSE("response", 3);
+        参数存储位置(String name, Integer code) {
+            this.name = name;
+            this.code = code;
+        }
+        private String name;
+        private Integer code;
+
+        public static String getNameByCode(Integer code) {
+            BaseConstant.参数存储位置 参数 =  Arrays.stream(参数存储位置.values()).filter(c -> c.getCode().equals(code)).findFirst().orElseGet(null);
+            if(参数 == null) {
+                return null;
+            }
+            return 参数.getName();
+
+        }
+
+        public static Integer getCodeByName(String name) {
+            String _name = name.toLowerCase();
+            BaseConstant.参数存储位置 p = Arrays.stream(参数存储位置.values()).filter(c -> c.getName().equals(_name)).findFirst().orElseGet(null);
+            if(p == null) {
+                return null;
+            }
+            return p.getCode();
+        }
+
     }
 
     /**
