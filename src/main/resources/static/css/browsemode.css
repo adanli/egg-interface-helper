@@ -20,6 +20,7 @@
     }
     .form-control[disabled]{
         background-color: #fff;
+        cursor: default;
     }
     /*树样式*/
     .treeview span.icon{

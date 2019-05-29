@@ -10,8 +10,24 @@ $(function(){
 // let flag = false;
 //AutoComplete数据
 const availableTags = [
-    "String",
-    "Integer"
+    'String',
+    'Integer',
+    'Byte',
+    'Short',
+    'Character',
+    'Float',
+    'Double',
+    'Boolean',
+    'Long',
+    'Date',
+    'int',
+    'byte',
+    'short',
+    'long',
+    'float',
+    'double',
+    'char',
+    'boolean'
 ];
 //请求类型数据
 const method = {
@@ -671,22 +687,6 @@ function getVal(head, suffix){
     })
     return listVO;
 }
-
-/**
- * 判断是编辑还是保存
- */
-let saveUpdateControll = () => {
-    //获得id后缀
-    let suffix = getSelectSuffix();
-    let interface_id = $('#interface_id_'+suffix).val();
-    if(interface_id != ''){
-        //修改
-        updateInterface(interface_id);
-    }else{
-        //保存
-        saveInterface();
-    }
-}
 /**
  * 构建保存/编辑数据
  */
@@ -717,24 +717,6 @@ let constructSaveOrUpdateData = () => {
         "example": eval('response_editor_'+suffix).getText()
     }
     return data
-}
-/**
- * 保存接口数据
- */
-function saveInterface(){
-    //构建要保存的数据
-    let data = constructSaveOrUpdateData();
-    console.log(data);
-    requestApi('/ih/rest/apiService/v1/interface','POST', data);
-}
-/**
- * 编辑接口
- */
-let updateInterface = (interface_id) => {
-    //构建要保存的数据
-    let data = constructSaveOrUpdateData();
-    console.log(data);
-    requestApi('/ih/rest/apiService/v1/interface/'+interface_id,'PUT', data);
 }
 
 /**
@@ -848,13 +830,15 @@ let saveOrUpdateDirectory = () => {
     }else{
         //添加目录
         let url = '/ih/rest/apiService/v1/directory?name='+data.name;
-        if(data.parentDirectoryId != ''){
+        if(data.parentDirectoryId != '' && data.parentDirectoryId != undefined){
             url += '&parentId='+data.parentDirectoryId;
         }
         request(url,'POST', {});
     }
     //清空modal并隐藏
     clearDirectoryModal();
+    //刷新树数据
+    refreshTreeData();
 }
 /**
  * 保存Or修改类名
@@ -874,6 +858,29 @@ function saveOrUpdateClass(){
     }
     //清空modal并隐藏
     clearClassModal();
+    //刷新树数据
+    refreshTreeData();
+}
+/**
+ * 保存Or修改接口
+ */
+let saveOrUpdateInterface = () => {
+    //获得id后缀
+    let suffix = getSelectSuffix();
+    let interface_id = $('#interface_id_'+suffix).val();
+    //构建要保存的数据
+    let data = constructSaveOrUpdateData();
+    if(interface_id != ''){
+        //修改
+        requestString('/ih/rest/apiService/v1/interface/'+interface_id,'PUT', data);
+    }else{
+        //保存
+        requestString('/ih/rest/apiService/v1/interface','POST', data);
+    }
+    //隐藏类选择窗口
+    $('#selectClassModal').modal('hide');
+    //刷新树数据
+    refreshTreeData();
 }
 /**
  * 删除目录Or类Or接口
@@ -887,7 +894,11 @@ let del = (id, type) => {
     }else if(type == 'interface'){
         url = '/ih/rest/apiService/v1/interface/'+id;
     }
-    requestString(url,'DELETE',{});
+    if(confirm('删除？')){
+        requestString(url,'DELETE',{});
+        //刷新树数据
+        refreshTreeData();
+    }
     //阻止冒泡事件
     window.event? window.event.cancelBubble = true : e.stopPropagation();
 }
@@ -913,8 +924,9 @@ let edit = (id, type) => {
  * 返回上级
  * @type {Array}
  */
-let backSuperiorData = [];
+let backSuperiorData = []; //记录返回上一级ID
 let backSuperior = () => {
+    refreshThisLevelData.pop(); //同时删除刷新ID
     let val = backSuperiorData.pop();
     if(val == 'null' || val == undefined){
         requestDirectory();
@@ -930,6 +942,18 @@ let constructBreadCrumb = (breadCrumb) => {
     $('#breadcrumb').append(breadCrumb);
 }
 /**
+ * 刷新数据
+ */
+let refreshThisLevelData = [];
+let refreshTreeData = () => {
+    if(refreshThisLevelData.length == 0){
+        requestDirectory();
+    }else{
+        let val = refreshThisLevelData[refreshThisLevelData.length -1];
+        requestChild(val, '');
+    }
+}
+/**
  * 请求目录
  */
 let requestDirectory = () => {
@@ -943,7 +967,10 @@ let requestDirectory = () => {
  */
 let requestChild = (directoryId, parentDirectoryId) => {
     if(parentDirectoryId != ''){
-        backSuperiorData.push(parentDirectoryId); //记录上级
+        backSuperiorData.push(parentDirectoryId); // 记录上级
+    }
+    if(parentDirectoryId != '') {
+        refreshThisLevelData.push(directoryId); // 记录本级
     }
     let child = request('/ih/rest/apiService/v1/directory','GET',{parentId:directoryId});
     //面包屑
