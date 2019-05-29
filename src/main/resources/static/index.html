@@ -365,9 +365,9 @@
 
                     </div>
                 </div>
-                <input type="text" id="select_class_id" style="display: none">
+                <input type="hidden" id="select_class_id">
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="$('#select_class_id').val('');">关闭
                     </button>
                     <button type="button" class="btn btn-primary" onclick="saveOrUpdateInterface()">
                         提交

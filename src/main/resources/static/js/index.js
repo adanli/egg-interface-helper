@@ -525,6 +525,7 @@ let requestInterfaceValue = (url, type) => {
  * @param data
  */
 let construnctionInterfaceValue = (data) => {
+    $('#select_class_id').val(data.classId); //默认选择类
     let {name, interfaceId, code, url, type, description, queryVO, headerVO, bodyVO, responseVO} = data;
     //获得id后缀
     let suffix = getSelectSuffix();
@@ -844,10 +845,13 @@ let saveOrUpdateInterface = () => {
     if(interface_id != ''){
         //修改
         requestString('/ih/rest/apiService/v1/interface/'+interface_id,'PUT', data);
+        //关闭tab
+        closeTabContro();
     }else{
         //保存
         requestString('/ih/rest/apiService/v1/interface','POST', data);
     }
+    $('#select_class_id').val(''); //重置选择类
     //隐藏类选择窗口
     $('#selectClassModal').modal('hide');
     //刷新树数据
