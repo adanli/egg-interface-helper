@@ -1,7 +1,6 @@
 $(function(){
     //请求目录数据
     requestDirectory();
-    // getHistory(); //历史记录
     //初始化json编辑器
     initJsonEditor('default');
     //初始化AutoComplete
@@ -135,19 +134,17 @@ function changeSelect(obj){
  */
 let bottomValChangeSelect = (obj) => {
     let sel = $(obj).text();
-    $(obj).parent().parent().prev().val(sel);
+    $(obj).parent().prev().find('input').val(sel);
 }
 // params和header添加trtd
 let parHeaderTr = '<tr flag="false">' +
     '<td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>' +
     '<td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>' +
     '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>' +
-    '<td><div class="input-group">' +
+    '<td><div class="input-group"><div class="input-group-btn">' +
+    '<span class="dropdown-toggle" data-toggle="dropdown" tabindex="-1">' +
     '<input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>' +
-    '<div class="input-group-btn">' +
-    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">' +
-    '<span class="caret dropdown-toggle" data-toggle="dropdown"></span>' +
-    '</button><ul class="dropdown-menu pull-right"><li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>' +
+    '</span><ul class="dropdown-menu pull-right"><li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>' +
     '<li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>' +
     '</ul></div></div></td>' +
     '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>' +
@@ -157,12 +154,10 @@ let bodResponseTr = '<tr flag="false">' +
     '<td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>' +
     '<td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>' +
     '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>' +
-    '<td><div class="input-group">' +
+    '<td><div class="input-group"><div class="input-group-btn">' +
+    '<span class="dropdown-toggle" data-toggle="dropdown" tabindex="-1">' +
     '<input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" placeholder="是否必填" onkeydown="addBodyTrTd(this)"/>' +
-    '<div class="input-group-btn">' +
-    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">' +
-    '<span class="caret dropdown-toggle" data-toggle="dropdown"></span></button>' +
-    '<ul class="dropdown-menu pull-right"><li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>\n' +
+    '</span><ul class="dropdown-menu pull-right"><li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>\n' +
     '<li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li></ul></div></div></td>' +
     '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>' +
     '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>' +
@@ -267,14 +262,21 @@ function getBodyJsonData(suffix){
     let str = eval('body_editor_'+suffix).getText();
     let json = $.parseJSON(str); //json数据
     let i = 0; //修改索引值
-    analysisJson(suffix, json, i, '', 'body_');
+    // analysisJson(suffix, json, i, '', 'body_');
+    analysisJson(suffix, json, '', 'body');
+    //初始化AutoComplete
+    initAutoComplete(availableTags);
 }
 function getResponseJsonData(suffix){
     let str = eval('response_editor_'+suffix).getText();
     let json = $.parseJSON(str); //json数据
     let i = 0; //修改索引值
-    analysisJson(suffix, json, i, '', 'response_');
+    // analysisJson(suffix, json, i, '', 'response_');
+    analysisJson(suffix, json, '', 'response');
+    //初始化AutoComplete
+    initAutoComplete(availableTags);
 }
+/*
 function analysisJson(suffix, json, i, parent, type){
     let obj = $('#'+type+suffix+' tr')
     let len = obj.length;
@@ -297,6 +299,7 @@ function analysisJson(suffix, json, i, parent, type){
     }
     return i;
 }
+*/
 /**
  * 选择文件夹构建
  */
@@ -353,7 +356,9 @@ function tabControl(){
     let id_headers = 'headers_'+ran;
     let id_body = 'body_'+ran;
     let id_response = 'response_'+ran;
+    let body_div = 'body_div_'+ran;
     let body_json_editor = 'body_json_editor_'+ran;
+    let response_div = 'response_div_'+ran;
     let response_json_editor = 'response_json_editor_'+ran;
     //移除所有选中
     $('#right_top_tab li').removeClass('active');
@@ -393,17 +398,30 @@ function tabControl(){
         '<li role="presentation"><a href='+href_response+' data-toggle="tab">response</a></li></ul>'+
         '<div id='+right_bottom_tab_content+' class="tab-content mrg">' +
         '<div class="tab-pane active div-mrg" id='+id_params+'>' +
-        '<table class="table table-condensed"><caption>Query Params</caption><tbody>' +
-        '<tr flag="true"><td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>' +
-        '<td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>' +
-        '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>' +
-        '<td><div class="input-group"><input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>' +
-        '<div class="input-group-btn"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">' +
-        '<span class="caret dropdown-toggle" data-toggle="dropdown"></span></button><ul class="dropdown-menu pull-right">\n' +
-        '<li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li><li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>' +
-        '</ul></div></div></td><td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>' +
-        '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td></tr>' +
-        '</tbody></table></div>' +
+        '<table class="table table-condensed">\n' +
+        '    <caption>Query Params</caption>\n' +
+        '    <tbody><tr flag="true">\n' +
+        '        <td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>\n' +
+        '        <td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>\n' +
+        '        <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>\n' +
+        '        <td>\n' +
+        '            <div class="input-group">\n' +
+        '                <div class="input-group-btn">\n' +
+        '                    <span class="dropdown-toggle" data-toggle="dropdown" tabindex="-1">\n' +
+        '                        <input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>\n' +
+        '                    </span>\n' +
+        '                    <ul class="dropdown-menu pull-right">\n' +
+        '                        <li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>\n' +
+        '                        <li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>\n' +
+        '                    </ul>\n' +
+        '                </div>\n' +
+        '            </div>\n' +
+        '        </td>\n' +
+        '        <td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>\n' +
+        '        <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>\n' +
+        '    </tr></tbody>\n' +
+        '</table>' +
+        '</div>' +
         '<div class="tab-pane div-mrg" id='+id_headers+'>' +
         '<table class="table table-condensed"><caption>Headers</caption><tbody>' +
         '<tr flag="true">\n' +
@@ -412,11 +430,10 @@ function tabControl(){
         '    <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>\n' +
         '    <td>\n' +
         '        <div class="input-group">\n' +
-        '            <input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>\n' +
         '            <div class="input-group-btn">\n' +
-        '                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">\n' +
-        '                    <span class="caret dropdown-toggle" data-toggle="dropdown"></span>\n' +
-        '                </button>\n' +
+        '                <span class="dropdown-toggle" data-toggle="dropdown" tabindex="-1">\n' +
+        '                    <input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>' +
+        '                </span>\n' +
         '                <ul class="dropdown-menu pull-right">\n' +
         '                    <li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>\n' +
         '                    <li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>\n' +
@@ -429,56 +446,10 @@ function tabControl(){
         '</tr>' +
         '</tbody></table></div>' +
         '<div class="tab-pane div-mrg" id='+id_body+'>' +
-        '<table class="table table-condensed"><caption>Body</caption><tbody>' +
-        '<tr flag="true">\n' +
-        '    <td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>\n' +
-        '    <td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>\n' +
-        '    <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>\n' +
-        '    <td>\n' +
-        '        <div class="input-group">\n' +
-        '            <input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" onkeydown="addBodyTrTd(this)"/>\n' +
-        '            <div class="input-group-btn">\n' +
-        '                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">\n' +
-        '                    <span class="caret dropdown-toggle" data-toggle="dropdown"></span>\n' +
-        '                </button>\n' +
-        '                <ul class="dropdown-menu pull-right">\n' +
-        '                    <li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>\n' +
-        '                    <li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>\n' +
-        '                </ul>\n' +
-        '            </div>\n' +
-        '        </div>\n' +
-        '   </td>\n' +
-        '    <td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>\n' +
-        '    <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>\n' +
-        '    <td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td>\n' +
-        '</tr>' +
-        '</tbody></table>' +
+        '<div id="'+body_div+'"></div>' +
         '<div id='+body_json_editor+' class="cus-jsoneditor"></div>' +
         '</div><div class="tab-pane div-mrg" id='+id_response+'>' +
-        '<table class="table table-condensed"><caption>Response</caption><tbody>' +
-        '<tr flag="true">\n' +
-        '    <td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>\n' +
-        '    <td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>\n' +
-        '    <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>\n' +
-        '    <td>\n' +
-        '        <div class="input-group">\n' +
-        '            <input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" onkeydown="addBodyTrTd(this)"/>\n' +
-        '            <div class="input-group-btn">\n' +
-        '                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">\n' +
-        '                    <span class="caret dropdown-toggle" data-toggle="dropdown"></span>\n' +
-        '                </button>\n' +
-        '                <ul class="dropdown-menu pull-right">\n' +
-        '                    <li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>\n' +
-        '                    <li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>\n' +
-        '                </ul>\n' +
-        '            </div>\n' +
-        '        </div>\n' +
-        '    </td>\n' +
-        '    <td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>\n' +
-        '    <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>\n' +
-        '    <td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td>\n' +
-        '</tr>' +
-        '</tbody></table>' +
+        '<div id="'+response_div+'"></div>' +
         '<div id='+response_json_editor+' class="cus-jsoneditor"></div></div></div></div></div>');
     //判断是否显示关闭图标
     showOrHide();
@@ -486,25 +457,6 @@ function tabControl(){
     initJsonEditor(ran);
     //初始化AutoComplete
     initAutoComplete(availableTags);
-}
-/**
- * 请求
- */
-function requestApi(url,type,data){
-    $.ajax({
-        url:url,
-        type:type,
-        data:JSON.stringify(data),
-        dataType:'json',
-        contentType: 'application/json',
-        success:function(resp){
-            console.log(resp);
-            $('#selectClassModal').modal('hide');
-        },
-        error:function(resp){
-            console.log(resp);
-        }
-    })
 }
 /**
  * 请求树数据
@@ -531,70 +483,6 @@ function requestGetTree(url, type, selectTree){
             console.log(resp);
         }
     })
-}
-/**
- * 请求历史记录树子集数据
- */
-let requestGetTreeHistoryChildNode = (url, type, index, selectTree) => {
-    $.ajax({
-        url:url,
-        type:type,
-        contentType: 'application/json',
-        success:function(resp){
-            constructHitoryTreeChildNode(resp.data, index, selectTree);
-        },
-        error:function(resp){
-            console.log(resp);
-        }
-    })
-}
-/**
- * 构建历史记录树数据
- */
-let constructHistoryTree = (data, selectTree) => {
-    let treeData = [];
-    for(let i = 0; i < data.length; i++){
-        let val = data[i];
-        let parent = {
-            index: i,
-            text: val,
-            icon:'glyphicon glyphicon-folder-close',
-            selectable:false,
-            nodes:[]
-        }
-        treeData.push(parent);
-    }
-    $('#'+selectTree).treeview({
-        data: treeData,         // 数据源
-        emptyIcon: '',    //没有子节点的节点图标
-        multiSelect: false,    //多选
-        levels: 0,
-        expandIcon:"glyphicon glyphicon-triangle-right",
-        collapseIcon: "glyphicon glyphicon-triangle-bottom",
-        showBorder: true,
-        borderColor: "#fff",
-        selectedBackColor: '#f5f5f5',
-        selectedColor: '#000',
-        onNodeExpanded: function(event, data){
-            requestGetTreeHistoryChildNode('/ih/rest/apiService/v1/interface/history?date='+data.text,'GET', data.index, selectTree);
-        },
-    });
-}
-
-/**
- * 构建历史记录树子集数据
- */
-function constructHitoryTreeChildNode(data, index, selectTree){
-    $("#"+selectTree).treeview("deleteNode", [index, { node: {}}])
-    for(let i = 0; i < data.length; i++){
-        let obj = data[i];
-        let node = {
-            id: obj.interfaceId,
-            text: method[obj.type] + obj.url,
-            selectable:false
-        };
-        $("#"+selectTree).treeview("addNode", [index, { node: node }])
-    }
 }
 /**
  * 请求接口数据
@@ -627,12 +515,20 @@ let construnctionInterfaceValue = (data) => {
     $('#url_text_'+suffix).val(url); //url
     $('#content_select_'+suffix).children().children().first().text(type); //请求类型
     $('#interface_desc_'+suffix).val(description); //接口描述
-    let obj = {'params':queryVO, 'headers':headerVO, 'body':bodyVO, 'response':responseVO};
+    /*let obj = {'params':queryVO, 'headers':headerVO, 'body':bodyVO, 'response':responseVO};
     for(let key in obj){
         constructRightBottomData(key, obj[key], suffix);
+    }*/
+    let queryHeadersObj = {'params':queryVO, 'headers':headerVO};
+    let bodyResponseObj = {'body':bodyVO, 'response':responseVO};
+    for(let key in queryHeadersObj){
+        constructRightBottomData(key, queryHeadersObj[key], suffix);
+    }
+    for(let key in bodyResponseObj){
+        analysisJson(suffix, $.parseJSON(bodyResponseObj[key].example), '', key);
     }
 }
-let constructRightBottomData = (head, vo, suffix) => {
+/*let constructRightBottomData = (head, vo, suffix) => {
     let trObjs = $('#'+head+'_'+suffix+' tr');
     let params = vo.params;
     for(let i in params){
@@ -657,6 +553,34 @@ let constructRightBottomData = (head, vo, suffix) => {
             eval(head+'_editor_'+suffix).setText(example);
         }
     }
+    //初始化AutoComplete
+    initAutoComplete(availableTags);
+}*/
+let constructRightBottomData = (head, vo, suffix) => {
+    let trObjs = $('#'+head+'_'+suffix+' tr');
+    let params = vo.params;
+    for(let i in params){
+        $(trObjs).each(function(){$(this).attr('flag', 'false')}); // 将所有输入框置为不可自动增加
+        //追加新的输入框
+        // if(head == 'params' || head == 'headers'){
+            $(trObjs).last().after(parHeaderTr);
+        // }else{
+        //     $(trObjs).last().after(bodResponseTr);
+        // }
+        let trObj = trObjs.eq(i);
+        let obj = params[i];
+        for(let key in obj){
+            $(trObj).find('input[name='+key+']').val(obj[key]);
+        }
+        trObjs = $('#'+head+'_'+suffix+' tr');
+    }
+    $(trObjs).parent().children('tr:last-child').attr('flag', 'true') // 将最后输入框置为可自动增加
+    // if(vo.hasOwnProperty('example')){
+    //     let example = vo.example;
+    //     if(example != null){
+    //         eval(head+'_editor_'+suffix).setText(example);
+    //     }
+    // }
     //初始化AutoComplete
     initAutoComplete(availableTags);
 }
@@ -717,13 +641,6 @@ let constructSaveOrUpdateData = () => {
         "example": eval('response_editor_'+suffix).getText()
     }
     return data
-}
-
-/**
- * 查询历史记录时间
- */
-let getHistory = () => {
-    requestGetTree('/ih/rest/apiService/v1/interface/history/date','GET','his');
 }
 /**
  * 保存Model框查询类数据
