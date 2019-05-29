@@ -11,14 +11,14 @@ $(function(){
 let constructDataListByDirectory = (params) => {
     let data = request('/ih/rest/apiService/v1/directory','GET', params); //请求父LIST
     let clazz = data.class;
-    if(clazz.length > 0){
+    // if(clazz.length > 0){
         for(let i = 0; i < clazz.length; i++){
             let obj = clazz[i];
             obj .childData = request('/ih/rest/apiService/v1/interfaces', 'GET',{classId:obj.classId});
         }
         console.log(clazz);
         renderingData(clazz);
-    }
+    // }
 }
 
 /**
