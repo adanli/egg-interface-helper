@@ -1,4 +1,12 @@
 /**
+ * 解析前准备工作
+ */
+let preparatoryWork = (suffix, json, parent, type) => {
+    let obj = $('#'+type+'_div_'+suffix);
+    $(obj).empty();
+    analysisJson(suffix, json, parent, type);
+}
+/**
  * 递归构造Body,Response 数据
  * @param suffix
  * @param json
@@ -7,7 +15,6 @@
  */
 let analysisJson = (suffix, json, parent, type) => {
     let obj = $('#'+type+'_div_'+suffix);
-    $(obj).empty();
     let str = '';
     if(parent == ''){
         if(type == 'body'){

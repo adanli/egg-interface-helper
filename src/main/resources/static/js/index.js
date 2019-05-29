@@ -263,7 +263,7 @@ function getBodyJsonData(suffix){
     let json = $.parseJSON(str); //json数据
     let i = 0; //修改索引值
     // analysisJson(suffix, json, i, '', 'body_');
-    analysisJson(suffix, json, '', 'body');
+    preparatoryWork(suffix, json, '', 'body');
     //初始化AutoComplete
     initAutoComplete(availableTags);
 }
@@ -272,7 +272,7 @@ function getResponseJsonData(suffix){
     let json = $.parseJSON(str); //json数据
     let i = 0; //修改索引值
     // analysisJson(suffix, json, i, '', 'response_');
-    analysisJson(suffix, json, '', 'response');
+    preparatoryWork(suffix, json, '', 'response');
     //初始化AutoComplete
     initAutoComplete(availableTags);
 }
@@ -525,7 +525,50 @@ let construnctionInterfaceValue = (data) => {
         constructRightBottomData(key, queryHeadersObj[key], suffix);
     }
     for(let key in bodyResponseObj){
-        analysisJson(suffix, $.parseJSON(bodyResponseObj[key].example), '', key);
+        preparatoryWork(suffix, $.parseJSON(bodyResponseObj[key].example), '', key);
+    }
+    //初始化AutoComplete
+    initAutoComplete(availableTags);
+    //填充example数据
+    for(let key in bodyResponseObj){
+        constructExampleData(suffix, bodyResponseObj[key], key);
+    }
+    //填充body/response input 数据
+    for(let key in bodyResponseObj){
+        constructBodyResponseData(suffix, bodyResponseObj[key].params, key);
+    }
+}
+/**
+ * 填充body/response input 数据
+ */
+let constructBodyResponseData = (suffix, vo, head) => {
+    let obj = $('#'+head+'_div_'+suffix+' tr');
+    $(obj).each(function(){
+        console.log($(this).find('input[name=code]').val());
+        let codeVal = $(this).find('input[name=code]').val();
+        let parentVal = $(this).find('input[name=parent]').val();
+        // $(this).find('input').each(function(){
+            for(let i in vo){
+                let obj = vo[i];
+                if(codeVal == obj.code && (parentVal == obj.parent || obj.parent == null)){
+                    for(let key in obj){
+                        $(this).find('input[name='+key+']').val(obj[key]);
+                    }
+                    // console.log(obj);
+                };
+            }
+        // })
+    })
+}
+/**
+ * 填充example数据
+ */
+let constructExampleData = (suffix, vo,  head) => {
+    if(vo.hasOwnProperty('example')){
+        let example = vo.example;
+        if(example != null){
+            eval(head+'_editor_'+suffix).setText(example);
+        }
     }
 }
 /*let constructRightBottomData = (head, vo, suffix) => {
