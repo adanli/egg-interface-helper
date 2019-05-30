@@ -82,6 +82,14 @@ public class ApiServiceImpl implements ApiService {
         return headerVO;
     };
 
+    private Supplier<PathVO> pathSupplier = () -> {
+        PathVO pathVO = new PathVO();
+        if(pathVO.getParams() == null) {
+            pathVO.setParams(new ArrayList<>());
+        }
+        return pathVO;
+    };
+
     private Supplier<BodyVO> bodySupplier = () -> {
         BodyVO bodyVO = new BodyVO();
         if(bodyVO.getParams() == null) {
@@ -106,25 +114,28 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    public boolean saveInterface(InterfaceVO interfaceVO, QueryVO queryVO, HeaderVO headerVO, BodyVO bodyVO, ResponseVO responseVO) {
+    public boolean saveInterface(InterfaceVO interfaceVO, QueryVO queryVO, HeaderVO headerVO, PathVO pathVO, BodyVO bodyVO, ResponseVO responseVO) {
 
         IhInterface ihInterface = interfaceVO2Interface.apply(interfaceVO);
         // 保存接口
         boolean flag = ihInterfaceService.saveOrUpdate(ihInterface);
 
         // 保存接口参数
-        this.saveParamsVOs(ihInterface.getInterfaceId(), queryVO, headerVO, bodyVO, responseVO);
+        this.saveParamsVOs(ihInterface.getInterfaceId(), queryVO, headerVO, pathVO, bodyVO, responseVO);
 
         return flag;
     }
 
-    private void saveParamsVOs(String interfaceId, QueryVO queryVO, HeaderVO headerVO, BodyVO bodyVO, ResponseVO responseVO) {
+    private void saveParamsVOs(String interfaceId, QueryVO queryVO, HeaderVO headerVO, PathVO pathVO, BodyVO bodyVO, ResponseVO responseVO) {
         // 保存接口参数
         if(queryVO!=null && queryVO.getParams()!=null) {
             this.saveParams(queryVO, interfaceId, BaseConstant.参数存储位置.QUERY.getName());
         }
         if(headerVO!=null && headerVO.getParams()!=null) {
             this.saveParams(headerVO, interfaceId, BaseConstant.参数存储位置.HEADER.getName());
+        }
+        if(pathVO!=null && pathVO.getParams()!=null) {
+            this.saveParams(pathVO, interfaceId, BaseConstant.参数存储位置.PATH.getName());
         }
         if(bodyVO!=null && bodyVO.getParams()!=null) {
             this.saveParams(bodyVO, interfaceId, BaseConstant.参数存储位置.BODY.getName());
@@ -262,6 +273,7 @@ public class ApiServiceImpl implements ApiService {
         if(list!=null && list.size()>0) {
             QueryVO queryVO = querySupplier.get();
             HeaderVO headerVO = headerSupplier.get();
+            PathVO pathVO = pathSupplier.get();
             BodyVO bodyVO = bodySupplier.get();
             ResponseVO responseVO = responseSupplier.get();
 
@@ -276,6 +288,10 @@ public class ApiServiceImpl implements ApiService {
                         break;
                     }
                     case 2: {
+                        pathVO.getParams().add(param2VO.apply(param));
+                        break;
+                    }
+                    case 3: {
                         if(param.getFlag().equals(BaseConstant.例子位置.query.getCode())) {
                             bodyVO.getParams().add(param2VO.apply(param));
                         }else {
@@ -284,7 +300,7 @@ public class ApiServiceImpl implements ApiService {
 
                         break;
                     }
-                    case 3: {
+                    case 4: {
                         if(param.getFlag().equals(BaseConstant.例子位置.query.getCode())) {
                             responseVO.getParams().add(param2VO.apply(param));
                         }else {
@@ -304,6 +320,7 @@ public class ApiServiceImpl implements ApiService {
 
             interfaceVO.setQueryVO(queryVO);
             interfaceVO.setHeaderVO(headerVO);
+            interfaceVO.setPathVO(pathVO);
             interfaceVO.setBodyVO(bodyVO);
             interfaceVO.setResponseVO(responseVO);
 
@@ -349,7 +366,7 @@ public class ApiServiceImpl implements ApiService {
      * @return
      */
     @Override
-    public boolean updateInterface(InterfaceVO interfaceVO, QueryVO queryVO, HeaderVO headerVO, BodyVO bodyVO, ResponseVO responseVO) {
+    public boolean updateInterface(InterfaceVO interfaceVO, QueryVO queryVO, HeaderVO headerVO, PathVO pathVO, BodyVO bodyVO, ResponseVO responseVO) {
         // 删除参数
         QueryWrapper<IhParams> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(IhParams::getInterfaceId, interfaceVO.getInterfaceId());
@@ -359,7 +376,7 @@ public class ApiServiceImpl implements ApiService {
         BeanUtils.copyProperties(interfaceVO, ihInterface);
         boolean flag = ihInterfaceService.saveOrUpdate(ihInterface);
 
-        this.saveParamsVOs(ihInterface.getInterfaceId(), queryVO, headerVO, bodyVO, responseVO);
+        this.saveParamsVOs(ihInterface.getInterfaceId(), queryVO, headerVO, pathVO, bodyVO, responseVO);
         return flag;
     }
 

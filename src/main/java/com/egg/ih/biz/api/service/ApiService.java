@@ -1,10 +1,7 @@
 package com.egg.ih.biz.api.service;
 
 import com.egg.ih.biz.api.vo.*;
-import com.egg.ih.biz.api.vo.params.BodyVO;
-import com.egg.ih.biz.api.vo.params.HeaderVO;
-import com.egg.ih.biz.api.vo.params.QueryVO;
-import com.egg.ih.biz.api.vo.params.ResponseVO;
+import com.egg.ih.biz.api.vo.params.*;
 import com.egg.ih.log.vo.HiOperVO;
 
 import java.util.List;
@@ -26,11 +23,12 @@ public interface ApiService {
      * @param interfaceVO 接口类,包含名称, 代码, 描述等
      * @param queryVO 位于query的参数
      * @param headerVO 位于headers的参数
+     * @param pathVO 位于path的参数
      * @param bodyVO 位于body的参数
      * @param responseVO 返回值
      * @return
      */
-    boolean saveInterface(InterfaceVO interfaceVO, QueryVO queryVO, HeaderVO headerVO, BodyVO bodyVO, ResponseVO responseVO) ;
+    boolean saveInterface(InterfaceVO interfaceVO, QueryVO queryVO, HeaderVO headerVO, PathVO pathVO, BodyVO bodyVO, ResponseVO responseVO) ;
 
     /**
      * 查询所有类, 将类名以字典形式顺利展示
@@ -77,11 +75,12 @@ public interface ApiService {
      * @param interfaceVO 接口类,包含名称, 代码, 描述等
      * @param queryVO 位于params的参数
      * @param headerVO 位于headers的参数
+     * @param pathVO 位于path的参数
      * @param bodyVO 位于body的参数
      * @param responseVO 返回值
      * @return
      */
-    boolean updateInterface(InterfaceVO interfaceVO, QueryVO queryVO, HeaderVO headerVO, BodyVO bodyVO, ResponseVO responseVO) ;
+    boolean updateInterface(InterfaceVO interfaceVO, QueryVO queryVO, HeaderVO headerVO, PathVO pathVO, BodyVO bodyVO, ResponseVO responseVO) ;
 
     /**
      * 根据类主键查询类

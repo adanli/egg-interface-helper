@@ -1,9 +1,6 @@
 package com.egg.ih.biz.api.vo;
 
-import com.egg.ih.biz.api.vo.params.BodyVO;
-import com.egg.ih.biz.api.vo.params.HeaderVO;
-import com.egg.ih.biz.api.vo.params.QueryVO;
-import com.egg.ih.biz.api.vo.params.ResponseVO;
+import com.egg.ih.biz.api.vo.params.*;
 import lombok.Data;
 
 import java.util.Date;
@@ -41,6 +38,7 @@ public class InterfaceVO {
 
     private QueryVO queryVO;
     private HeaderVO headerVO;
+    private PathVO pathVO;
     private BodyVO bodyVO;
     private ResponseVO responseVO;
 

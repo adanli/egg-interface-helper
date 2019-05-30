@@ -4,10 +4,7 @@ import com.egg.ih.biz.api.service.ApiService;
 import com.egg.ih.biz.api.vo.ClassVO;
 import com.egg.ih.biz.api.vo.DirectoryVO;
 import com.egg.ih.biz.api.vo.InterfaceVO;
-import com.egg.ih.biz.api.vo.params.BodyVO;
-import com.egg.ih.biz.api.vo.params.HeaderVO;
-import com.egg.ih.biz.api.vo.params.QueryVO;
-import com.egg.ih.biz.api.vo.params.ResponseVO;
+import com.egg.ih.biz.api.vo.params.*;
 import com.egg.ih.biz.ex.BaseErrorCode;
 import com.egg.ih.log.vo.HiOperVO;
 import com.egg.ih.util.errorcode.DefaultErrorCode;
@@ -43,6 +40,7 @@ public class ApiController {
     private static final String INTERFACE_VO = "interfaceVO";
     private static final String PARAMS_VO = "queryVO";
     private static final String HEADERS_VO = "headerVO";
+    private static final String PATH_VO = "pathVO";
     private static final String BODY_VO = "bodyVO";
     private static final String RESPONSE_VO = "responseVO";
 
@@ -67,6 +65,7 @@ public class ApiController {
         return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.saveInterface(paramClass.getInterfaceVO(),
                 paramClass.getQuery(),
                 paramClass.getHeader(),
+                paramClass.getPath(),
                 paramClass.getBody(),
                 paramClass.getResponse()));
     }
@@ -147,6 +146,7 @@ public class ApiController {
         return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.updateInterface(paramClass.getInterfaceVO(),
                 paramClass.getQuery(),
                 paramClass.getHeader(),
+                paramClass.getPath(),
                 paramClass.getBody(),
                 paramClass.getResponse()));
     }
@@ -156,6 +156,7 @@ public class ApiController {
         InterfaceVO interfaceVO = null;
         QueryVO queryVO = null;
         HeaderVO headerVO = null;
+        PathVO pathVO = null;
         BodyVO bodyVO = null;
         ResponseVO responseVO = null;
 
@@ -164,6 +165,10 @@ public class ApiController {
         }
         if(map.get(PARAMS_VO) != null) {
             queryVO = gson.fromJson(gson.toJson(map.get(PARAMS_VO)), QueryVO.class);
+
+        }
+        if(map.get(PATH_VO) != null) {
+            pathVO = gson.fromJson(gson.toJson(map.get(PATH_VO)), PathVO.class);
 
         }
         if(map.get(HEADERS_VO) != null) {
@@ -181,6 +186,7 @@ public class ApiController {
         paramClass.setInterfaceVO(interfaceVO);
         paramClass.setQuery(queryVO);
         paramClass.setHeader(headerVO);
+        paramClass.setPath(pathVO);
         paramClass.setBody(bodyVO);
         paramClass.setResponse(responseVO);
 
@@ -260,6 +266,7 @@ public class ApiController {
         private InterfaceVO interfaceVO;
         private QueryVO query;
         private HeaderVO header;
+        private PathVO path;
         private BodyVO body;
         private ResponseVO response;
     }

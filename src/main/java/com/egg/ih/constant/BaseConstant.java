@@ -82,8 +82,9 @@ public class BaseConstant {
 //        QUERY, HEADER, BODY, RESPONSE
         QUERY("query", 0),
         HEADER("header", 1),
-        BODY("body", 2),
-        RESPONSE("response", 3);
+        PATH("path", 2),
+        BODY("body", 3),
+        RESPONSE("response", 4);
         参数存储位置(String name, Integer code) {
             this.name = name;
             this.code = code;
