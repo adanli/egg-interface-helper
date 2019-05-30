@@ -67,7 +67,10 @@ let constructBodyResponseData = (suffix, vo, head) => {
         // $(this).find('input').each(function(){
         for(let i in vo){
             let obj = vo[i];
-            if(codeVal == obj.code && (parentVal == obj.parent || obj.parent == null)){
+            if(obj.parent == null){
+                obj.parent = '';
+            }
+            if(codeVal == obj.code && parentVal == obj.parent){
                 for(let key in obj){
                     $(this).find('input[name='+key+']').val(obj[key]);
                 }

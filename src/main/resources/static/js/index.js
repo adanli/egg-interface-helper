@@ -867,7 +867,7 @@ let saveInterfaceGetClass = () => {
     let bootstrapValidator = $("#interfaceForm_"+suffix).data('bootstrapValidator');
 
     if(bootstrapValidator.isValid()){
-        $('##selectClassModal').modal('show');
+        $('#selectClassModal').modal('show');
         requestGetTree('/ih/rest/apiService/v1/classes','GET','');
     }
 }
