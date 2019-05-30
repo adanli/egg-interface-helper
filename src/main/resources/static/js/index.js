@@ -1,4 +1,6 @@
 $(function(){
+    //初始化表单验证
+    initFormValidator('default');
     //请求目录数据
     requestDirectory();
     //初始化json编辑器
@@ -193,7 +195,7 @@ function addBodyTrTd(obj){
  * 初始化json编辑器
  */
 function initJsonEditor(suffix){
-    var body_container,resp_container, body_options, resp_options, json;
+    let body_container,resp_container, body_options, resp_options, json;
     body_container = document.getElementById('body_json_editor_'+suffix);
     resp_container = document.getElementById('response_json_editor_'+suffix);
     //jsoneditor支持多种模式，modes: ['code', 'form', 'text', 'tree', 'view'], // allowed modes
@@ -202,7 +204,7 @@ function initJsonEditor(suffix){
         mode: 'code',
         modes: ['code', 'form', 'text', 'tree', 'view'],
         name: "jsonContent",
-        onError: function (err) {alert(err.toString());},
+        onError: function (err) {console.log(err.toString());},
         onEvent: function(node, event) {
             if (event.type === 'click') {
                 var message = 'click on <' + node.field +
@@ -356,6 +358,7 @@ function tabControl(){
     let href_content = '#content_'+ran;
     let id_content = 'href_content_'+ran;
     let close_icon = 'close_icon_'+ran;
+    let interface_form = 'interfaceForm_'+ran;
     let content = 'content_'+ran;
     let interface_id = 'interface_id_'+ran;
     let interface_name = 'interface_name_'+ran;
@@ -392,23 +395,22 @@ function tabControl(){
         $(this).removeClass('active');
     })
     //追加内容
-    $('#right_top_tab_content > div:last').after('<div class="tab-pane active" id='+content+'>' +
-        '<div class="mrg div-mrg"><input id='+interface_name+' class="form-control cus-interface-name cus-input" type="text" placeholder="接口名称" />' +
-        // '<span id='+interface_url+'></span>' +
-        // '<span id='+interface_desc_icon+' class="glyphicon glyphicon-triangle-left cursor" onclick="interfaceDescription()"></span>' +
-        '<input id='+interface_desc+' type="text" style="margin-top: 10px" class="form-control cus-interface-description cus-input" placeholder="接口描述"/>' +
+    $('#right_top_tab_content > div:last').after('<div class="tab-pane active" id='+content+'><form id="'+interface_form+'"><div>' +
+        '<div class="mrg div-mrg"><div class="form-group">' +
+        '<input id='+interface_name+' name='+interface_name+' class="form-control cus-interface-name cus-input" type="text" placeholder="接口名称" required /></div>' +
+        '<input id='+interface_desc+' type="text" class="form-control cus-interface-description cus-input" placeholder="接口描述"/>' +
         '</div><ul class="nav nav-list"><li class="divider"></li></ul><div class="mrg div-mrg">' +
-        '<div class="row"><div class="col-md-11"><div class="input-group"><div id='+content_select+' class="input-group-btn">' +
+        '<div class="row"><div class="col-md-11"><div class="form-group"><div class="input-group"><div id='+content_select+' class="input-group-btn">' +
         '<button type="button" class="btn btn-default dropdown-toggle" style="width: 100px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
         '<span>GET</span><span style="text-align: center; float: right"><span class="caret"></span></span></button><ul class="dropdown-menu">' +
         '<li onclick="changeSelect(this)"><a href="#">GET</a></li>' +
         '<li onclick="changeSelect(this)"><a href="#">POST</a></li>' +
         '<li onclick="changeSelect(this)"><a href="#">PUT</a></li>' +
         '<li onclick="changeSelect(this)"><a href="#">DELETE</a></li></ul></div>' +
-        '<input id='+url_text+' type="text" class="form-control" aria-label="..." onkeydown="urlTextUpdate()" onkeyup="urlTextUpdate()">' +
-        '</div></div>' +
+        '<input id='+url_text+' name='+url_text+' type="text" class="form-control" aria-label="..." onkeydown="urlTextUpdate()" onkeyup="urlTextUpdate()" required>' +
+        '</div></div></div>' +
         '<div class="col-md-1">' +
-        '<button class="btn cus-btn" data-toggle="modal" data-target="#selectClassModal" onclick="saveInterfaceGetClass()">保存</button>\</div></div></div><div class="mrg cus-right-bottom-input">'+
+        '<button class="btn cus-btn" onclick="saveInterfaceGetClass()">保存</button></div></div></div><div class="mrg cus-right-bottom-input">'+
         '<ul id='+right_bottom_tab+' class="nav nav-pills cus-nav-right-pills mrg">' +
         '<li role="presentation" class="active"><a href='+href_params+' data-toggle="tab">params</a></li>' +
         '<li role="presentation"><a href='+href_headers+' data-toggle="tab">headers</a></li>' +
@@ -470,9 +472,11 @@ function tabControl(){
         '<div id='+body_json_editor+' class="cus-jsoneditor"></div>' +
         '</div><div class="tab-pane div-mrg" id='+id_response+'>' +
         '<div id="'+response_div+'"></div>' +
-        '<div id='+response_json_editor+' class="cus-jsoneditor"></div></div></div></div></div>');
+        '<div id='+response_json_editor+' class="cus-jsoneditor"></div></div></div></div></div></form></div>');
     //判断是否显示关闭图标
     showOrHide();
+    //初始化表单验证
+    initFormValidator(ran);
     //初始化json编辑器
     initJsonEditor(ran);
     //初始化AutoComplete
@@ -687,12 +691,6 @@ let constructSaveOrUpdateData = () => {
     }
     return data
 }
-/**
- * 保存Model框查询类数据
- */
-let saveInterfaceGetClass = () => {
-    requestGetTree('/ih/rest/apiService/v1/classes','GET','');
-}
 
 /**
  * 移除params
@@ -786,56 +784,94 @@ let requestString = (url, type, data) => {
     })
 }
 /**
+ * 初始化表单验证
+ */
+let initFormValidator = (suffix) => {
+    //初始化表单验证
+    $('#directoryForm,#classForm,#interfaceForm_'+suffix).bootstrapValidator({
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+    });
+}
+/**
  * 保存OR修改目录
  */
 let saveOrUpdateDirectory = () => {
-    let data = {};
-    $('#directory_input div input').each(function() {
-        data[$(this).attr('name')] = $(this).val();
-    });
-    if(data.parentDirectoryId == ''){
-        delete data.parentDirectoryId
-    }
-    if(data.directoryId != ''){
-        //修改目录
-        requestString('/ih/rest/apiService/v1/directory/'+data.directoryId,'PUT', data);
-    }else{
-        //添加目录
-        let url = '/ih/rest/apiService/v1/directory?name='+data.name;
-        if(data.parentDirectoryId != '' && data.parentDirectoryId != undefined){
-            url += '&parentId='+data.parentDirectoryId;
+    $("#directoryForm").submit();
+
+    let bootstrapValidator = $("#directoryForm").data('bootstrapValidator');
+
+    if(bootstrapValidator.isValid()){
+        let data = {};
+        $('#directory_input div input').each(function() {
+            data[$(this).attr('name')] = $(this).val();
+        });
+        if(data.parentDirectoryId == ''){
+            delete data.parentDirectoryId
         }
-        request(url,'POST', {});
+        if(data.directoryId != ''){
+            //修改目录
+            requestString('/ih/rest/apiService/v1/directory/'+data.directoryId,'PUT', data);
+        }else{
+            //添加目录
+            let url = '/ih/rest/apiService/v1/directory?name='+data.name;
+            if(data.parentDirectoryId != '' && data.parentDirectoryId != undefined){
+                url += '&parentId='+data.parentDirectoryId;
+            }
+            request(url,'POST', {});
+        }
+        //清空modal并隐藏
+        clearDirectoryModal();
+        //刷新树数据
+        refreshTreeData();
     }
-    //清空modal并隐藏
-    clearDirectoryModal();
-    //刷新树数据
-    refreshTreeData();
 }
 /**
  * 保存Or修改类名
  */
 function saveOrUpdateClass(){
-    let data = {};
-    $('#class_input div input').each(function() {
-        data[$(this).attr('name')] = $(this).val();
-    });
-    console.log(data);
-    if(data.classId != ''){
-        //修改类
-        request('/ih/rest/apiService/v1/class/'+data.classId+'?className='+data.name,'PUT', {});
-    }else{
-        //添加类
-        requestString('/ih/rest/apiService/v1/class','POST', data);
+    $("#classForm").submit();
+
+    let bootstrapValidator = $("#classForm").data('bootstrapValidator');
+
+    if(bootstrapValidator.isValid()){
+        let data = {};
+        $('#class_input div input').each(function() {
+            data[$(this).attr('name')] = $(this).val();
+        });
+        if(data.classId != ''){
+            //修改类
+            request('/ih/rest/apiService/v1/class/'+data.classId+'?className='+data.name,'PUT', {});
+        }else{
+            //添加类
+            requestString('/ih/rest/apiService/v1/class','POST', data);
+        }
+        //清空modal并隐藏
+        clearClassModal();
+        //刷新树数据
+        refreshTreeData();
     }
-    //清空modal并隐藏
-    clearClassModal();
-    //刷新树数据
-    refreshTreeData();
 }
 /**
  * 保存Or修改接口
  */
+//保存Or修改之前的选择类
+let saveInterfaceGetClass = () => {
+    //获得id后缀
+    let suffix = getSelectSuffix();
+    $("#interfaceForm_"+suffix).submit();
+
+    let bootstrapValidator = $("#interfaceForm_"+suffix).data('bootstrapValidator');
+
+    if(bootstrapValidator.isValid()){
+        $('##selectClassModal').modal('show');
+        requestGetTree('/ih/rest/apiService/v1/classes','GET','');
+    }
+}
+//开始保存Or修改
 let saveOrUpdateInterface = () => {
     //获得id后缀
     let suffix = getSelectSuffix();
