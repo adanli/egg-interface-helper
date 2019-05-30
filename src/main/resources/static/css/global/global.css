@@ -1,0 +1,10 @@
+    /*----------------------------------左侧开始-------------------------------------*/
+    /*左背景色*/
+    .left{
+        background-color: #40414A;
+    }
+    /*选择模式样式*/
+    .check-mode, .check-mode:hover, .check-mode:focus, .open > .dropdown-toggle.check-mode,
+    .open > .dropdown-toggle.check-mode:hover, .open > .dropdown-toggle.check-mode:focus{
+        background-color: #4A90E2;
+    }
