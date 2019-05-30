@@ -1,17 +1,17 @@
-    html, body{
+    /*html, body{
         margin:0;
         height:100%;
     }
     body{
         font-size: 13px;
         height:100%;
-    }
+    }*/
     /*去除所有圆角属性*/
-    * {
+    /** {
         -webkit-border-radius: 0 !important;
         -moz-border-radius: 0 !important;
         border-radius: 0 !important;
-    }
+    }*/
     /*滚动条样式*/
     ::-webkit-scrollbar {
         width: 5px;
@@ -112,33 +112,33 @@
         border-top: 2px solid #1890FF;
     }
     .cus-right-top-height{
-        height: 25px;
+        /*height: 25px;*/
         padding: 5px 5px !important;
     }
     /*接口名称input样式*/
-    .cus-interface-name{
+    /*.cus-interface-name{
         width: 15%;
         display: inline;
         border: 0px;
         box-shadow: inset 0 0px 0px rgba(0, 0, 0, .075)
-    }
-    .cus-interface-description{
+    }*/
+    /*.cus-interface-description{
         display: inline;
         border: 0px;
         box-shadow: inset 0 0px 0px rgba(0, 0, 0, .075)
-    }
-    .cus-input{
+    }*/
+    /*.cus-input{
         border-bottom: 1px solid #D3D3D3 !important;
-    }
+    }*/
     /*右下input框*/
     .cus-right-bottom-input input{
         border: 0px;
         box-shadow: inset 0 0px 0px rgba(0, 0, 0, .075)
     }
-    /*右下模块边框*/
+    /*!*右下模块边框*!
     .right-bottom-border{
         border: 1px solid #D3D3D3;
-    }
+    }*/
     /*右下导航栏navpills*/
     .cus-nav-right-pills{
         border-top: 1px solid #D3D3D3;

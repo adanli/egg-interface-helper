@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/index.css" />
     <link rel="stylesheet" href="css/bootstrap/css/bootstrapValidator.css"/>
     <link rel="stylesheet" href="css/tools/dm-notif-style.css"/>
+    <link rel="stylesheet" href="css/global/global.css"/>
     <script src="js/jquery/jquery.js"></script>
     <script src="js/bootstrap/bootstrap.js"></script>
     <script src="js/bootstrap/bootstrap-treeview.js"></script>
@@ -27,20 +28,20 @@
 <div class="container-fluid">
     <div class="row">
         <!--左-->
-        <div class="col-md-2">
+        <div class="col-md-2 left">
             <!--搜索框-->
             <div class="input-group mrg div-mrg">
                 <!--<span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>-->
                 <!--<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">-->
                 <div class="input-group-btn">
-                    <button type="button" class="btn btn-default dropdown-toggle" style="width: 100%" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button type="button" class="btn btn-default dropdown-toggle check-mode" style="width: 100%" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span>设计模式</span>
 
                         <span style="text-align: center; float: right">
                             <span class="caret"></span>
                         </span>
                     </button>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu check-mode-spread">
                         <li><a href="./index.html">设计模式</a></li>
                         <li><a href="./browsemode.html">浏览模式</a></li>
                         <li><a href="#">测试模式</a></li>
@@ -66,7 +67,8 @@
 
                     <div>
                         <div class="row" style="width: 100%">
-                            <div class="col-md-1 cursor" onclick="backSuperior()"><span><img src="img/icon/back.png"/></span></div>
+                            <div class="col-md-1 cursor" onclick="backSuperior()"><span class="glyphicon glyphicon-arrow-left"></span></div>
+<!--                            <img src="img/icon/back.png"/>-->
                             <div class="col-md-1 cursor flo" data-toggle="modal" data-target="#directoryModal"><span class="glyphicon glyphicon-plus"></span></div>
                         </div>
                         <!--面包屑-->
@@ -120,134 +122,136 @@
                                 <input id="interface_desc_default" type="text" class="form-control cus-interface-description cus-input" placeholder="接口描述"/>
                             </div>
                             <!--分割线-->
-                            <ul class="nav nav-list"><li class="divider"></li></ul>
+<!--                            <ul class="nav nav-list"><li class="divider"></li></ul>-->
                             <!--接口内容-->
-                            <div class="mrg div-mrg">
-                                <div class="row">
-                                    <div class="col-md-11">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <div id="content_select_default" class="input-group-btn">
-                                                    <button type="button" class="btn btn-default dropdown-toggle" style="width: 100px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <span>GET</span>
-                                                        <span style="text-align: center; float: right">
-                                                            <span class="caret"></span>
-                                                        </span>
-                                                    </button>
-                                                    <ul class="dropdown-menu">
-                                                        <li onclick="changeSelect(this)"><a href="#">GET</a></li>
-                                                        <li onclick="changeSelect(this)"><a href="#">POST</a></li>
-                                                        <li onclick="changeSelect(this)"><a href="#">PUT</a></li>
-                                                        <li onclick="changeSelect(this)"><a href="#">DELETE</a></li>
-                                                    </ul>
+                            <div class="interface-content">
+                                <div class="mrg div-mrg">
+                                    <div class="row">
+                                        <div class="col-md-11">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <div id="content_select_default" class="input-group-btn">
+                                                        <button type="button" class="btn btn-default dropdown-toggle" style="width: 100px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            <span>GET</span>
+                                                            <span style="text-align: center; float: right">
+                                                                <span class="caret"></span>
+                                                            </span>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li onclick="changeSelect(this)"><a href="#">GET</a></li>
+                                                            <li onclick="changeSelect(this)"><a href="#">POST</a></li>
+                                                            <li onclick="changeSelect(this)"><a href="#">PUT</a></li>
+                                                            <li onclick="changeSelect(this)"><a href="#">DELETE</a></li>
+                                                        </ul>
+                                                    </div>
+                                                    <input id="url_text_default" name="url_text_default" type="text" class="form-control" aria-label="..." onkeydown="urlTextUpdate()" onkeyup="urlTextUpdate()" required>
                                                 </div>
-                                                <input id="url_text_default" name="url_text_default" type="text" class="form-control" aria-label="..." onkeydown="urlTextUpdate()" onkeyup="urlTextUpdate()" required>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <button class="btn cus-btn" onclick="saveInterfaceGetClass()">保存</button>
-                                        <!--data-toggle="modal" data-target="#selectClassModal"-->
+                                        <div class="col-md-1">
+                                            <button class="btn cus-btn" onclick="saveInterfaceGetClass()">保存</button>
+                                            <!--data-toggle="modal" data-target="#selectClassModal"-->
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!--接口参数-->
-                            <div class="mrg cus-right-bottom-input">
-                                <!--导航栏-->
-                                <ul id="right_bottom_tab_default" class="nav nav-pills cus-nav-right-pills mrg">
-                                    <li role="presentation" class="active"><a href="#params_default" data-toggle="tab">query</a></li>
-                                    <li role="presentation"><a href="#headers_default" data-toggle="tab">headers</a></li>
-                                    <li role="presentation"><a href="#path_default" data-toggle="tab">path</a></li>
-                                    <li role="presentation"><a href="#body_default" data-toggle="tab">body</a></li>
-                                    <li role="presentation"><a href="#response_default" data-toggle="tab">response</a></li>
-                                </ul>
-                                <!--导航栏对应内容-->
-                                <div id="right_bottom_tab_content_default" class="tab-content mrg">
-                                    <div class="tab-pane active div-mrg" id="params_default">
-                                        <table class="table table-condensed">
-                                            <caption>Query</caption>
-                                            <tbody><tr flag="true">
-                                                <td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>
-                                                <td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>
-                                                <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>
-                                                <td>
-                                                    <div class="input-group">
-                                                        <div class="input-group-btn">
-                                                            <span class="dropdown-toggle" data-toggle="dropdown" tabindex="-1">
-                                                                <input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>
-                                                            </span>
-                                                            <ul class="dropdown-menu pull-right">
-                                                                <li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>
-                                                                <li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>
-                                                            </ul>
+                                <!--接口参数-->
+                                <div class="mrg cus-right-bottom-input">
+                                    <!--导航栏-->
+                                    <ul id="right_bottom_tab_default" class="nav nav-pills cus-nav-right-pills mrg">
+                                        <li role="presentation" class="active"><a href="#params_default" data-toggle="tab">query</a></li>
+                                        <li role="presentation"><a href="#headers_default" data-toggle="tab">headers</a></li>
+                                        <li role="presentation"><a href="#path_default" data-toggle="tab">path</a></li>
+                                        <li role="presentation"><a href="#body_default" data-toggle="tab">body</a></li>
+                                        <li role="presentation"><a href="#response_default" data-toggle="tab">response</a></li>
+                                    </ul>
+                                    <!--导航栏对应内容-->
+                                    <div id="right_bottom_tab_content_default" class="tab-content mrg">
+                                        <div class="tab-pane active div-mrg" id="params_default">
+                                            <table class="table table-condensed">
+                                                <caption>Query</caption>
+                                                <tbody><tr flag="true">
+                                                    <td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>
+                                                    <td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>
+                                                    <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>
+                                                    <td>
+                                                        <div class="input-group">
+                                                            <div class="input-group-btn">
+                                                                <span class="dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                                                                    <input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>
+                                                                </span>
+                                                                <ul class="dropdown-menu pull-right">
+                                                                    <li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>
+                                                                    <li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>
+                                                                </ul>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </td>
-                                                <td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>
-                                                <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>
-                                                <td><span class="glyphicon glyphicon-remove param-remove-icon cursor" style="display: none" onclick="removmeParams(this)"></span></td>
-                                            </tr></tbody>
-                                        </table>
-                                    </div>
-                                    <div class="tab-pane div-mrg" id="headers_default">
-                                        <table class="table table-condensed">
-                                            <caption>Headers</caption>
-                                            <tbody><tr flag="true">
-                                                <td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>
-                                                <td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>
-                                                <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>
-                                                <td>
-                                                    <div class="input-group">
-                                                        <div class="input-group-btn">
-                                                            <span class="dropdown-toggle" data-toggle="dropdown" tabindex="-1">
-                                                                <input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>
-                                                            </span>
-                                                            <ul class="dropdown-menu pull-right">
-                                                                <li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>
-                                                                <li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>
-                                                            </ul>
+                                                    </td>
+                                                    <td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>
+                                                    <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>
+                                                    <td><span class="glyphicon glyphicon-remove param-remove-icon cursor" style="display: none" onclick="removmeParams(this)"></span></td>
+                                                </tr></tbody>
+                                            </table>
+                                        </div>
+                                        <div class="tab-pane div-mrg" id="headers_default">
+                                            <table class="table table-condensed">
+                                                <caption>Headers</caption>
+                                                <tbody><tr flag="true">
+                                                    <td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>
+                                                    <td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>
+                                                    <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>
+                                                    <td>
+                                                        <div class="input-group">
+                                                            <div class="input-group-btn">
+                                                                <span class="dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                                                                    <input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>
+                                                                </span>
+                                                                <ul class="dropdown-menu pull-right">
+                                                                    <li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>
+                                                                    <li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>
+                                                                </ul>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </td>
-                                                <td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>
-                                                <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>
-                                                <td><span class="glyphicon glyphicon-remove param-remove-icon cursor" style="display: none" onclick="removmeParams(this)"></span></td>
-                                            </tr></tbody>
-                                        </table>
-                                    </div>
-                                    <div class="tab-pane div-mrg" id="path_default">
-                                        <table class="table table-condensed">
-                                            <caption>path</caption>
-                                            <tbody><tr flag="true">
-                                                <td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>
-                                                <td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>
-                                                <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>
-                                                <td>
-                                                    <div class="input-group">
-                                                        <div class="input-group-btn">
-                                                            <span class="dropdown-toggle" data-toggle="dropdown" tabindex="-1">
-                                                                <input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>
-                                                            </span>
-                                                            <ul class="dropdown-menu pull-right">
-                                                                <li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>
-                                                                <li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>
-                                                            </ul>
+                                                    </td>
+                                                    <td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>
+                                                    <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>
+                                                    <td><span class="glyphicon glyphicon-remove param-remove-icon cursor" style="display: none" onclick="removmeParams(this)"></span></td>
+                                                </tr></tbody>
+                                            </table>
+                                        </div>
+                                        <div class="tab-pane div-mrg" id="path_default">
+                                            <table class="table table-condensed">
+                                                <caption>path</caption>
+                                                <tbody><tr flag="true">
+                                                    <td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>
+                                                    <td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>
+                                                    <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>
+                                                    <td>
+                                                        <div class="input-group">
+                                                            <div class="input-group-btn">
+                                                                <span class="dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                                                                    <input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>
+                                                                </span>
+                                                                <ul class="dropdown-menu pull-right">
+                                                                    <li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>
+                                                                    <li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>
+                                                                </ul>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </td>
-                                                <td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>
-                                                <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>
-                                                <td><span class="glyphicon glyphicon-remove param-remove-icon cursor" style="display: none" onclick="removmeParams(this)"></span></td>
-                                            </tr></tbody>
-                                        </table>
-                                    </div>
-                                    <div class="tab-pane div-mrg" id="body_default">
-                                        <div id="body_div_default"></div>
-                                        <div id="body_json_editor_default" class="cus-jsoneditor"></div>
-                                    </div>
-                                    <div class="tab-pane div-mrg" id="response_default">
-                                        <div id="response_div_default"></div>
-                                        <div id="response_json_editor_default" class="cus-jsoneditor"></div>
+                                                    </td>
+                                                    <td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>
+                                                    <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>
+                                                    <td><span class="glyphicon glyphicon-remove param-remove-icon cursor" style="display: none" onclick="removmeParams(this)"></span></td>
+                                                </tr></tbody>
+                                            </table>
+                                        </div>
+                                        <div class="tab-pane div-mrg" id="body_default">
+                                            <div id="body_div_default"></div>
+                                            <div id="body_json_editor_default" class="cus-jsoneditor"></div>
+                                        </div>
+                                        <div class="tab-pane div-mrg" id="response_default">
+                                            <div id="response_div_default"></div>
+                                            <div id="response_json_editor_default" class="cus-jsoneditor"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

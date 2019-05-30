@@ -1,10 +1,50 @@
-    /*----------------------------------左侧开始-------------------------------------*/
+    html, body{
+        margin:0;
+        height:100%;
+    }
+    body{
+        font-size: 13px;
+        height:100%;
+    }
+    /*去除所有圆角属性*/
+    /** {
+        -webkit-border-radius: 0 !important;
+        -moz-border-radius: 0 !important;
+        border-radius: 0 !important;
+    }*/
+/*----------------------------------左侧开始-------------------------------------*/
     /*左背景色*/
     .left{
         background-color: #40414A;
     }
+    .left > *{
+        color: rgba(255, 255, 255, 0.5);
+    }
     /*选择模式样式*/
-    .check-mode, .check-mode:hover, .check-mode:focus, .open > .dropdown-toggle.check-mode,
-    .open > .dropdown-toggle.check-mode:hover, .open > .dropdown-toggle.check-mode:focus{
+    .check-mode,
+    .check-mode:hover, .check-mode:focus, .check-mode:active:focus,
+    .open > .dropdown-toggle.check-mode,
+    /*.open > .dropdown-toggle.check-mode:hover,*/
+    .open > .dropdown-toggle.check-mode:focus{
         background-color: #4A90E2;
+        border-radius: 4px !important;
+        border-color: #4A90E2 !important;
+        color: #FFFFFF;
+    }
+    /*选择模式展开列表*/
+    .check-mode-spread, .check-mode-spread > li > a{
+        width: 100%;
+        background-color: #40414A;
+        color: rgba(255, 255, 255, 0.5);
+    }
+    /*面包屑*/
+    .breadcrumb{
+        background-color: #40414A;
+    }
+/*----------------------------------右侧开始------------------------------------------*/
+    .interface-content{
+        border: 1px solid #D9D9DB;
+        margin-left: 11px;
+        margin-right: 11px;
+        border-radius: 4px;
     }
