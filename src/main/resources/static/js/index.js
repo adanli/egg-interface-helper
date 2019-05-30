@@ -530,7 +530,7 @@ let requestInterfaceValue = (url, type) => {
  */
 let construnctionInterfaceValue = (data) => {
     $('#select_class_id').val(data.classId); //默认选择类
-    let {name, interfaceId, code, url, type, description, queryVO, headerVO, bodyVO, responseVO} = data;
+    let {name, interfaceId, code, url, type, description, queryVO, headerVO, passVO, bodyVO, responseVO} = data;
     //获得id后缀
     let suffix = getSelectSuffix();
     $('#interface_id_'+suffix).val(interfaceId); //要修改接口的ID
@@ -544,7 +544,7 @@ let construnctionInterfaceValue = (data) => {
     for(let key in obj){
         constructRightBottomData(key, obj[key], suffix);
     }*/
-    let queryHeadersObj = {'params':queryVO, 'headers':headerVO};
+    let queryHeadersObj = {'params':queryVO, 'headers':headerVO, 'pass':passVO};
     let bodyResponseObj = {'body':bodyVO, 'response':responseVO};
     // params/header数据
     for(let key in queryHeadersObj){
@@ -681,6 +681,9 @@ let constructSaveOrUpdateData = () => {
     data.headerVO = {
         "params": getVal('headers', suffix),
     }
+    data.passVO = {
+        "params": getVal('pass', suffix),
+    }
     data.bodyVO = {
         "params": getVal('body', suffix),
         "example": eval('body_editor_'+suffix).getText()
@@ -776,6 +779,9 @@ let requestString = (url, type, data) => {
         data: JSON.stringify(data),
         contentType: 'application/json',
         success:function(resp){
+            if(resp.code != 0){
+                dm_notify(resp.code, resp.msg);
+            }
             console.log(resp)
         },
         error:function(resp){
