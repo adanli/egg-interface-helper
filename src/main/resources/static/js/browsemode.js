@@ -95,17 +95,17 @@ let leftTabControl = (that) => {
  * 渲染详细数据
  */
 let renderingDetailedData = (data) => {
-    const {name, description, type, url,  queryVO, headerVO, bodyVO, responseVO} = data;
+    const {name, description, type, url,  queryVO, headerVO, pathVO, bodyVO, responseVO} = data;
     $('#name').val(name);
     $('#description').val(description);
     $('#type').text(type);
     $('#url').val(url);
-    let obj = {'query':queryVO, 'headers':headerVO};
+    let obj = {'query':queryVO, 'headers':headerVO, 'path':pathVO};
     let bodyResponseObj = {'body':bodyVO, 'response':responseVO};
     //params/headers
     for(let key in obj){
         renderingBottomDetailedData(key, obj[key]);
-        console.log(obj[key]);
+        // console.log(obj[key]);
     }
     //body/response
     for(let key in bodyResponseObj){

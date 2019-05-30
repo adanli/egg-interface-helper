@@ -371,10 +371,12 @@ function tabControl(){
     let right_bottom_tab_content = 'right_bottom_tab_content_'+ran;
     let href_params = '#params_'+ran;
     let href_headers = '#headers_'+ran;
+    let href_path = '#path_'+ran;
     let href_body = '#body_'+ran;
     let href_response = '#response_'+ran;
     let id_params = 'params_'+ran;
     let id_headers = 'headers_'+ran;
+    let id_path = 'path_'+ran;
     let id_body = 'body_'+ran;
     let id_response = 'response_'+ran;
     let body_div = 'body_div_'+ran;
@@ -412,8 +414,9 @@ function tabControl(){
         '<div class="col-md-1">' +
         '<button class="btn cus-btn" onclick="saveInterfaceGetClass()">保存</button></div></div></div><div class="mrg cus-right-bottom-input">'+
         '<ul id='+right_bottom_tab+' class="nav nav-pills cus-nav-right-pills mrg">' +
-        '<li role="presentation" class="active"><a href='+href_params+' data-toggle="tab">params</a></li>' +
+        '<li role="presentation" class="active"><a href='+href_params+' data-toggle="tab">query</a></li>' +
         '<li role="presentation"><a href='+href_headers+' data-toggle="tab">headers</a></li>' +
+        '<li role="presentation"><a href='+href_path+' data-toggle="tab">path</a></li>' +
         '<li role="presentation"><a href='+href_body+' data-toggle="tab">body</a></li>' +
         '<li role="presentation"><a href='+href_response+' data-toggle="tab">response</a></li></ul>'+
         '<div id='+right_bottom_tab_content+' class="tab-content mrg">' +
@@ -467,6 +470,31 @@ function tabControl(){
         '<td><span class="glyphicon glyphicon-remove param-remove-icon cursor" style="display: none" onclick="removmeParams(this)"></span></td>' +
         '</tr>' +
         '</tbody></table></div>' +
+        '<div class="tab-pane div-mrg" id='+id_path+'>\n' +
+        '  <table class="table table-condensed">\n' +
+        '      <caption>path</caption>\n' +
+        '      <tbody><tr flag="true">\n' +
+        '          <td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>\n' +
+        '          <td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>\n' +
+        '          <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>\n' +
+        '          <td>\n' +
+        '              <div class="input-group">\n' +
+        '                  <div class="input-group-btn">\n' +
+        '                      <span class="dropdown-toggle" data-toggle="dropdown" tabindex="-1">\n' +
+        '                          <input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>\n' +
+        '                      </span>\n' +
+        '                      <ul class="dropdown-menu pull-right">\n' +
+        '                          <li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>\n' +
+        '                          <li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>\n' +
+        '                      </ul>\n' +
+        '                  </div>\n' +
+        '              </div>\n' +
+        '          </td>\n' +
+        '          <td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>\n' +
+        '          <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>\n' +
+        '          <td><span class="glyphicon glyphicon-remove param-remove-icon cursor" style="display: none" onclick="removmeParams(this)"></span></td>\n' +
+        '      </tr></tbody>\n' +
+        '  </table></div>' +
         '<div class="tab-pane div-mrg" id='+id_body+'>' +
         '<div id="'+body_div+'"></div>' +
         '<div id='+body_json_editor+' class="cus-jsoneditor"></div>' +
