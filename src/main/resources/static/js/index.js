@@ -68,12 +68,23 @@ function showOrHide(){
         $('#close_icon_'+suffix).css('display','none');
     }
 }
+
+/**
+ * 获取准备关闭的对象
+ */
+let getReadyCloseObj = (that) => {
+    let suffix = $(that).parent().parent().attr('suffix');
+    closeTabContro(suffix);
+}
 /**
  * tab关闭图标控制
  */
-function closeTabContro(){
+function closeTabContro(suffix){
     //获得id后缀
-    let suffix = getSelectSuffix();
+    // let suffix = getSelectSuffix();
+    //移除所有选中
+    $('#right_top_tab li').each(function() {$(this).removeClass('active')});
+    $('#right_top_tab_content > div').each(function() {$(this).removeClass('active')})
     //获取上级元素长度
     let prevLen = $('#href_content_'+suffix).parent().prev().length;
     if(prevLen > 0){
@@ -395,7 +406,7 @@ function tabControl(){
         '<a href='+href_content+' id='+id_content+' data-toggle="tab" class="cus-right-top-height">' +
         '<input id='+interface_id+' style="display: none" type="text"/>' +
         '<nobr>Untitled Request</nobr>' +
-        '<span id='+close_icon+' class="glyphicon glyphicon-remove cus-close-icon cursor" style="display: none" onclick="closeTabContro()"></span>' +
+        '<span id='+close_icon+' class="glyphicon glyphicon-remove cus-close-icon cursor" style="display: none" onclick="getReadyCloseObj(this)"></span>' +
         '</a></li>');
     //移除内容选中
     $('#right_top_tab_content > div').each(function() {
@@ -923,7 +934,7 @@ let saveOrUpdateInterface = () => {
         //修改
         requestString('/ih/rest/apiService/v1/interface/'+interface_id,'PUT', data);
         //关闭tab
-        closeTabContro();
+        closeTabContro(suffix);
     }else{
         //保存
         requestString('/ih/rest/apiService/v1/interface','POST', data);
@@ -1131,7 +1142,7 @@ function constructCollectionTreeChildNode(data, index){
     for(let i in data){
         let obj = data[i];
         let node = {
-            text: method[obj.type] + '<span class="cursor" title="'+obj.url+'">'+obj.url+'</span>' +
+            text: method[obj.type] + '<span class="cursor" title="'+obj.url+'">'+obj.shortCode+'</span>' +
                 '<br>' +
                 '<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px" onclick="del(\''+obj.interfaceId+'\',\'interface\')"></span>',
             id: obj.interfaceId,
