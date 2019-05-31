@@ -329,13 +329,18 @@ function construnctionSelectClass(data){
     for(let i = 0; i < data.length; i++){
         let val = data[i];
         $('#select_class').append('<a href="#" class="list-group-item list-group-item-action" id='+val.classId+' onclick="setSelectClass(this)">' +
-            '<span class="glyphicon glyphicon-folder-close" style="padding-right: 10px"></span>'+val.name+'</a>');
+            '<span class="glyphicon glyphicon-copyright-mark" style="padding-right: 10px"></span>'+val.name+'</a>');
+    }
+    let selectClassId = $('#select_class_id').val();
+    if(selectClassId != ''){
+        $('#select_class').find('a[id='+selectClassId+']').addClass('active');
     }
 }
 /**
  * 设置选中类
  */
 function setSelectClass(obj){
+    $('#select_class .active').removeClass('active');
     $('#select_class_id').val($(obj).attr('id'));
 }
 /**

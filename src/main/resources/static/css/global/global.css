@@ -44,10 +44,12 @@
 /*----------------------------------右侧开始------------------------------------------*/
     /*接口名称*/
     .interface-name{
+        color: rgba( 0, 0, 0, 0.3);
         background: rgba( 216, 216, 216, 0.15);
     }
     /*接口描述*/
     .interface-description{
+        color: rgba( 0, 0, 0, 0.3);
         background: rgba( 216, 216, 216, 0.15);
     }
     /*接口内容*/
@@ -95,21 +97,32 @@
             background-color: rgba( 216, 216, 216, 0);
         }
     /*query/headers/path/body/response样式*/
-    .cus-right-bottom-input input{
-        border: 0px;
-        box-shadow: inset 0 0px 0px rgba(0, 0, 0, .075)
-    }
-    .cus-right-bottom-input input:disabled{
-        background: rgba(216, 216, 216, 0.15);
-        border: 1px solid rgba(64, 65, 74, 0.15);
-        border-radius: 4px !important;
-        cursor: default;
-    }
-    caption{
-        background: #4A90E2;
-        width: 100px;
-        margin-left: -10px;
-        margin-bottom: 10px;
-        text-align: center;
-        color: #FFFFFF
+        /*table标题*/
+        caption{
+            background: #4A90E2;
+            width: 100px;
+            margin-left: -10px;
+            margin-bottom: 10px;
+            text-align: center;
+            color: #FFFFFF
+        }
+        /*所有input*/
+        .cus-right-bottom-input input{
+            border: 0px;
+            box-shadow: inset 0 0px 0px rgba(0, 0, 0, .075)
+        }
+        /*禁止编辑input*/
+        .cus-right-bottom-input input:disabled{
+            background: rgba(216, 216, 216, 0.15);
+            border: 1px solid rgba(64, 65, 74, 0.15);
+            border-radius: 4px !important;
+            cursor: default;
+        }
+/*----------------------------------Modal开始------------------------------------------*/
+    /*保存时选择类窗口*/
+    #select_class > a:hover, #select_class > a:focus,
+    #select_class > .active{
+        color: #FFFFFF;
+        background-color: #4A90E2;
+        border: 1px solid #4A90E2;
     }
