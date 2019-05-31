@@ -36,6 +36,8 @@ public class InterfaceVO {
 
     private String type;
 
+    private String shortCode;
+
     private QueryVO queryVO;
     private HeaderVO headerVO;
     private PathVO pathVO;
