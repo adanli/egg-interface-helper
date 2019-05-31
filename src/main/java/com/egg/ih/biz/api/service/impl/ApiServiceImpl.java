@@ -127,7 +127,7 @@ public class ApiServiceImpl implements ApiService {
     public boolean saveInterface(InterfaceVO interfaceVO, QueryVO queryVO, HeaderVO headerVO, PathVO pathVO, BodyVO bodyVO, ResponseVO responseVO) {
 
         QueryWrapper<IhInterface> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(IhInterface::getClassId, interfaceVO.getClassId()).eq(IhInterface::getUrl, interfaceVO.getUrl()).eq(IhInterface::getValid, BaseConstant.有效性.有效.getCode());
+        wrapper.lambda().eq(IhInterface::getClassId, interfaceVO.getClassId()).eq(IhInterface::getUrl, interfaceVO.getUrl()).eq(IhInterface::getValid, BaseConstant.有效性.有效.getCode()).eq(IhInterface::getType, interfaceVO.getType());
         IhInterface ihInterface = ihInterfaceService.getOne(wrapper);
         if(ihInterface != null) {
             System.out.println("当前记录已存在");
