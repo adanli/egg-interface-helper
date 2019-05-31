@@ -1045,6 +1045,7 @@ let constructCollectionTree = (data) => {
                 id: obj.classId,
                 icon:'glyphicon glyphicon-copyright-mark',
                 selectable:false,
+                color: 'rgba(255, 255, 255, 0.5)',
                 nodes: []
             }
             treeData.push(parent);
@@ -1061,6 +1062,7 @@ let constructCollectionTree = (data) => {
                     '<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px;" onclick="del(\''+obj.directoryId+'\',\'directory\')"></span>',
                 id: obj.directoryId,
                 icon:'glyphicon glyphicon-folder-close',
+                color: 'rgba(255, 255, 255, 0.5)',
                 selectable:false,
             }
             treeData.push(node);
@@ -1074,9 +1076,11 @@ let constructCollectionTree = (data) => {
         expandIcon:"glyphicon glyphicon-triangle-right",
         collapseIcon: "glyphicon glyphicon-triangle-bottom",
         showBorder: true,
-        borderColor: "#fff",
-        selectedBackColor: '#f5f5f5',
-        selectedColor: '#000',
+        borderColor: "#40414A",
+        selectedBackColor: '#40414A',
+        selectedColor: 'rgba(255, 255, 255, 0.5)',
+        backColor: '#40414A',
+        onhoverColor: '#40414A',
         onNodeExpanded: function(event, data){
             //折叠所有
             // $('#'+selectTree).treeview('collapseAll', { silent:true });
@@ -1125,6 +1129,7 @@ function constructCollectionTreeChildNode(data, index){
                 '<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px" onclick="del(\''+obj.interfaceId+'\',\'interface\')"></span>',
             id: obj.interfaceId,
             name: obj.name,
+            color: 'rgba(255, 255, 255, 0.5)',
         };
         $("#collection").treeview("addNode", [index, { node: node }])
     }
