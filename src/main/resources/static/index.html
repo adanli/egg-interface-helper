@@ -117,21 +117,21 @@
                             <!--右侧接口名称-->
                             <div class="mrg div-mrg">
                                 <div class="form-group">
-                                    <input id="interface_name_default" name="interface_name_default" class="form-control cus-interface-name cus-input" type="text" placeholder="接口名称" required/>
+                                    <input id="interface_name_default" name="interface_name_default" class="form-control interface-name" type="text" placeholder="接口名称" required/>
                                 </div>
-                                <input id="interface_desc_default" type="text" class="form-control cus-interface-description cus-input" placeholder="接口描述"/>
+                                <input id="interface_desc_default" type="text" class="form-control interface-description" placeholder="接口描述"/>
                             </div>
                             <!--分割线-->
 <!--                            <ul class="nav nav-list"><li class="divider"></li></ul>-->
                             <!--接口内容-->
                             <div class="interface-content">
-                                <div class="mrg div-mrg">
-                                    <div class="row">
+                                <div class="interface-type-url-save-back">
+                                    <div class="row interface-type-url-pad">
                                         <div class="col-md-11">
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <div id="content_select_default" class="input-group-btn">
-                                                        <button type="button" class="btn btn-default dropdown-toggle" style="width: 100px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <button type="button" class="btn btn-default dropdown-toggle interface-type" style="width: 100px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                             <span>GET</span>
                                                             <span style="text-align: center; float: right">
                                                                 <span class="caret"></span>
@@ -144,7 +144,7 @@
                                                             <li onclick="changeSelect(this)"><a href="#">DELETE</a></li>
                                                         </ul>
                                                     </div>
-                                                    <input id="url_text_default" name="url_text_default" type="text" class="form-control" aria-label="..." onkeydown="urlTextUpdate()" onkeyup="urlTextUpdate()" required>
+                                                    <input id="url_text_default" name="url_text_default" type="text" class="form-control interface-url" onkeydown="urlTextUpdate()" onkeyup="urlTextUpdate()" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -155,9 +155,9 @@
                                     </div>
                                 </div>
                                 <!--接口参数-->
-                                <div class="mrg cus-right-bottom-input">
+                                <div class="cus-right-bottom-input">
                                     <!--导航栏-->
-                                    <ul id="right_bottom_tab_default" class="nav nav-pills cus-nav-right-pills mrg">
+                                    <ul id="right_bottom_tab_default" class="nav nav-pills cus-nav-right-pills interface-params">
                                         <li role="presentation" class="active"><a href="#params_default" data-toggle="tab">query</a></li>
                                         <li role="presentation"><a href="#headers_default" data-toggle="tab">headers</a></li>
                                         <li role="presentation"><a href="#path_default" data-toggle="tab">path</a></li>
@@ -220,7 +220,7 @@
                                         </div>
                                         <div class="tab-pane div-mrg" id="path_default">
                                             <table class="table table-condensed">
-                                                <caption>path</caption>
+                                                <caption>Path</caption>
                                                 <tbody><tr flag="true">
                                                     <td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>
                                                     <td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>

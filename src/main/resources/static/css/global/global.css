@@ -42,6 +42,14 @@
         background-color: #40414A;
     }
 /*----------------------------------右侧开始------------------------------------------*/
+    /*接口名称*/
+    .interface-name{
+        background: rgba( 216, 216, 216, 0.15);
+    }
+    /*接口描述*/
+    .interface-description{
+        background: rgba( 216, 216, 216, 0.15);
+    }
     /*接口内容*/
     .interface-content{
         border: 1px solid #D9D9DB;
@@ -49,6 +57,43 @@
         margin-right: 11px;
         border-radius: 4px;
     }
+    /*接口url/type/save--back*/
+    .interface-type-url-save-back{
+        padding-top: 10px;
+        /*padding-bottom: 10px;*/
+        background: rgba( 216, 216, 216, 0.15);
+    }
+    /*接口url/type/save--padding*/
+    .interface-type-url-pad{
+        padding-top: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    /*接口type，接口url*/
+    .interface-type, .interface-url{
+        background: rgba( 216, 216, 216, 0);
+    }
+    /*接口参数*/
+    .interface-params{
+        background: rgba( 216, 216, 216, 0.15);
+    }
+    /*各个参数名称*/
+    /*navpills导航栏样式*/
+        /*选中时*/
+        .nav-pills > li.active > a{
+            color: #4A90E2;
+            background-color: rgba( 216, 216, 216, 0);
+        }
+        /*鼠标悬浮*/
+        .nav > li > a:hover{
+            color: #CDCDCD;
+            background-color: rgba( 216, 216, 216, 0);
+        }
+        /*切换时*/
+        .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover{
+            color: #4A90E2;
+            background-color: rgba( 216, 216, 216, 0);
+        }
     /*query/headers/path/body/response样式*/
     .cus-right-bottom-input input{
         border: 0px;
@@ -59,4 +104,12 @@
         border: 1px solid rgba(64, 65, 74, 0.15);
         border-radius: 4px !important;
         cursor: default;
+    }
+    caption{
+        background: #4A90E2;
+        width: 100px;
+        margin-left: -10px;
+        margin-bottom: 10px;
+        text-align: center;
+        color: #FFFFFF
     }

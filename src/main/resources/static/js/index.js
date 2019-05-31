@@ -399,21 +399,23 @@ function tabControl(){
     //追加内容
     $('#right_top_tab_content > div:last').after('<div class="tab-pane active" id='+content+'><form id="'+interface_form+'"><div>' +
         '<div class="mrg div-mrg"><div class="form-group">' +
-        '<input id='+interface_name+' name='+interface_name+' class="form-control cus-interface-name cus-input" type="text" placeholder="接口名称" required /></div>' +
-        '<input id='+interface_desc+' type="text" class="form-control cus-interface-description cus-input" placeholder="接口描述"/>' +
-        '</div><ul class="nav nav-list"><li class="divider"></li></ul><div class="mrg div-mrg">' +
-        '<div class="row"><div class="col-md-11"><div class="form-group"><div class="input-group"><div id='+content_select+' class="input-group-btn">' +
-        '<button type="button" class="btn btn-default dropdown-toggle" style="width: 100px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+        '<input id='+interface_name+' name='+interface_name+' class="form-control interface-name" type="text" placeholder="接口名称" required /></div>' +
+        '<input id='+interface_desc+' type="text" class="form-control interface-description" placeholder="接口描述"/>' +
+        '</div>' +
+        // '<ul class="nav nav-list"><li class="divider"></li></ul>' +
+        '<div class="interface-content"><div class="interface-type-url-save-back">' +
+        '<div class="row interface-type-url-pad"><div class="col-md-11"><div class="form-group"><div class="input-group"><div id='+content_select+' class="input-group-btn">' +
+        '<button type="button" class="btn btn-default dropdown-toggle interface-type" style="width: 100px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
         '<span>GET</span><span style="text-align: center; float: right"><span class="caret"></span></span></button><ul class="dropdown-menu">' +
         '<li onclick="changeSelect(this)"><a href="#">GET</a></li>' +
         '<li onclick="changeSelect(this)"><a href="#">POST</a></li>' +
         '<li onclick="changeSelect(this)"><a href="#">PUT</a></li>' +
         '<li onclick="changeSelect(this)"><a href="#">DELETE</a></li></ul></div>' +
-        '<input id='+url_text+' name='+url_text+' type="text" class="form-control" aria-label="..." onkeydown="urlTextUpdate()" onkeyup="urlTextUpdate()" required>' +
+        '<input id='+url_text+' name='+url_text+' type="text" class="form-control interface-url" aria-label="..." onkeydown="urlTextUpdate()" onkeyup="urlTextUpdate()" required>' +
         '</div></div></div>' +
         '<div class="col-md-1">' +
-        '<button class="btn cus-btn" onclick="saveInterfaceGetClass()">保存</button></div></div></div><div class="mrg cus-right-bottom-input">'+
-        '<ul id='+right_bottom_tab+' class="nav nav-pills cus-nav-right-pills mrg">' +
+        '<button class="btn cus-btn" onclick="saveInterfaceGetClass()">保存</button></div></div></div><div class="cus-right-bottom-input">'+
+        '<ul id='+right_bottom_tab+' class="nav nav-pills cus-nav-right-pills interface-params">' +
         '<li role="presentation" class="active"><a href='+href_params+' data-toggle="tab">query</a></li>' +
         '<li role="presentation"><a href='+href_headers+' data-toggle="tab">headers</a></li>' +
         '<li role="presentation"><a href='+href_path+' data-toggle="tab">path</a></li>' +
@@ -422,7 +424,7 @@ function tabControl(){
         '<div id='+right_bottom_tab_content+' class="tab-content mrg">' +
         '<div class="tab-pane active div-mrg" id='+id_params+'>' +
         '<table class="table table-condensed">\n' +
-        '    <caption>Query Params</caption>\n' +
+        '    <caption>Query</caption>\n' +
         '    <tbody><tr flag="true">\n' +
         '        <td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>\n' +
         '        <td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>\n' +
@@ -472,7 +474,7 @@ function tabControl(){
         '</tbody></table></div>' +
         '<div class="tab-pane div-mrg" id='+id_path+'>\n' +
         '  <table class="table table-condensed">\n' +
-        '      <caption>path</caption>\n' +
+        '      <caption>Path</caption>\n' +
         '      <tbody><tr flag="true">\n' +
         '          <td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>\n' +
         '          <td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>\n' +
@@ -500,7 +502,7 @@ function tabControl(){
         '<div id='+body_json_editor+' class="cus-jsoneditor"></div>' +
         '</div><div class="tab-pane div-mrg" id='+id_response+'>' +
         '<div id="'+response_div+'"></div>' +
-        '<div id='+response_json_editor+' class="cus-jsoneditor"></div></div></div></div></div></form></div>');
+        '<div id='+response_json_editor+' class="cus-jsoneditor"></div></div></div></div></div></div></form></div>');
     //判断是否显示关闭图标
     showOrHide();
     //初始化表单验证
