@@ -42,9 +42,21 @@
         background-color: #40414A;
     }
 /*----------------------------------右侧开始------------------------------------------*/
+    /*接口内容*/
     .interface-content{
         border: 1px solid #D9D9DB;
         margin-left: 11px;
         margin-right: 11px;
         border-radius: 4px;
+    }
+    /*query/headers/path/body/response样式*/
+    .cus-right-bottom-input input{
+        border: 0px;
+        box-shadow: inset 0 0px 0px rgba(0, 0, 0, .075)
+    }
+    .cus-right-bottom-input input:disabled{
+        background: rgba(216, 216, 216, 0.15);
+        border: 1px solid rgba(64, 65, 74, 0.15);
+        border-radius: 4px !important;
+        cursor: default;
     }

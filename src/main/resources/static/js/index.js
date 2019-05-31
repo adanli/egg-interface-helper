@@ -878,7 +878,7 @@ function saveOrUpdateClass(){
         });
         if(data.classId != ''){
             //修改类
-            request('/ih/rest/apiService/v1/class/'+data.classId+'?className='+data.name,'PUT', {});
+            requestString('/ih/rest/apiService/v1/class/'+data.classId,'PUT', data);
         }else{
             //添加类
             requestString('/ih/rest/apiService/v1/class','POST', data);
