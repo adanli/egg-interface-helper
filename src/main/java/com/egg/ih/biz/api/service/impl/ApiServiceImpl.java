@@ -334,6 +334,9 @@ public class ApiServiceImpl implements ApiService {
             });
 
             // 根据父级排序
+            Collections.sort(queryVO.getParams(), new ParamComparator());
+            Collections.sort(headerVO.getParams(), new ParamComparator());
+            Collections.sort(pathVO.getParams(), new ParamComparator());
             Collections.sort(bodyVO.getParams(), new ParamComparator());
             Collections.sort(responseVO.getParams(), new ParamComparator());
 
@@ -348,8 +351,17 @@ public class ApiServiceImpl implements ApiService {
     }
 
     class ParamComparator implements Comparator<ParamVO> {
-
         @Override
+        public int compare(ParamVO o1, ParamVO o2) {
+            if(o1.getSort() == null) {
+                return -1;
+            }else if(o2.getSort() == null) {
+                return -1;
+            }
+            return o1.getSort().compareTo(o2.getSort());
+        }
+
+        /*@Override
         public int compare(ParamVO o1, ParamVO o2) {
             if(o1.getParent() == null) {
                 return -100;
@@ -358,7 +370,7 @@ public class ApiServiceImpl implements ApiService {
             }else {
                 return o1.getParent().compareTo(o2.getParamId());
             }
-        }
+        }*/
     }
 
     private IhClass findOrgClassById(String id) {

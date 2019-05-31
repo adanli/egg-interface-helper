@@ -53,6 +53,16 @@ private static final long serialVersionUID=1L;
 
     private String parent;
 
+    private Integer sort;
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
     public String getParent() {
         return parent;
     }
