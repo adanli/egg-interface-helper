@@ -55,6 +55,16 @@ private static final long serialVersionUID=1L;
 
     private Integer sort;
 
+    private String trace;
+
+    public String getTrace() {
+        return trace;
+    }
+
+    public void setTrace(String trace) {
+        this.trace = trace;
+    }
+
     public Integer getSort() {
         return sort;
     }

@@ -19,7 +19,6 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -165,24 +164,24 @@ public class ApiController {
         }
         if(map.get(PARAMS_VO) != null) {
             queryVO = gson.fromJson(gson.toJson(map.get(PARAMS_VO)), QueryVO.class);
-            this.setIndedx(queryVO.getParams());
+            this.setIndex(queryVO.getParams());
         }
         if(map.get(HEADERS_VO) != null) {
             headerVO = gson.fromJson(gson.toJson(map.get(HEADERS_VO)), HeaderVO.class);
-            this.setIndedx(headerVO.getParams());
+            this.setIndex(headerVO.getParams());
         }
         if(map.get(PATH_VO) != null) {
             pathVO = gson.fromJson(gson.toJson(map.get(PATH_VO)), PathVO.class);
-            this.setIndedx(pathVO.getParams());
+            this.setIndex(pathVO.getParams());
         }
         if(map.get(BODY_VO) != null) {
             bodyVO = gson.fromJson(gson.toJson(map.get(BODY_VO)), BodyVO.class);
-            this.setIndedx(bodyVO.getParams());
+            this.setIndex(bodyVO.getParams());
         }
 
         if(map.get(RESPONSE_VO) != null) {
             responseVO = gson.fromJson(gson.toJson(map.get(RESPONSE_VO)), ResponseVO.class);
-            this.setIndedx(responseVO.getParams());
+            this.setIndex(responseVO.getParams());
         }
         ParamClass paramClass = new ParamClass();
         paramClass.setInterfaceVO(interfaceVO);
@@ -195,7 +194,7 @@ public class ApiController {
         return paramClass;
     }
 
-    private void setIndedx(List<ParamVO> list) {
+    private void setIndex(List<ParamVO> list) {
         for(int i=0; i<list.size(); i++) {
             list.get(i).setSort(i);
         }

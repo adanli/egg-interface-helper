@@ -40,4 +40,6 @@ public class ParamVO {
     private String parent;
 
     private Integer sort;
+
+    private String trace;
 }

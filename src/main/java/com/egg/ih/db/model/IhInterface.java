@@ -47,6 +47,16 @@ private static final long serialVersionUID=1L;
 
     private String type;
 
+    private String shortCode;
+
+    public String getShortCode() {
+        return shortCode;
+    }
+
+    public void setShortCode(String shortCode) {
+        this.shortCode = shortCode;
+    }
+
     @TableField(exist = false)
     private List<IhParams> params;
 

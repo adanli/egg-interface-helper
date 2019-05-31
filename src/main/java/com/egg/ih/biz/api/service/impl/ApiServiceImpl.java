@@ -134,6 +134,7 @@ public class ApiServiceImpl implements ApiService {
             return false;
         }
 
+        this.assembleShortCode(interfaceVO);
         ihInterface = interfaceVO2Interface.apply(interfaceVO);
         // 保存接口
         boolean flag = ihInterfaceService.saveOrUpdate(ihInterface);
@@ -142,6 +143,15 @@ public class ApiServiceImpl implements ApiService {
         this.saveParamsVOs(ihInterface.getInterfaceId(), queryVO, headerVO, pathVO, bodyVO, responseVO);
 
         return flag;
+    }
+
+    private void assembleShortCode(InterfaceVO interfaceVO) {
+        IhClass ihClass = ihClassService.getById(interfaceVO.getClassId());
+        if(ihClass == null) {
+            System.out.println("当前接口的类不存在");
+        }
+        String shortCode = interfaceVO.getUrl().substring(ihClass.getUrl().length());
+        interfaceVO.setShortCode(shortCode);
     }
 
     private void saveParamsVOs(String interfaceId, QueryVO queryVO, HeaderVO headerVO, PathVO pathVO, BodyVO bodyVO, ResponseVO responseVO) {
@@ -403,6 +413,8 @@ public class ApiServiceImpl implements ApiService {
         wrapper.lambda().eq(IhParams::getInterfaceId, interfaceVO.getInterfaceId());
         ihParamsService.list(wrapper).stream().forEach(p -> ihParamsService.removeById(p.getParamId()));
 
+
+        this.assembleShortCode(interfaceVO);
         IhInterface ihInterface = new IhInterface();
         BeanUtils.copyProperties(interfaceVO, ihInterface);
         boolean flag = ihInterfaceService.saveOrUpdate(ihInterface);
