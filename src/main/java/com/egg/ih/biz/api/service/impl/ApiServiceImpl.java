@@ -113,10 +113,28 @@ public class ApiServiceImpl implements ApiService {
         return ihClassService.saveOrUpdate(ihClass);
     }
 
+    /**
+     * 如果存在classId和url一致的数据，不允许保存
+     * @param interfaceVO 接口类,包含名称, 代码, 描述等
+     * @param queryVO 位于query的参数
+     * @param headerVO 位于headers的参数
+     * @param pathVO 位于path的参数
+     * @param bodyVO 位于body的参数
+     * @param responseVO 返回值
+     * @return
+     */
     @Override
     public boolean saveInterface(InterfaceVO interfaceVO, QueryVO queryVO, HeaderVO headerVO, PathVO pathVO, BodyVO bodyVO, ResponseVO responseVO) {
 
-        IhInterface ihInterface = interfaceVO2Interface.apply(interfaceVO);
+        QueryWrapper<IhInterface> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(IhInterface::getClassId, interfaceVO.getClassId()).eq(IhInterface::getUrl, interfaceVO.getUrl()).eq(IhInterface::getValid, BaseConstant.有效性.有效.getCode());
+        IhInterface ihInterface = ihInterfaceService.getOne(wrapper);
+        if(ihInterface != null) {
+            System.out.println("当前记录已存在");
+            return false;
+        }
+
+        ihInterface = interfaceVO2Interface.apply(interfaceVO);
         // 保存接口
         boolean flag = ihInterfaceService.saveOrUpdate(ihInterface);
 
@@ -239,11 +257,12 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    public boolean updateClass(String classId, String className) {
+    public boolean updateClass(String classId, ClassVO classVO) {
 
         IhClass ihClass = this.findOrgClassById(classId);
         if(ihClass != null) {
-            ihClass.setName(className);
+            ihClass = new IhClass();
+            BeanUtils.copyProperties(classVO, ihClass);
             return ihClassService.saveOrUpdate(ihClass);
         }
 

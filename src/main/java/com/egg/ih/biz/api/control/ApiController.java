@@ -96,7 +96,7 @@ public class ApiController {
     @ApiOperation(notes = "/interface/{interfaceId}", value = "根据接口主键查询接口内容")
     @ApiImplicitParam(name = "interfaceId", value = "接口主键", dataType = "String", paramType = "path", required = true)
     @GetMapping(value = "/interface/{interfaceId}")
-    public BaseResponse<InterfaceVO> findInterfaceById(@PathVariable String interfaceId, HttpServletRequest request) {
+    public BaseResponse<InterfaceVO> findInterfaceById(@PathVariable String interfaceId) {
 
         InterfaceVO interfaceVO = apiService.findInterfaceById(interfaceId);
 
@@ -125,8 +125,8 @@ public class ApiController {
         @ApiImplicitParam(name = "className", value = "接口类名称", dataType = "String", paramType = "query", required = true)
     })
     @PutMapping(value = "/class/{classId}")
-    public BaseResponse<Boolean> updateClass(@PathVariable String classId, @RequestParam String className) {
-        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.updateClass(classId, className));
+    public BaseResponse<Boolean> updateClass(@PathVariable String classId, @RequestBody ClassVO classVO) {
+        return ResponseBuilder.build(DefaultErrorCode.SUCCESS, apiService.updateClass(classId, classVO));
     }
 
     @ApiOperation(notes = "/interface/{interfaceId}", value = "修改接口")
