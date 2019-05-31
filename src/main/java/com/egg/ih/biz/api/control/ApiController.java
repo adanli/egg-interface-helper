@@ -165,22 +165,24 @@ public class ApiController {
         }
         if(map.get(PARAMS_VO) != null) {
             queryVO = gson.fromJson(gson.toJson(map.get(PARAMS_VO)), QueryVO.class);
-
-        }
-        if(map.get(PATH_VO) != null) {
-            pathVO = gson.fromJson(gson.toJson(map.get(PATH_VO)), PathVO.class);
-
+            this.setIndedx(queryVO.getParams());
         }
         if(map.get(HEADERS_VO) != null) {
             headerVO = gson.fromJson(gson.toJson(map.get(HEADERS_VO)), HeaderVO.class);
-
+            this.setIndedx(headerVO.getParams());
+        }
+        if(map.get(PATH_VO) != null) {
+            pathVO = gson.fromJson(gson.toJson(map.get(PATH_VO)), PathVO.class);
+            this.setIndedx(pathVO.getParams());
         }
         if(map.get(BODY_VO) != null) {
             bodyVO = gson.fromJson(gson.toJson(map.get(BODY_VO)), BodyVO.class);
+            this.setIndedx(bodyVO.getParams());
         }
 
         if(map.get(RESPONSE_VO) != null) {
             responseVO = gson.fromJson(gson.toJson(map.get(RESPONSE_VO)), ResponseVO.class);
+            this.setIndedx(responseVO.getParams());
         }
         ParamClass paramClass = new ParamClass();
         paramClass.setInterfaceVO(interfaceVO);
@@ -191,6 +193,12 @@ public class ApiController {
         paramClass.setResponse(responseVO);
 
         return paramClass;
+    }
+
+    private void setIndedx(List<ParamVO> list) {
+        for(int i=0; i<list.size(); i++) {
+            list.get(i).setSort(i);
+        }
     }
 
     @ApiOperation(notes = "/class/{classId}", value = "根据主键查询接口类")

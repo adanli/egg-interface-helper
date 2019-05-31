@@ -23,7 +23,7 @@
     <select id="findParamsByInterfaceId" resultType="com.egg.ih.db.model.IhParams">
       select * from ih_params
         where interface_id = #{interfaceId}
-        order by position asc;
+        order by position, sort asc;
     </select>
 
 </mapper>

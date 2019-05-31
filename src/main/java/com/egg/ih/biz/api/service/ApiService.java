@@ -65,6 +65,7 @@ public interface ApiService {
     /**
      * 更新类名称
      * @param classId
+     * @param classVO
      * @return
      */
     boolean updateClass(String classId, ClassVO classVO);

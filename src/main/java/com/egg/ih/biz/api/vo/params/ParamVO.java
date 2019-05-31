@@ -38,4 +38,6 @@ public class ParamVO {
     private String type;
 
     private String parent;
+
+    private Integer sort;
 }
