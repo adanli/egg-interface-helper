@@ -145,12 +145,16 @@ public class ApiServiceImpl implements ApiService {
         return flag;
     }
 
+
     private void assembleShortCode(InterfaceVO interfaceVO) {
         IhClass ihClass = ihClassService.getById(interfaceVO.getClassId());
         if(ihClass == null) {
             System.out.println("当前接口的类不存在");
         }
+
         String shortCode = interfaceVO.getUrl().substring(ihClass.getUrl().length());
+
+
         interfaceVO.setShortCode(shortCode);
     }
 
