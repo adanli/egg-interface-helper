@@ -112,7 +112,7 @@
 
             <div id="right_top_tab_content" class="tab-content mrg div-mrg right-bottom-border">
                 <div class="tab-pane active" id="content_default">
-                    <form id="interfaceForm_default">
+                    <form id="interfaceForm_default" onsubmit="return false">
                         <div>
                             <!--右侧接口名称-->
                             <div class="mrg div-mrg">
@@ -264,7 +264,7 @@
     <div class="modal fade" id="directoryModal" tabindex="-1" role="dialog" aria-labelledby="directoryModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form id="directoryForm">
+                <form id="directoryForm" onkeydown="if(event.keyCode==13)return false;">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                             &times;
@@ -299,7 +299,7 @@
     <div class="modal fade" id="classModal" tabindex="-1" role="dialog" aria-labelledby="classModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form id="classForm">
+                <form id="classForm" onkeydown="if(event.keyCode==13)return false;">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                             &times;

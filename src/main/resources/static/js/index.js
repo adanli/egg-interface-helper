@@ -7,6 +7,8 @@ $(function(){
     initJsonEditor('default');
     //初始化AutoComplete
     initAutoComplete(availableTags);
+    //禁用所有默认autoComplete
+    $('input').each(function(){$(this).attr('autocomplete','off')})
 })
 // let flag = false;
 //AutoComplete数据
@@ -151,17 +153,17 @@ let bottomValChangeSelect = (obj) => {
 }
 // params和header添加trtd
 let parHeaderTr = '<tr flag="false">' +
-    '<td><input class="form-control" type="text" name="code" placeholder="参数名称" onkeydown="addTrTd(this)"/></td>' +
-    '<td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addTrTd(this)"/></td>' +
-    '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addTrTd(this)"/></td>' +
+    '<td><input class="form-control" type="text" name="code" placeholder="参数名称" autocomplete="off" onkeydown="addTrTd(this)"/></td>' +
+    '<td><input class="form-control type" type="text" name="type" placeholder="数据类型" autocomplete="off" onkeydown="addTrTd(this)"/></td>' +
+    '<td><input class="form-control" type="text" name="description" placeholder="属性描述" autocomplete="off" onkeydown="addTrTd(this)"/></td>' +
     '<td><div class="input-group"><div class="input-group-btn">' +
     '<span class="dropdown-toggle" data-toggle="dropdown" tabindex="-1">' +
-    '<input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" onkeydown="addTrTd(this)"/>' +
+    '<input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" autocomplete="off" onkeydown="addTrTd(this)"/>' +
     '</span><ul class="dropdown-menu pull-right"><li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>' +
     '<li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>' +
     '</ul></div></div></td>' +
-    '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addTrTd(this)"/></td>' +
-    '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addTrTd(this)"/></td>' +
+    '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" autocomplete="off" onkeydown="addTrTd(this)"/></td>' +
+    '<td><input class="form-control" type="text" name="remark" placeholder="备注" autocomplete="off" onkeydown="addTrTd(this)"/></td>' +
     '<td><span class="glyphicon glyphicon-remove param-remove-icon cursor" onclick="removmeParams(this)"></span></td></tr>';
 // body和response添加trtd
 let bodResponseTr = '<tr flag="false">' +
@@ -181,6 +183,7 @@ let bodResponseTr = '<tr flag="false">' +
  */
 function addTrTd(obj){
     let flag = $(obj).parent().parent().attr('flag');
+    //删除params控制
     if($(obj).parent().parent().parent().find('tr').length > 0){
         $('.param-remove-icon').css('display','inline');
     }
@@ -413,7 +416,7 @@ function tabControl(){
         $(this).removeClass('active');
     })
     //追加内容
-    $('#right_top_tab_content > div:last').after('<div class="tab-pane active" id='+content+'><form id="'+interface_form+'"><div>' +
+    $('#right_top_tab_content > div:last').after('<div class="tab-pane active" id='+content+'><form id="'+interface_form+'" onsubmit="return false"><div>' +
         '<div class="mrg div-mrg"><div class="form-group">' +
         '<input id='+interface_name+' name='+interface_name+' class="form-control interface-name" type="text" placeholder="接口名称" required /></div>' +
         '<input id='+interface_desc+' type="text" class="form-control interface-description" placeholder="接口描述"/>' +
@@ -933,11 +936,13 @@ let saveOrUpdateInterface = () => {
     if(interface_id != ''){
         //修改
         requestString('/ih/rest/apiService/v1/interface/'+interface_id,'PUT', data);
-        //关闭tab
-        closeTabContro(suffix);
     }else{
         //保存
         requestString('/ih/rest/apiService/v1/interface','POST', data);
+        //添加新的tab
+        tabControl();
+        //关闭tab
+        closeTabContro(suffix);
     }
     $('#select_class_id').val(''); //重置选择类
     //隐藏类选择窗口

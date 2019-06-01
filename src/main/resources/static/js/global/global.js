@@ -6,7 +6,7 @@ let bodyResponseData = {};
 let preparatoryWork = (suffix, json, parent, type) => {
     let obj = $('#'+type+'_div_'+suffix);
     $(obj).empty();
-    analysisJson(suffix, json, parent, type);
+    analysisJson(suffix, json, parent, type, '');
 }
 /**
  * 递归构造Body,Response 数据
@@ -15,7 +15,7 @@ let preparatoryWork = (suffix, json, parent, type) => {
  * @param parent
  * @param type
  */
-let analysisJson = (suffix, json, parent, type) => {
+let analysisJson = (suffix, json, parent, type, trace) => {
     let obj = $('#'+type+'_div_'+suffix);
     let str = '';
     if(parent == ''){
@@ -29,25 +29,26 @@ let analysisJson = (suffix, json, parent, type) => {
     };
     let i = 0;
     for(name in json){
-        str += '<tr flag="false"><td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)" value="'+name+'"/></td>' +
-            '      <td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>' +
-            '      <td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td><td>' +
+        str += '<tr flag="false"><td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" autocomplete="off" onkeydown="addBodyTrTd(this)" value="'+name+'"/></td>' +
+            '      <td><input class="form-control type" type="text" name="type" placeholder="数据类型" autocomplete="off" onkeydown="addBodyTrTd(this)"/></td>' +
+            '      <td><input class="form-control" type="text" name="description" placeholder="属性描述" autocomplete="off" onkeydown="addBodyTrTd(this)"/></td><td>' +
             '         <div class="input-group"><div class="input-group-btn">' +
             '            <span class="dropdown-toggle" data-toggle="dropdown" tabindex="-1">' +
-            '                <input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" onkeydown="addBodyTrTd(this)"/>' +
+            '                <input class="form-control" type="text" name="necessary" disabled placeholder="是否必填" autocomplete="off" onkeydown="addBodyTrTd(this)"/>' +
             '            </span>' +
             '            <ul class="dropdown-menu pull-right">' +
             '                <li onclick="bottomValChangeSelect(this)"><a href="#">是</a></li>' +
             '                <li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li>' +
             '            </ul></div></div>\</td>' +
-            '        <td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>\n' +
-            '      <td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>\n' +
-            '<td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)" value="'+parent+'"/></td></tr>';
+            '        <td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" autocomplete="off" onkeydown="addBodyTrTd(this)"/></td>\n' +
+            '      <td><input class="form-control" type="text" name="remark" placeholder="备注" autocomplete="off" onkeydown="addBodyTrTd(this)"/></td>\n' +
+            '<td><input class="form-control" type="text" name="parent" disabled placeholder="父级" autocomplete="off" onkeydown="addBodyTrTd(this)" value="'+parent+'"/></td>' +
+            '<td><input class="form-control" type="text" name="trace" disabled placeholder="链路" autocomplete="off" onkeydown="addBodyTrTd(this)" value="'+trace+'"/></td></tr>';
         i++;
         if(json[name] instanceof Array){
-            analysisJson(suffix, json[name], name, type);
+            analysisJson(suffix, json[name], name, type, trace+'/'+name);
         }else if(json[name] instanceof Object){
-            analysisJson(suffix, json[name], name, type);
+            analysisJson(suffix, json[name], name, type, trace+'/'+name);
         }
     }
     str += '</tbody></table>';
