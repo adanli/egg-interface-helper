@@ -166,7 +166,7 @@ let parHeaderTr = '<tr flag="false">' +
     '<td><input class="form-control" type="text" name="remark" placeholder="备注" autocomplete="off" onkeydown="addTrTd(this)"/></td>' +
     '<td><span class="glyphicon glyphicon-remove param-remove-icon cursor" onclick="removmeParams(this)"></span></td></tr>';
 // body和response添加trtd
-let bodResponseTr = '<tr flag="false">' +
+/*let bodResponseTr = '<tr flag="false">' +
     '<td><input class="form-control" type="text" name="code" disabled placeholder="参数名称" onkeydown="addBodyTrTd(this)"/></td>' +
     '<td><input class="form-control type" type="text" name="type" placeholder="数据类型" onkeydown="addBodyTrTd(this)"/></td>' +
     '<td><input class="form-control" type="text" name="description" placeholder="属性描述" onkeydown="addBodyTrTd(this)"/></td>' +
@@ -177,7 +177,7 @@ let bodResponseTr = '<tr flag="false">' +
     '<li onclick="bottomValChangeSelect(this)"><a href="#">否</a></li></ul></div></div></td>' +
     '<td><input class="form-control" type="text" name="maxLength" placeholder="最大长度" onkeydown="addBodyTrTd(this)"/></td>' +
     '<td><input class="form-control" type="text" name="remark" placeholder="备注" onkeydown="addBodyTrTd(this)"/></td>' +
-    '<td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td></tr>';
+    '<td><input class="form-control" type="text" name="parent" disabled placeholder="父级" onkeydown="addBodyTrTd(this)"/></td></tr>';*/
 /**
  * 自动追加tr,td
  */
@@ -195,7 +195,7 @@ function addTrTd(obj){
         initAutoComplete(availableTags);
     }
 }
-function addBodyTrTd(obj){
+/*function addBodyTrTd(obj){
     let flag = $(obj).parent().parent().attr('flag');
     if(flag == 'true'){
         $(obj).parent().parent().attr('flag','false');
@@ -204,7 +204,7 @@ function addBodyTrTd(obj){
         //初始化AutoComplete
         initAutoComplete(availableTags);
     }
-}
+}*/
 /**
  * 初始化json编辑器
  */
@@ -281,32 +281,42 @@ function initJsonEditor(suffix){
 function getBodyJsonData(suffix){
     let str = eval('body_editor_'+suffix).getText();
     let json = $.parseJSON(str); //json数据
-    let i = 0; //修改索引值
+    // let i = 0; //修改索引值
     // analysisJson(suffix, json, i, '', 'body_');
+    //获得table所有数据
+    getTableDataConstruct('body',suffix);
+    //递归构造Body,Response 数据
     preparatoryWork(suffix, json, '', 'body');
     //填充body/response input 数据
-    if(bodyResponseData.hasOwnProperty('bodyResponse'+suffix)){
+    /*if(bodyResponseData.hasOwnProperty('bodyResponse'+suffix)){
         let obj = bodyResponseData['bodyResponse'+suffix];
         for(let key in obj){
             constructBodyResponseData(suffix, obj[key].params, key);
         }
-    }
+    }*/
+    //填充body/response input 数据
+    constructBodyResponseData(suffix);
     //初始化AutoComplete
     initAutoComplete(availableTags);
 }
 function getResponseJsonData(suffix){
     let str = eval('response_editor_'+suffix).getText();
     let json = $.parseJSON(str); //json数据
-    let i = 0; //修改索引值
+    // let i = 0; //修改索引值
     // analysisJson(suffix, json, i, '', 'response_');
+    //获得table所有数据
+    getTableDataConstruct('response',suffix);
+    //递归构造Body,Response 数据
     preparatoryWork(suffix, json, '', 'response');
     //填充body/response input 数据
-    if(bodyResponseData.hasOwnProperty('bodyResponse'+suffix)){
+    /*if(bodyResponseData.hasOwnProperty('bodyResponse'+suffix)){
         let obj = bodyResponseData['bodyResponse'+suffix];
         for(let key in obj){
             constructBodyResponseData(suffix, obj[key].params, key);
         }
-    }
+    }*/
+    //填充body/response input 数据
+    constructBodyResponseData(suffix);
     //初始化AutoComplete
     initAutoComplete(availableTags);
 }
@@ -611,9 +621,10 @@ let construnctionInterfaceValue = (data) => {
         constructExampleData(suffix, bodyResponseObj[key], key);
     }
     //填充body/response input 数据
-    for(let key in bodyResponseObj){
-        constructBodyResponseData(suffix, bodyResponseObj[key].params, key);
-    }
+    // for(let key in bodyResponseObj){
+    //     constructBodyResponseData(suffix, bodyResponseObj[key].params, key);
+    // }
+    constructBodyResponseData(suffix);
 }
 /**
  * 填充example数据
