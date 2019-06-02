@@ -1,28 +1,3 @@
-    /*html, body{
-        margin:0;
-        height:100%;
-    }
-    body{
-        font-size: 13px;
-        height:100%;
-    }*/
-    /*去除所有圆角属性*/
-    /** {
-        -webkit-border-radius: 0 !important;
-        -moz-border-radius: 0 !important;
-        border-radius: 0 !important;
-    }*/
-    /*滚动条样式*/
-    ::-webkit-scrollbar {
-        width: 5px;
-        height: 5px;
-        background-color: #fff;
-    }
-    ::-webkit-scrollbar-thumb
-    {
-        border-radius: 10px;
-        background-color: #555;
-    }
     /**/
     .container-fluid{
         height: 100%;
@@ -63,15 +38,6 @@
         text-overflow: ellipsis;
         overflow: hidden;
     }
-    /*params headers body response 选中下划线*/
-    .nav-pills > li.active{
-        border-bottom: 2px solid #1890FF;
-    }
-
-
-    a{
-        color: #CDCDCD;
-    }
     /*分割线样式*/
     .divider {
         height: 1px;
@@ -103,35 +69,6 @@
     .cus-right-top-height{
         /*height: 25px;*/
         padding: 5px 5px !important;
-    }
-    /*接口名称input样式*/
-    /*.cus-interface-name{
-        width: 15%;
-        display: inline;
-        border: 0px;
-        box-shadow: inset 0 0px 0px rgba(0, 0, 0, .075)
-    }*/
-    /*.cus-interface-description{
-        display: inline;
-        border: 0px;
-        box-shadow: inset 0 0px 0px rgba(0, 0, 0, .075)
-    }*/
-    /*.cus-input{
-        border-bottom: 1px solid #D3D3D3 !important;
-    }*/
-    /*右下input框*/
-    /*.cus-right-bottom-input input{*/
-        /*border: 0px;*/
-        /*box-shadow: inset 0 0px 0px rgba(0, 0, 0, .075)*/
-    /*}*/
-    /*!*右下模块边框*!
-    .right-bottom-border{
-        border: 1px solid #D3D3D3;
-    }*/
-    /*右下导航栏navpills*/
-    .cus-nav-right-pills{
-        /*border-top: 1px solid #D3D3D3;*/
-        border-bottom: 1px solid #D3D3D3;
     }
     /*设置左导航栏*/
     .cus-left-nav-pills{
@@ -170,44 +107,22 @@
     .cus-padding{
         padding-left: 10px;
     }
-    /*统一右浮动*/
-    .flo{
-        float: right;
-    }
     /*右侧模块左边框*/
     .cus-right-left-border{
         border-left: 1px solid #D3D3D3;
     }
-    /*textarea*/
-    .cus-textarea{
-        /*border-left: 0px;*/
-    }
-    /**/
-    /*.cus-btn{
-        color: #fff;
-        background-color: #1890FF;
-        border-color: #1890FF;
-        text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
-        box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
-    }
-    .cus-btn:hover, .cus-btn:focus {
-         color: #fff;
-         background-color: #40a9ff;
-         border-color: #40a9ff;
-    }*/
-    /*json编辑器*/
-    .jsoneditor-menu{
-        display: none;
-    }
-    .jsoneditor-outer, .has-main-menu-bar {
-         margin-top: 0px !important;
-         padding-top: 0px !important;
-    }
-    .cus-jsoneditor{
-        height: 300px;
-    }
 
 
+
+    /*添加目录图标*/
+    .add-directory{
+        float: right;
+    }
+    /*右下导航栏navpills*/
+    .cus-nav-right-pills{
+        /*border-top: 1px solid #D3D3D3;*/
+        border-bottom: 1px solid #D3D3D3;
+    }
     /*table标题*/
     caption{
         background: #4A90E2;
@@ -216,4 +131,15 @@
         margin-bottom: 10px;
         text-align: center;
         color: #FFFFFF
+    }
+    /*json编辑器*/
+    .jsoneditor-menu{
+        display: none;
+    }
+    .jsoneditor-outer, .has-main-menu-bar {
+        margin-top: 0px !important;
+        padding-top: 0px !important;
+    }
+    .cus-jsoneditor{
+        height: 300px;
     }

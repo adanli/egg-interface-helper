@@ -12,6 +12,17 @@
         -moz-border-radius: 0 !important;
         border-radius: 0 !important;
     }*/
+    /*滚动条样式*/
+    ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+        background-color: #fff;
+    }
+    ::-webkit-scrollbar-thumb
+    {
+        border-radius: 10px;
+        background-color: #555;
+    }
 /*----------------------------------左侧开始-------------------------------------*/
     /*左背景色*/
     .left{
@@ -91,6 +102,9 @@
     /*各个参数名称*/
     /*navpills导航栏样式*/
         /*选中时*/
+        .nav-pills > li.active{
+            border-bottom: 2px solid #1890FF;
+        }
         .nav-pills > li.active > a{
             color: #4A90E2;
             background-color: rgba( 216, 216, 216, 0);
@@ -104,6 +118,9 @@
         .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover{
             color: #4A90E2;
             background-color: rgba( 216, 216, 216, 0);
+        }
+        a{
+            color: #CDCDCD;
         }
     /*query/headers/path/body/response样式*/
         /*table标题*/

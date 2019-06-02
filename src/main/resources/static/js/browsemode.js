@@ -41,7 +41,11 @@ let constructTreeData = (params) => {
             nodes.push(node);
         }
     }
-    return nodes;
+    if(JSON.stringify(nodes) == "[]"){
+        return null
+    }else{
+        return nodes;
+    }
 }
 /**
  * 渲染树数据

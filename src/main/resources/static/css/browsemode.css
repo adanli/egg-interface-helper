@@ -28,26 +28,6 @@
         margin-right: 12px !important;
     }
 
-    .nav-pills > li.active > a{
-        color: #0f0f0f;
-        background-color: #fff;
-    }
-    /*params headers body response 选中下划线*/
-    .nav-pills > li.active{
-        border-bottom: 2px solid #1890FF;
-    }
-    .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover{
-        color: #0f0f0f;
-        background-color: #fff;
-    }
-    .nav > li > a:hover{
-        color: #CDCDCD;
-        background-color: #fff;
-    }
-    a{
-        color: #CDCDCD;
-    }
-
 
 
     /*---------------------------------------------head------------------------------------------------*/
@@ -70,6 +50,7 @@
         height: 40px;
         margin-top: 6%;
     }
+    /*--------------------------------------------------------------------------------------------------*/
     /*选择目录样式*/
     .check-directory{
         border-radius: 4px !important;
@@ -81,6 +62,7 @@
         float: right;
         width: 150px;
     }
+    /*--------------------------------------------------------------------------------------------------*/
     /*简介内容*/
     .title{
         color: rgba(0, 0, 0, 0.5);
@@ -94,13 +76,14 @@
         color: #4A90E2;
         background-color: rgba( 216, 216, 216, 0.15) !important;
     }
+    /*--------------------------------------------------------------------------------------------------*/
     /*请求类型*/
     .request-type{
         width: 100px;
         font-weight: bold;
         color: #000000;
     }
-    .type[disabled]{
+    .request-type[disabled]{
         cursor: default;
     }
     /*详细数据*/
