@@ -1,7 +1,4 @@
-    /*选中样式*/
-    .cus-select{
-        background-color: #1890FF !important;
-    }
+
     /*统一外边框*/
     .mrg{
         margin: 20px 0px;
@@ -49,4 +46,69 @@
     }
     a{
         color: #CDCDCD;
+    }
+
+
+
+    /*---------------------------------------------head------------------------------------------------*/
+    /*头部样式*/
+    .head {
+        background: #40414A;
+        height: 80px;
+    }
+    /*选择模式样式*/
+    .check-mode,
+    .check-mode:hover, .check-mode:focus, .check-mode:active:focus,
+    .open > .dropdown-toggle.check-mode,
+        /*.open > .dropdown-toggle.check-mode:hover,*/
+    .open > .dropdown-toggle.check-mode:focus{
+        background-color: #4A90E2;
+        border-radius: 4px !important;
+        border-color: #4A90E2 !important;
+        color: #FFFFFF;
+        width: 100%;
+        height: 40px;
+        margin-top: 6%;
+    }
+    /*选择目录样式*/
+    .check-directory{
+        border-radius: 4px !important;
+        width: 100%;
+        height: 40px;
+    }
+    /*导出按钮样式 -- 补充*/
+    .cus-btn{
+        float: right;
+        width: 150px;
+    }
+    /*简介内容*/
+    .title{
+        color: rgba(0, 0, 0, 0.5);
+    }
+    .content{
+        color: #000000;
+        /*font-weight: bold;*/
+    }
+    /*选中左行*/
+    .cus-select{
+        color: #4A90E2;
+        background-color: rgba( 216, 216, 216, 0.15) !important;
+    }
+    /*请求类型*/
+    .request-type{
+        width: 100px;
+        font-weight: bold;
+        color: #000000;
+    }
+    .type[disabled]{
+        cursor: default;
+    }
+    /*详细数据*/
+    .detailed caption{
+        background: #4A90E2;
+        width: 100px;
+        margin-left: -10px;
+        margin-bottom: 10px;
+        text-align: center;
+        color: #FFFFFF
     }

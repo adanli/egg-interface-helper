@@ -67,7 +67,7 @@ let renderingTreeData = () => {
             window.event? window.event.cancelBubble = true : e.stopPropagation();
         },
         onNodeSelected: function (event, data) {
-            console.log(data);
+            // console.log(data);
             $('#tree_select button').first().text(data.text);
             constructDataListByDirectory({parentId:data.id});
         },
@@ -107,6 +107,7 @@ let renderingDetailedData = (data) => {
         renderingBottomDetailedData(key, obj[key]);
         // console.log(obj[key]);
     }
+    bodyResponseData['bodyResponsedefault'] = bodyResponseObj;
     //body/response
     for(let key in bodyResponseObj){
         preparatoryWork('default', $.parseJSON(bodyResponseObj[key].example), '', key);
@@ -116,9 +117,9 @@ let renderingDetailedData = (data) => {
         constructExampleData('default', bodyResponseObj[key], key);
     }
     //填充body/response input 数据
-    for(let key in bodyResponseObj){
-        constructBodyResponseData('default', bodyResponseObj[key].params, key);
-    }
+    // for(let key in bodyResponseObj){
+    constructBodyResponseData('default');
+    // }
     //将所有input置为不可点击
     $('.tab-content input').attr('disabled',true);
     $('.tab-content input').attr('placeholder','');
@@ -139,7 +140,7 @@ let renderingBottomDetailedData = (key, vo) => {
     $('#'+key).empty();
     let params = vo.params;
     if(JSON.stringify(params) != '[]'){
-        let str = '<table class="table table-condensed"><thead><tr>' +
+        let str = '<table class="table"><thead><caption>'+key.substr(0,1).toUpperCase()+key.substr(1)+'</caption><tr>' +
             '         <th>参数名称</th>' +
             '         <th>数据类型</th>' +
             '         <th>属性描述</th>' +
@@ -153,7 +154,8 @@ let renderingBottomDetailedData = (key, vo) => {
                     obj[key] = '';
                 }
             }
-            str += '<tr><td>'+obj.code+'</td><td>'+obj.type.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</td><td>'+obj.description+'</td><td>'+obj.necessary+'</td><td>'+obj.maxLength+'</td><td>'+obj.remark+'</td></tr>';
+            str += '<tr><td>'+obj.code+'</td><td>'+obj.type.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</td>' +
+                '<td>'+obj.description+'</td><td>'+obj.necessary+'</td><td>'+obj.maxLength+'</td><td>'+obj.remark+'</td></tr>';
         }
         str += '</tbody></table>';
         $('#'+key).append(str);
@@ -223,10 +225,10 @@ let renderingData = (data) => {
     let rightStr = '';
     for(let i = 0; i < data.length; i++){
         let obj = data[i];
-        leftStr += '<table class="table table-striped">' +
+        leftStr += '<table class="table">' +
             '       <caption>'+obj.name+'</caption>' +
             '            <tbody>';
-        rightStr += '<table class="table table-striped">' +
+        rightStr += '<table class="table">' +
             '       <caption>&nbsp</caption>' +
             '            <tbody>';
         for(let j = 0; j < obj.childData.length; j++){

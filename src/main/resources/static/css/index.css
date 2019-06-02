@@ -183,7 +183,7 @@
         /*border-left: 0px;*/
     }
     /**/
-    .cus-btn{
+    /*.cus-btn{
         color: #fff;
         background-color: #1890FF;
         border-color: #1890FF;
@@ -194,7 +194,7 @@
          color: #fff;
          background-color: #40a9ff;
          border-color: #40a9ff;
-    }
+    }*/
     /*json编辑器*/
     .jsoneditor-menu{
         display: none;
@@ -205,4 +205,15 @@
     }
     .cus-jsoneditor{
         height: 300px;
+    }
+
+
+    /*table标题*/
+    caption{
+        background: #4A90E2;
+        width: 100px;
+        margin-left: -10px;
+        margin-bottom: 10px;
+        text-align: center;
+        color: #FFFFFF
     }
