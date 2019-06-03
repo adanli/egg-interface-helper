@@ -13,7 +13,7 @@ egg-interface-helper是一款专注于项目初期开发时接口设计的辅助
 ### 部署/启动
 ```bash
 $ git clone https://github.com/cooperation-dev/egg-interface-helper.git
-$ import maven project for idea
+$ import maven project to idea
 $ start WebApplication
 $ 浏览器访问 localhost:8080/ih
 ```
