@@ -837,6 +837,7 @@ let requestString = (url, type, data) => {
         url:url,
         type:type,
         data: JSON.stringify(data),
+        async: false,
         contentType: 'application/json',
         success:function(resp){
             if(resp.code != 0){
@@ -1072,7 +1073,7 @@ let constructCollectionTree = (data) => {
             let obj = clazz[i];
             let parent = {
                 index: i,
-                text: '<span class="cursor" title='+obj.url+'>'+obj.code+'</span>' +
+                text: '<span class="cursor" title='+obj.name+'>'+obj.name+'</span>' +
                     '<br>' +
                     '<span class="glyphicon glyphicon-edit cursor" style="float: right; margin-right: 10px;" onclick="edit(\''+obj.classId+'\',\'class\')"></span>' +
                     '<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px;" onclick="del(\''+obj.classId+'\',\'class\')"></span>',
@@ -1158,7 +1159,7 @@ function constructCollectionTreeChildNode(data, index){
     for(let i in data){
         let obj = data[i];
         let node = {
-            text: method[obj.type] + '<span class="cursor" title="'+obj.url+'">'+obj.shortCode+'</span>' +
+            text: method[obj.type] + '<span class="cursor" title="'+obj.name+'">'+obj.name+'</span>' +
                 '<br>' +
                 '<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px" onclick="del(\''+obj.interfaceId+'\',\'interface\')"></span>',
             id: obj.interfaceId,
