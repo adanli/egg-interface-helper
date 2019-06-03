@@ -263,6 +263,14 @@ public class ApiServiceImpl implements ApiService {
     @Override
     public void deleteClassById(String classId) {
         IhClass ihClass = this.findOrgClassById(classId);
+        // 如果class下面还存在有效的接口，则不允许删除
+        QueryWrapper<IhInterface> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(IhInterface::getClassId, classId).eq(IhInterface::getValid, BaseConstant.有效性.有效.getCode());
+        int size = ihInterfaceService.count(wrapper);
+        if(size > 0) {
+            System.out.println("当前类仍存在有效接口，请先删除");
+            return;
+        }
 
         if(ihClass != null) {
             ihClass.setValid(BaseConstant.有效性.无效.getCode());
