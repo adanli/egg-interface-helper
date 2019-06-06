@@ -1,11 +1,11 @@
 server:
-  port: 8080
+  port: 8049
   servlet:
     context-path: /ih
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/egg_ih?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Hongkong
+    url: jdbc:mysql://10.128.32.242:3306/cicsc_ih?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Hongkong
     username: test
     password: 111111
 mybatis-plus:

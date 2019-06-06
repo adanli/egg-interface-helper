@@ -382,17 +382,6 @@ public class ApiServiceImpl implements ApiService {
             }
             return o1.getSort().compareTo(o2.getSort());
         }
-
-        /*@Override
-        public int compare(ParamVO o1, ParamVO o2) {
-            if(o1.getParent() == null) {
-                return -100;
-            }else if(o2.getParent() == null) {
-                return -200;
-            }else {
-                return o1.getParent().compareTo(o2.getParamId());
-            }
-        }*/
     }
 
     private IhClass findOrgClassById(String id) {

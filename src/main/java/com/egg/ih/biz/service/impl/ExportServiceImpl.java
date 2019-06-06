@@ -163,7 +163,7 @@ public class ExportServiceImpl implements ExportService {
                     XWPFTableCell cell = row.getCell(0);
                     createTitle(row, cell, false);
 
-                    int position = this.assambleTable(inter, document, table, row, cell, iRun,false, 0);
+                    int position = this.assambleTable(inter, document, table, row, cell, iRun,false, 0, BaseConstant.参数存储位置.BODY.getCode());
 
                     XWPFParagraph returnParamParagraph = interfaceParagraph.apply(document);
                     iRun = interfaceRun.apply(returnParamParagraph);
@@ -181,7 +181,7 @@ public class ExportServiceImpl implements ExportService {
                         cell = row.getCell(0);
 
                         createTitle(row, cell, true);
-                        this.assambleTable(inter, document, table, row, cell, iRun, true, position);
+                        this.assambleTable(inter, document, table, row, cell, iRun, true, position, BaseConstant.参数存储位置.RESPONSE.getCode());
 
                     }else {
                         iRun.addBreak(BreakType.TEXT_WRAPPING);
@@ -218,14 +218,14 @@ public class ExportServiceImpl implements ExportService {
      * @return
      * @throws IOException
      */
-    private int assambleTable(IhInterface inter, XWPFDocument document, XWPFTable table, XWPFTableRow row, XWPFTableCell cell, XWPFRun iRun, boolean isResponse, int start) throws IOException {
+    private int assambleTable(IhInterface inter, XWPFDocument document, XWPFTable table, XWPFTableRow row, XWPFTableCell cell, XWPFRun iRun, boolean isResponse, int start, Integer posi) throws IOException {
 
         IhParams param = null;
         String example = null;
         int position = -1;
         for(int i=start; i<inter.getParams().size(); i++) {
             param = inter.getParams().get(i);
-            if (param.getFlag().equals(BaseConstant.例子位置.example.getCode())) {
+            if (param.getFlag().equals(BaseConstant.例子位置.example.getCode()) && param.getPosition().equals(posi)) {
                 example = new String(param.getExample(), Charset.defaultCharset());
                 continue;
             }
