@@ -571,17 +571,22 @@ function requestGetTree(url, type, selectTree){
  * 请求接口数据
  */
 let requestInterfaceValue = (url, type) => {
+    let response = null;
     $.ajax({
         url:url,
         type:type,
+        async:false,
         contentType: 'application/json',
         success:function(resp){
-            construnctionInterfaceValue(resp.data);
+            if(resp.data != null){
+                response = resp.data;
+            }
         },
         error:function(resp){
             console.log(resp);
         }
     })
+    return response;
 }
 /**
  * 接口数据填充
@@ -1132,7 +1137,8 @@ let constructCollectionTree = (data) => {
                 //添加tab
                 tabControl();
                 //请求tab数据
-                requestInterfaceValue('/ih/rest/apiService/v1/interface/'+data.id,'GET');
+                let interfaceVal = requestInterfaceValue('/ih/rest/apiService/v1/interface/'+data.id,'GET');
+                construnctionInterfaceValue(interfaceVal);
             };
         },
     });
@@ -1161,6 +1167,7 @@ function constructCollectionTreeChildNode(data, index){
         let node = {
             text: method[obj.type] + '<span class="cursor" title="'+obj.name+'">'+obj.name+'</span>' +
                 '<br>' +
+                '<span class="glyphicon glyphicon-copy cursor" style="float: right; margin-right: 10px" onclick="copyInterface(\''+obj.interfaceId+'\')"></span>'+
                 '<span class="glyphicon glyphicon-trash cursor" style="float: right; margin-right: 10px" onclick="del(\''+obj.interfaceId+'\',\'interface\')"></span>',
             id: obj.interfaceId,
             name: obj.name,
@@ -1168,4 +1175,22 @@ function constructCollectionTreeChildNode(data, index){
         };
         $("#collection").treeview("addNode", [index, { node: node }])
     }
+}
+/**
+ *  拷贝接口
+ */
+let copyInterface = (interfaceId) => {
+    // if(whetherAddTab(interfaceId)){
+    //添加tab
+    tabControl();
+    //请求tab数据
+    let interfaceVal = requestInterfaceValue('/ih/rest/apiService/v1/interface/'+interfaceId,'GET');
+    interfaceVal.name = interfaceVal.name+'Copy';
+    interfaceVal.url = interfaceVal.url+'/Copy';
+    construnctionInterfaceValue(interfaceVal);
+    //获得id后缀
+    let suffix = getSelectSuffix();
+    $('#interface_id_'+suffix).val('');
+    saveOrUpdateInterface();
+    // };
 }
