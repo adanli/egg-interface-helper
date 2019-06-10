@@ -1192,5 +1192,7 @@ let copyInterface = (interfaceId) => {
     let suffix = getSelectSuffix();
     $('#interface_id_'+suffix).val('');
     saveOrUpdateInterface();
+    //阻止冒泡事件
+    window.event? window.event.cancelBubble = true : e.stopPropagation();
     // };
 }
