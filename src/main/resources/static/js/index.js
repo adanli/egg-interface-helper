@@ -439,6 +439,7 @@ function tabControl(){
         '<li onclick="changeSelect(this)"><a href="#">GET</a></li>' +
         '<li onclick="changeSelect(this)"><a href="#">POST</a></li>' +
         '<li onclick="changeSelect(this)"><a href="#">PUT</a></li>' +
+        '<li onclick="changeSelect(this)"><a href="#">PATCH</a></li>' +
         '<li onclick="changeSelect(this)"><a href="#">DELETE</a></li></ul></div>' +
         '<input id='+url_text+' name='+url_text+' type="text" class="form-control interface-url" aria-label="..." onkeydown="urlTextUpdate()" onkeyup="urlTextUpdate()" required>' +
         '</div></div></div>' +
